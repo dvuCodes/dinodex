@@ -33,6 +33,9 @@ bun install        # Install dependencies
 ## Skills
 - **Always use the `frontend-design` skill** (`.claude/skills/frontend-design/SKILL.md`) when working on frontend components, pages, layouts, or styling. This skill enforces distinctive, production-grade design with bold aesthetic choices that match the anime Pokédex vision. Invoke via `/frontend-design` before making UI changes.
 
+## Workflow Rules
+- **Always update `docs/TODO.md`** when work is completed and validated (build passes, lint clean). Mark tasks as done with ~~strikethrough~~ and ✅, update completion criteria checkboxes, and commit the TODO update alongside the work.
+
 ## Code Style
 - Use TypeScript strict mode
 - Prefer named exports

@@ -238,34 +238,34 @@ Before starting any tasks, read these files in order to understand the full cont
 
 ---
 
-## Phase 9: Final Polish
+## Phase 9: Final Polish ✅
 
-### 9.1 Add favicon and OG image
-- Create a simple dino-themed favicon (can be emoji-based initially)
-- Create a static OG image for social sharing (1200×630)
+### 9.1 ~~Add favicon and OG image~~ ✅
+- ~~Create a simple dino-themed favicon (can be emoji-based initially)~~
+- ~~Create a static OG image for social sharing (1200×630)~~
 
-### 9.2 Create README.md
-- Project description
-- Tech stack
-- Getting started (bun install, bun run dev)
-- Project structure overview
-- How to add new dinosaurs
-- How to generate art with Gemini
-- Credits
+### 9.2 ~~Create README.md~~ ✅
+- ~~Project description~~
+- ~~Tech stack~~
+- ~~Getting started (bun install, bun run dev)~~
+- ~~Project structure overview~~
+- ~~How to add new dinosaurs~~
+- ~~How to generate art with Gemini~~
+- ~~Credits~~
 
-### 9.3 Configure for deployment
-- Ensure `next.config.ts` has correct configuration
-- Test `bun run build` succeeds with no errors ✅
-- Test `bun start` serves correctly
+### 9.3 ~~Configure for deployment~~ ✅
+- ~~Ensure `next.config.ts` has correct configuration~~
+- ~~Test `bun run build` succeeds with no errors~~ ✅
+- ~~Test `bun start` serves correctly~~ ✅
 
-### 9.4 Final review
-- Browse through all 30 dinos on home page
-- Open each detail page, toggle all 3 stages
-- Test search with various queries
-- Test all filter combinations
-- Check for visual consistency across different dinos
-- Verify all stat values display correctly
-- Confirm related dinos link correctly
+### 9.4 ~~Final review~~ ✅
+- ~~Browse through all 30 dinos on home page~~
+- ~~Open each detail page, toggle all 3 stages~~
+- ~~Test search with various queries~~
+- ~~Test all filter combinations~~
+- ~~Check for visual consistency across different dinos~~
+- ~~Verify all stat values display correctly~~
+- ~~Confirm related dinos link correctly~~
 
 ---
 
@@ -283,4 +283,4 @@ The app is considered MVP-complete when:
 - [x] All images have alt text
 - [x] Keyboard navigation works throughout
 - [x] `bun run build` succeeds with zero errors
-- [ ] Lighthouse score is 90+ on all metrics (with placeholder art)
+- [x] Lighthouse score is 90+ on all metrics (with placeholder art)

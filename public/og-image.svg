@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="ogBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFBF0"/>
+      <stop offset="100%" style="stop-color:#FEF3C7"/>
+    </linearGradient>
+    <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#22C55E"/>
+      <stop offset="33%" style="stop-color:#3B82F6"/>
+      <stop offset="66%" style="stop-color:#F59E0B"/>
+      <stop offset="100%" style="stop-color:#EF4444"/>
+    </linearGradient>
+    <linearGradient id="stripe" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#22C55E"/>
+      <stop offset="25%" style="stop-color:#3B82F6"/>
+      <stop offset="50%" style="stop-color:#F59E0B"/>
+      <stop offset="75%" style="stop-color:#EF4444"/>
+      <stop offset="100%" style="stop-color:#8B5CF6"/>
+    </linearGradient>
+    <linearGradient id="cardGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#DCFCE7"/>
+      <stop offset="100%" style="stop-color:#BBF7D0"/>
+    </linearGradient>
+    <linearGradient id="cardBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#DBEAFE"/>
+      <stop offset="100%" style="stop-color:#BFDBFE"/>
+    </linearGradient>
+    <linearGradient id="cardAmber" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FEF3C7"/>
+      <stop offset="100%" style="stop-color:#FDE68A"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#00000015"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#ogBg)"/>
+
+  <!-- Subtle grid pattern -->
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <rect width="40" height="40" fill="none"/>
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#22C55E" stroke-width="0.3" opacity="0.15"/>
+  </pattern>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+
+  <!-- Top gradient stripe -->
+  <rect width="1200" height="6" fill="url(#stripe)"/>
+
+  <!-- Bottom gradient stripe -->
+  <rect y="624" width="1200" height="6" fill="url(#stripe)"/>
+
+  <!-- Decorative circles -->
+  <circle cx="100" cy="530" r="180" fill="#22C55E" opacity="0.04"/>
+  <circle cx="1100" cy="100" r="200" fill="#3B82F6" opacity="0.04"/>
+  <circle cx="600" cy="600" r="150" fill="#F59E0B" opacity="0.04"/>
+
+  <!-- Title -->
+  <text x="600" y="200" text-anchor="middle" font-family="'M PLUS Rounded 1c', 'Nunito', sans-serif" font-weight="900" font-size="120" fill="url(#titleGrad)">DINODEX</text>
+
+  <!-- Subtitle -->
+  <text x="600" y="270" text-anchor="middle" font-family="'Noto Sans', sans-serif" font-weight="500" font-size="32" fill="#78716C">Dinosaur Encyclopedia</text>
+
+  <!-- Decorative line -->
+  <rect x="450" y="295" width="300" height="3" rx="1.5" fill="url(#stripe)" opacity="0.6"/>
+
+  <!-- Feature cards -->
+  <!-- Card 1 -->
+  <rect x="140" y="340" width="260" height="180" rx="16" fill="url(#cardGreen)" filter="url(#shadow)"/>
+  <text x="270" y="410" text-anchor="middle" font-size="48">🦕</text>
+  <text x="270" y="455" text-anchor="middle" font-family="'M PLUS Rounded 1c', sans-serif" font-weight="700" font-size="22" fill="#15803D">30 Dinosaurs</text>
+  <text x="270" y="485" text-anchor="middle" font-family="'Noto Sans', sans-serif" font-size="14" fill="#166534">All 3 geological eras</text>
+
+  <!-- Card 2 -->
+  <rect x="470" y="340" width="260" height="180" rx="16" fill="url(#cardBlue)" filter="url(#shadow)"/>
+  <text x="600" y="410" text-anchor="middle" font-size="48">🥚➜🦖</text>
+  <text x="600" y="455" text-anchor="middle" font-family="'M PLUS Rounded 1c', sans-serif" font-weight="700" font-size="22" fill="#1D4ED8">3 Stages</text>
+  <text x="600" y="485" text-anchor="middle" font-family="'Noto Sans', sans-serif" font-size="14" fill="#1E40AF">Hatchling → Juvenile → Adult</text>
+
+  <!-- Card 3 -->
+  <rect x="800" y="340" width="260" height="180" rx="16" fill="url(#cardAmber)" filter="url(#shadow)"/>
+  <text x="930" y="410" text-anchor="middle" font-size="48">📊</text>
+  <text x="930" y="455" text-anchor="middle" font-family="'M PLUS Rounded 1c', sans-serif" font-weight="700" font-size="22" fill="#B45309">Animated Stats</text>
+  <text x="930" y="485" text-anchor="middle" font-family="'Noto Sans', sans-serif" font-size="14" fill="#92400E">Search, filter &amp; explore</text>
+
+  <!-- Footer text -->
+  <text x="600" y="590" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="16" fill="#A8A29E">dinodex.vercel.app</text>
+</svg>

@@ -26,9 +26,9 @@ export function StatBar({
       <span className="font-body text-[13px] font-medium text-text-secondary w-16 shrink-0">
         {label}
       </span>
-      <div className="flex-1 h-3 rounded-pill bg-[#F1F0EB] overflow-hidden">
+      <div className="flex-1 h-3 rounded-pill bg-parchment border border-border-default/50 overflow-hidden">
         <motion.div
-          className="h-full rounded-pill"
+          className="h-full rounded-pill relative overflow-hidden"
           style={{ backgroundColor: color }}
           initial={{ width: 0 }}
           animate={{ width: `${percent}%` }}
@@ -38,9 +38,18 @@ export function StatBar({
             damping: 15,
             delay,
           }}
-        />
+        >
+          {/* Subtle shimmer on the filled portion */}
+          <div
+            className="absolute inset-0 opacity-30"
+            style={{
+              background: `linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.5) 50%, transparent 100%)`,
+              backgroundSize: "200% 100%",
+            }}
+          />
+        </motion.div>
       </div>
-      <span className="font-mono text-[13px] font-medium text-text-primary w-16 text-right shrink-0">
+      <span className="font-mono text-[13px] font-medium text-text-primary w-16 text-right shrink-0 tabular-nums">
         {unit}
       </span>
     </div>

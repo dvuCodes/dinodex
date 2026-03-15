@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import type { Era, Diet } from "@/lib/types";
 import { ERA_COLORS, DIET_COLORS } from "@/lib/constants";
 
@@ -25,23 +26,28 @@ function Chip({
   onClick: () => void;
 }) {
   return (
-    <button
+    <motion.button
       onClick={onClick}
-      className="shrink-0 h-8 px-4 rounded-pill font-body text-[13px] font-medium capitalize transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+      whileTap={{ scale: 0.93 }}
+      className="shrink-0 h-8 px-4 rounded-pill font-body text-[13px] font-medium capitalize transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
       style={
         active
-          ? { backgroundColor: color, color: "white" }
+          ? {
+              backgroundColor: color,
+              color: "white",
+              boxShadow: `0 2px 8px ${color}30`,
+            }
           : {
-              border: "1px solid var(--color-border-default)",
+              border: "1.5px solid var(--color-border-default)",
               color: "var(--color-text-secondary)",
-              backgroundColor: "transparent",
+              backgroundColor: "var(--color-parchment)",
             }
       }
       aria-label={`Filter by ${label}`}
       aria-pressed={active}
     >
       {label}
-    </button>
+    </motion.button>
   );
 }
 
@@ -52,41 +58,56 @@ export function FilterChips({
   onDietChange,
 }: FilterChipsProps) {
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-        {ERAS.map((era) => (
-          <Chip
-            key={era}
-            label={era === "all" ? "All Eras" : era}
-            active={activeEra === era}
-            color={
-              era === "all"
-                ? "var(--color-text-primary)"
-                : ERA_COLORS[era].primary
-            }
-            onClick={() => onEraChange(era)}
-          />
-        ))}
+    <motion.div
+      initial={{ opacity: 0, y: -4 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: 0.2 }}
+      className="flex flex-col gap-2"
+    >
+      <div className="flex items-center gap-2">
+        <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest shrink-0 w-8">
+          Era
+        </span>
+        <div className="flex gap-1.5 overflow-x-auto pb-0.5 scrollbar-hide">
+          {ERAS.map((era) => (
+            <Chip
+              key={era}
+              label={era === "all" ? "All" : era}
+              active={activeEra === era}
+              color={
+                era === "all"
+                  ? "var(--color-text-primary)"
+                  : ERA_COLORS[era].primary
+              }
+              onClick={() => onEraChange(era)}
+            />
+          ))}
+        </div>
       </div>
-      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-        {DIETS.map((diet) => (
-          <Chip
-            key={diet}
-            label={
-              diet === "all"
-                ? "All Diets"
-                : `${DIET_COLORS[diet as Diet].emoji} ${diet}`
-            }
-            active={activeDiet === diet}
-            color={
-              diet === "all"
-                ? "var(--color-text-primary)"
-                : DIET_COLORS[diet].primary
-            }
-            onClick={() => onDietChange(diet)}
-          />
-        ))}
+      <div className="flex items-center gap-2">
+        <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest shrink-0 w-8">
+          Diet
+        </span>
+        <div className="flex gap-1.5 overflow-x-auto pb-0.5 scrollbar-hide">
+          {DIETS.map((diet) => (
+            <Chip
+              key={diet}
+              label={
+                diet === "all"
+                  ? "All"
+                  : `${DIET_COLORS[diet as Diet].emoji} ${diet}`
+              }
+              active={activeDiet === diet}
+              color={
+                diet === "all"
+                  ? "var(--color-text-primary)"
+                  : DIET_COLORS[diet].primary
+              }
+              onClick={() => onDietChange(diet)}
+            />
+          ))}
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

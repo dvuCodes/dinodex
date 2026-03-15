@@ -17,50 +17,82 @@ export function DinoCard({ dino }: { dino: DinoEntry }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -4, transition: { duration: 0.2 } }}
+      whileHover={{ y: -6, transition: { duration: 0.2 } }}
       className="group"
     >
-      <Link href={`/dino/${paddedId}`}>
+      <Link href={`/dino/${paddedId}`} className="block">
         <div
-          className="bg-white rounded-card p-3 shadow-sm hover:shadow-lg transition-shadow duration-200"
+          className="relative bg-white rounded-card p-3 transition-all duration-300 card-glow overflow-hidden"
           style={{
             border: `2px solid ${dietColor.primary}`,
+            boxShadow: `0 2px 8px rgba(0,0,0,0.06)`,
+            ["--glow-color" as string]: `${dietColor.primary}15`,
           }}
         >
-          <div className="flex items-center justify-between mb-2">
-            <span className="font-mono text-sm font-medium text-text-secondary">
+          {/* Decorative corner triangle */}
+          <div
+            className="absolute top-0 right-0 w-12 h-12 opacity-[0.07]"
+            style={{
+              background: `linear-gradient(135deg, transparent 50%, ${eraColor.primary} 50%)`,
+            }}
+          />
+
+          {/* Dex number with mono treatment */}
+          <div className="flex items-center justify-between mb-2 relative z-10">
+            <span className="font-mono text-[13px] font-medium text-text-muted tracking-wider">
               {formatDexNumber(dino.id)}
             </span>
-            <span className="text-sm" aria-label={dino.diet}>
-              {dietColor.emoji}
+            <span
+              className="text-[10px] font-body font-semibold uppercase tracking-wider px-2 py-0.5 rounded-pill"
+              style={{
+                backgroundColor: `${dietColor.primary}12`,
+                color: dietColor.primary,
+              }}
+            >
+              {dietColor.emoji} {dino.diet}
             </span>
           </div>
 
+          {/* Art container with radial glow */}
           <div
-            className="aspect-square rounded-xl overflow-hidden mb-2"
-            style={{ backgroundColor: eraColor.light }}
+            className="relative aspect-square rounded-xl overflow-hidden mb-2.5 dex-scanline"
+            style={{
+              background: `radial-gradient(circle at 50% 40%, ${eraColor.light}, ${eraColor.light}80 70%, ${eraColor.light}40)`,
+            }}
           >
+            {/* Faint dex number watermark */}
+            <span
+              className="absolute bottom-1 right-2 font-mono text-[40px] font-black leading-none opacity-[0.04] select-none"
+            >
+              {paddedId}
+            </span>
             <Image
               src={artSrc}
               alt={`Anime illustration of adult ${dino.name}`}
               width={512}
               height={512}
-              className="w-full h-full object-contain"
+              className="w-full h-full object-contain relative z-[1] group-hover:scale-105 transition-transform duration-500"
             />
           </div>
 
-          <h2 className="font-display text-base font-bold text-text-primary truncate">
+          {/* Name and era */}
+          <h2 className="font-display text-[15px] font-bold text-text-primary truncate leading-tight">
             {dino.name}
           </h2>
-          <div className="flex items-center gap-1 mt-0.5">
-            <span className="text-xs">{dietColor.emoji}</span>
-            <span className="font-body text-xs text-text-secondary capitalize">
-              {dino.diet}
-            </span>
-          </div>
-          <p className="font-body text-xs text-text-muted capitalize mt-0.5">
-            {dino.era}
+          <p
+            className="font-body text-[11px] font-medium capitalize mt-0.5"
+            style={{ color: eraColor.primary }}
+          >
+            {dino.era} Era
           </p>
+
+          {/* Hover border glow */}
+          <div
+            className="absolute inset-0 rounded-card opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+            style={{
+              boxShadow: `0 0 20px ${dietColor.primary}20, 0 8px 32px rgba(0,0,0,0.12)`,
+            }}
+          />
         </div>
       </Link>
     </motion.div>

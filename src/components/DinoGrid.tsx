@@ -24,7 +24,7 @@ export function DinoGrid({ dinos }: DinoGridProps) {
   } = useFilteredDinos(dinos);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-5">
       <SearchBar value={searchQuery} onChange={setSearchQuery} />
 
       <FilterChips
@@ -33,6 +33,20 @@ export function DinoGrid({ dinos }: DinoGridProps) {
         onEraChange={setEraFilter}
         onDietChange={setDietFilter}
       />
+
+      {/* Result count */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        className="flex items-center gap-2"
+      >
+        <div className="h-px flex-1 bg-border-default" />
+        <span className="font-mono text-[11px] text-text-muted tracking-wider">
+          {filteredDinos.length} {filteredDinos.length === 1 ? "SPECIES" : "SPECIES"} FOUND
+        </span>
+        <div className="h-px flex-1 bg-border-default" />
+      </motion.div>
 
       {filteredDinos.length === 0 ? (
         <EmptyState />
@@ -45,7 +59,8 @@ export function DinoGrid({ dinos }: DinoGridProps) {
             hidden: {},
             visible: {
               transition: {
-                staggerChildren: 0.03,
+                staggerChildren: 0.04,
+                delayChildren: 0.1,
               },
             },
           }}

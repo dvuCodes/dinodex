@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { motion } from "framer-motion";
 
 interface SearchBarProps {
   value: string;
@@ -11,9 +12,14 @@ export function SearchBar({ value, onChange }: SearchBarProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div className="relative">
+    <motion.div
+      initial={{ opacity: 0, y: -8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: 0.1 }}
+      className="relative group"
+    >
       <svg
-        className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted"
+        className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-text-muted group-focus-within:text-accent transition-colors duration-200"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -22,7 +28,7 @@ export function SearchBar({ value, onChange }: SearchBarProps) {
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
-          strokeWidth={2}
+          strokeWidth={2.5}
           d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
         />
       </svg>
@@ -32,7 +38,7 @@ export function SearchBar({ value, onChange }: SearchBarProps) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Search dinosaurs..."
-        className="w-full pl-10 pr-10 py-2.5 rounded-pill border border-border-default bg-white font-body text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
+        className="w-full pl-11 pr-11 py-3 rounded-card bg-white font-body text-sm text-text-primary placeholder:text-text-muted/70 border border-border-default shadow-sm focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent/40 focus:shadow-md transition-all duration-200"
         aria-label="Search dinosaurs"
       />
       {value && (
@@ -41,12 +47,14 @@ export function SearchBar({ value, onChange }: SearchBarProps) {
             onChange("");
             inputRef.current?.focus();
           }}
-          className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center rounded-full bg-border-default text-text-secondary hover:bg-border-hover transition-colors"
+          className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center rounded-full bg-text-muted/10 text-text-secondary hover:bg-accent/10 hover:text-accent transition-all duration-150"
           aria-label="Clear search"
         >
-          <span className="text-xs leading-none">&times;</span>
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+          </svg>
         </button>
       )}
-    </div>
+    </motion.div>
   );
 }

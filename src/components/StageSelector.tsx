@@ -20,35 +20,36 @@ export function StageSelector({
   onStageChange,
 }: StageSelectorProps) {
   return (
-    <div className="flex gap-2">
+    <div className="relative inline-flex gap-1 p-1 rounded-pill bg-parchment border border-border-default">
       {STAGES.map(({ key, label }) => {
         const isActive = activeStage === key;
         const colors = STAGE_COLORS[key];
 
         return (
-          <motion.button
+          <button
             key={key}
             onClick={() => onStageChange(key)}
-            whileTap={{ scale: 0.95 }}
-            className="h-10 px-4 rounded-pill font-body text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
-            style={
-              isActive
-                ? {
-                    backgroundColor: colors.primary,
-                    color: "white",
-                    boxShadow: `0 2px 8px ${colors.primary}40`,
-                  }
-                : {
-                    border: `1px solid ${colors.primary}`,
-                    color: colors.primary,
-                    backgroundColor: "transparent",
-                  }
-            }
+            className="relative h-9 px-4 rounded-pill font-body text-sm font-medium transition-colors duration-200 z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+            style={{
+              color: isActive ? "white" : colors.primary,
+            }}
             aria-label={`View ${key} stage`}
             aria-pressed={isActive}
           >
-            {label}
-          </motion.button>
+            {/* Sliding active background */}
+            {isActive && (
+              <motion.div
+                layoutId="stage-active-bg"
+                className="absolute inset-0 rounded-pill"
+                style={{
+                  backgroundColor: colors.primary,
+                  boxShadow: `0 2px 12px ${colors.primary}40`,
+                }}
+                transition={{ type: "spring", stiffness: 400, damping: 28 }}
+              />
+            )}
+            <span className="relative z-10">{label}</span>
+          </button>
         );
       })}
     </div>

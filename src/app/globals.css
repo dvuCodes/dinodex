@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+@theme {
+  /* Era Colors */
+  --color-era-triassic: #F59E0B;
+  --color-era-triassic-light: #FEF3C7;
+  --color-era-triassic-dark: #78350F;
+  --color-era-jurassic: #10B981;
+  --color-era-jurassic-light: #D1FAE5;
+  --color-era-jurassic-dark: #064E3B;
+  --color-era-cretaceous: #EF4444;
+  --color-era-cretaceous-light: #FEE2E2;
+  --color-era-cretaceous-dark: #7F1D1D;
+
+  /* Diet Colors */
+  --color-diet-carnivore: #DC2626;
+  --color-diet-carnivore-light: #FEE2E2;
+  --color-diet-herbivore: #16A34A;
+  --color-diet-herbivore-light: #DCFCE7;
+  --color-diet-omnivore: #D97706;
+  --color-diet-omnivore-light: #FEF3C7;
+  --color-diet-piscivore: #2563EB;
+  --color-diet-piscivore-light: #DBEAFE;
+
+  /* Stage Colors */
+  --color-stage-hatchling: #16A34A;
+  --color-stage-hatchling-bg: #BBF7D0;
+  --color-stage-juvenile: #D97706;
+  --color-stage-juvenile-bg: #FDE68A;
+  --color-stage-adult: #DC2626;
+  --color-stage-adult-bg: #FECACA;
+
+  /* Stat Bar Colors */
+  --color-stat-height: #EF4444;
+  --color-stat-length: #F97316;
+  --color-stat-weight: #EAB308;
+  --color-stat-speed: #3B82F6;
+  --color-stat-danger: #8B5CF6;
+  --color-stat-defense: #06B6D4;
+
+  /* UI Base Colors */
+  --color-cream: #FFFBF0;
+  --color-parchment: #FFF8ED;
+  --color-border-default: #E5E0D5;
+  --color-border-hover: #D4CFC4;
+  --color-text-primary: #1C1917;
+  --color-text-secondary: #78716C;
+  --color-text-muted: #A8A29E;
+  --color-accent: #E11D48;
+  --color-accent-hover: #BE123C;
+
+  /* Font Families */
+  --font-display: "M PLUS Rounded 1c", sans-serif;
+  --font-body: "Noto Sans", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Border Radius */
+  --radius-card: 16px;
+  --radius-pill: 9999px;
+
+  /* Animations */
+  --animate-sparkle: sparkle 0.6s ease-out forwards;
+  --animate-bar-fill: barFill 0.6s ease-out forwards;
+}
+
+@keyframes sparkle {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2) rotate(180deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8) rotate(360deg);
+  }
+}
+
+@keyframes barFill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: var(--bar-width);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #FFFBF0;
+  color: #1C1917;
+  font-family: var(--font-body);
+}
+
+::selection {
+  background-color: #FECACA;
+  color: #7F1D1D;
+}

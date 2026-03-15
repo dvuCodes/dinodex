@@ -11,21 +11,23 @@ Dinodex is a Pokédex-style dinosaur encyclopedia web app. Anime-styled art, 30 
 - **Animation:** Framer Motion for page transitions, stat bars, card hover
 - **Data:** Static JSON (src/data/dinos.json), no backend
 - **Fonts:** M PLUS Rounded 1c (display), Noto Sans (body), JetBrains Mono (mono)
+- **Package Manager:** Bun
 - **Deployment:** Vercel (static export)
 
 ## Key Docs (read before building)
-- `SPEC.md` — Full product spec with features, routes, architecture
-- `DESIGN_SYSTEM.md` — Colors, typography, component specs, animation specs
-- `DATA_SCHEMA.md` — TypeScript interfaces, constants, sample dino entries, utilities
-- `ART_GENERATION.md` — Gemini art pipeline and placeholder strategy
-- `TODO.md` — Structured build task list (follow this sequentially)
+- `docs/SPEC.md` — Full product spec with features, routes, architecture
+- `docs/DESIGN_SYSTEM.md` — Colors, typography, component specs, animation specs
+- `docs/DATA_SCHEMA.md` — TypeScript interfaces, constants, sample dino entries, utilities
+- `docs/ART_GENERATION.md` — Gemini art pipeline and placeholder strategy
+- `docs/TODO.md` — Structured build task list (follow this sequentially)
 
 ## Build Commands
 ```bash
-npm run dev        # Start dev server (Turbopack)
-npm run build      # Production build
-npm run start      # Serve production build
-npm run lint       # Lint check
+bun run dev        # Start dev server (Turbopack)
+bun run build      # Production build
+bun run start      # Serve production build
+bun run lint       # Lint check
+bun install        # Install dependencies
 ```
 
 ## Code Style

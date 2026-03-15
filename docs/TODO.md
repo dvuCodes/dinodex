@@ -17,67 +17,67 @@ Before starting any tasks, read these files in order to understand the full cont
 
 ---
 
-## Phase 1: Project Scaffolding
+## Phase 1: Project Scaffolding ✅
 
-### 1.1 Initialize Next.js project
-- Create new Next.js 15 project with App Router, TypeScript, Tailwind CSS v4, ESLint
-- Project name: `dinodex`
-- Use `src/` directory structure
-- Enable Turbopack for dev
+### 1.1 ~~Initialize Next.js project~~ ✅
+- ~~Create new Next.js 15 project with App Router, TypeScript, Tailwind CSS v4, ESLint~~
+- ~~Project name: `dinodex`~~
+- ~~Use `src/` directory structure~~
+- ~~Enable Turbopack for dev~~
 
-### 1.2 Install dependencies
-- `framer-motion` — animations (card transitions, stat bars, page transitions)
-- `next` (already included)
-- No other runtime deps needed — keep it lean
+### 1.2 ~~Install dependencies~~ ✅
+- ~~`framer-motion` — animations (card transitions, stat bars, page transitions)~~
+- ~~`next` (already included)~~
+- ~~No other runtime deps needed — keep it lean~~
 
-### 1.3 Configure Tailwind
-- Set up `tailwind.config.ts` with the custom theme extensions from DESIGN_SYSTEM.md section 8
-- Add custom colors: era colors, diet colors, stage colors, stat colors, UI base colors
-- Add custom font families: display, body, mono
-- Add custom border-radius: card (16px), pill (9999px)
-- Add custom animations: sparkle, bar-fill
+### 1.3 ~~Configure Tailwind~~ ✅
+- ~~Set up Tailwind CSS v4 with custom theme via `@theme` in `globals.css`~~
+- ~~Add custom colors: era colors, diet colors, stage colors, stat colors, UI base colors~~
+- ~~Add custom font families: display, body, mono~~
+- ~~Add custom border-radius: card (16px), pill (9999px)~~
+- ~~Add custom animations: sparkle, bar-fill~~
 
-### 1.4 Set up Google Fonts
-- In `src/app/layout.tsx`, import from `next/font/google`:
-  - `M_Plus_Rounded_1c` weights: 400, 700, 900
-  - `Noto_Sans` weights: 400, 500, 700
-  - `JetBrains_Mono` weight: 500
-- Apply via CSS variables: `--font-display`, `--font-body`, `--font-mono`
-- Set body font to Noto Sans, background to cream (#FFFBF0)
+### 1.4 ~~Set up Google Fonts~~ ✅
+- ~~In `src/app/layout.tsx`, load Google Fonts:~~
+  - ~~`M PLUS Rounded 1c` weights: 400, 700, 900~~
+  - ~~`Noto Sans` weights: 400, 500, 700~~
+  - ~~`JetBrains Mono` weight: 500~~
+- ~~Apply via CSS variables: `--font-display`, `--font-body`, `--font-mono`~~
+- ~~Set body font to Noto Sans, background to cream (#FFFBF0)~~
 
-### 1.5 Set up global styles
-- In `src/app/globals.css`:
-  - Set background color: `#FFFBF0` (warm cream)
-  - Set default text color: `#1C1917`
-  - Add smooth scrolling: `html { scroll-behavior: smooth }`
-  - Add selection color styling
-  - Import Tailwind directives
+### 1.5 ~~Set up global styles~~ ✅
+- ~~In `src/app/globals.css`:~~
+  - ~~Set background color: `#FFFBF0` (warm cream)~~
+  - ~~Set default text color: `#1C1917`~~
+  - ~~Add smooth scrolling: `html { scroll-behavior: smooth }`~~
+  - ~~Add selection color styling~~
+  - ~~Import Tailwind directives~~
 
-### 1.6 Create project structure
-- Create all directories per SPEC.md section 4.2:
-  - `src/components/`
-  - `src/data/`
-  - `src/lib/`
-  - `src/hooks/`
-  - `src/app/dino/[id]/`
-  - `public/dinos/` (empty for now)
-  - `scripts/`
+### 1.6 ~~Create project structure~~ ✅
+- ~~Create all directories per SPEC.md section 4.2:~~
+  - ~~`src/components/`~~
+  - ~~`src/data/`~~
+  - ~~`src/lib/`~~
+  - ~~`src/hooks/`~~
+  - ~~`src/app/dino/[id]/`~~
+  - ~~`public/dinos/` (empty for now)~~
+  - ~~`scripts/`~~
 
 ---
 
 ## Phase 2: Data Layer
 
-### 2.1 Create TypeScript types
-- Create `src/lib/types.ts` with all interfaces from DATA_SCHEMA.md section 1
-- Export: `Era`, `Diet`, `Locomotion`, `Stage`, `DinoStage`, `DinoEntry`
+### 2.1 ~~Create TypeScript types~~ ✅
+- ~~Create `src/lib/types.ts` with all interfaces from DATA_SCHEMA.md section 1~~
+- ~~Export: `Era`, `Diet`, `Locomotion`, `Stage`, `DinoStage`, `DinoEntry`~~
 
-### 2.2 Create constants
-- Create `src/lib/constants.ts` with all color maps from DATA_SCHEMA.md section 2
-- Export: `ERA_COLORS`, `DIET_COLORS`, `STAGE_COLORS`, `STAT_COLORS`, `STAT_MAXES`
+### 2.2 ~~Create constants~~ ✅
+- ~~Create `src/lib/constants.ts` with all color maps from DATA_SCHEMA.md section 2~~
+- ~~Export: `ERA_COLORS`, `DIET_COLORS`, `STAGE_COLORS`, `STAT_COLORS`, `STAT_MAXES`~~
 
-### 2.3 Create utility functions
-- Create `src/lib/utils.ts` with all helpers from DATA_SCHEMA.md section 4
-- Export: `formatDexNumber`, `formatWeight`, `formatMeters`, `formatSpeed`, `getStatPercent`, `getArtPath`
+### 2.3 ~~Create utility functions~~ ✅
+- ~~Create `src/lib/utils.ts` with all helpers from DATA_SCHEMA.md section 4~~
+- ~~Export: `formatDexNumber`, `formatWeight`, `formatMeters`, `formatSpeed`, `getStatPercent`, `getArtPath`~~
 
 ### 2.4 Create the full dinosaur dataset
 - Create `src/data/dinos.json` with all 30 dinosaur entries
@@ -90,14 +90,14 @@ Before starting any tasks, read these files in order to understand the full cont
 - Use the dinosaur roster from SPEC.md section 5 for the full list of 30
 - IMPORTANT: Take time with this — the data quality IS the product
 
-### 2.5 Create data loader
-- Create `src/lib/data.ts`:
-  - `getAllDinos(): DinoEntry[]` — returns all 30
-  - `getDinoById(id: number): DinoEntry | undefined` — single lookup
-  - `getDinosByEra(era: Era): DinoEntry[]` — filtered by era
-  - `getDinosByDiet(diet: Diet): DinoEntry[]` — filtered by diet
-  - `getRelatedDinos(dino: DinoEntry): DinoEntry[]` — looks up relatedIds
-- Import and type-assert from `dinos.json`
+### 2.5 ~~Create data loader~~ ✅
+- ~~Create `src/lib/data.ts`:~~
+  - ~~`getAllDinos(): DinoEntry[]` — returns all 30~~
+  - ~~`getDinoById(id: number): DinoEntry | undefined` — single lookup~~
+  - ~~`getDinosByEra(era: Era): DinoEntry[]` — filtered by era~~
+  - ~~`getDinosByDiet(diet: Diet): DinoEntry[]` — filtered by diet~~
+  - ~~`getRelatedDinos(dino: DinoEntry): DinoEntry[]` — looks up relatedIds~~
+- ~~Import and type-assert from `dinos.json`~~
 
 ---
 

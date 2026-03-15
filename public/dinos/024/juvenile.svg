@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <rect width="512" height="512" rx="24" fill="#FEF3C7"/>
+  <g transform="translate(256, 260)">
+    <!-- Body -->
+    <ellipse cx="0" cy="30" rx="70" ry="50" fill="#FBBF24"/>
+    <!-- Tail -->
+    <path d="M60,30 Q100,10 130,40 Q140,50 120,45" stroke="#F59E0B" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <!-- Neck -->
+    <path d="M-40,0 Q-50,-40 -30,-70" stroke="#FBBF24" stroke-width="30" fill="#FBBF24" stroke-linecap="round"/>
+    <!-- Head -->
+    <ellipse cx="-25" cy="-85" rx="35" ry="28" fill="#FBBF24"/>
+    <!-- Jaw -->
+    <path d="M-50,-78 L-60,-72 L-40,-75" fill="#F59E0B"/>
+    <!-- Eye -->
+    <circle cx="-30" cy="-92" r="10" fill="white"/>
+    <circle cx="-28" cy="-91" r="6" fill="#1C1917"/>
+    <circle cx="-26" cy="-93" r="2.5" fill="white"/>
+    <!-- Determined expression -->
+    <path d="M-42,-96 L-34,-100" stroke="#1C1917" stroke-width="2" stroke-linecap="round"/>
+    <!-- Legs -->
+    <rect x="-30" y="70" width="16" height="45" rx="8" fill="#F59E0B"/>
+    <rect x="15" y="70" width="16" height="45" rx="8" fill="#F59E0B"/>
+    <!-- Arms -->
+    <rect x="-55" y="10" width="12" height="28" rx="6" fill="#F59E0B" transform="rotate(-20 -55 10)"/>
+    <!-- Motion lines -->
+    <line x1="-100" y1="-40" x2="-120" y2="-40" stroke="#D97706" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+    <line x1="-95" y1="-20" x2="-120" y2="-20" stroke="#D97706" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+    <line x1="-100" y1="0" x2="-115" y2="0" stroke="#D97706" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+  </g>
+  <!-- Label -->
+  <text x="256" y="430" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="bold" fill="#D97706">Juvenile</text>
+</svg>

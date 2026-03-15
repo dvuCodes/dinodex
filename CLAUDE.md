@@ -30,6 +30,9 @@ bun run lint       # Lint check
 bun install        # Install dependencies
 ```
 
+## Skills
+- **Always use the `frontend-design` skill** (`.claude/skills/frontend-design/SKILL.md`) when working on frontend components, pages, layouts, or styling. This skill enforces distinctive, production-grade design with bold aesthetic choices that match the anime Pokédex vision. Invoke via `/frontend-design` before making UI changes.
+
 ## Code Style
 - Use TypeScript strict mode
 - Prefer named exports

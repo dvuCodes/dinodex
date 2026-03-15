@@ -1,0 +1,1442 @@
+[
+  {
+    "id": 1,
+    "name": "Eoraptor",
+    "meaning": "Dawn Plunderer",
+    "pronunciation": "EE-oh-RAP-tor",
+    "era": "triassic",
+    "period": "Late Triassic (231–228 Mya)",
+    "diet": "omnivore",
+    "type": "Theropod",
+    "locomotion": "biped",
+    "region": "South America",
+    "discoveredBy": "Ricardo Martínez",
+    "discoveredYear": 1991,
+    "funFact": "One of the earliest dinosaurs ever discovered, Eoraptor was no bigger than a dog and lived at the very dawn of the age of dinosaurs.",
+    "relatedIds": [2, 4],
+    "stages": {
+      "hatchling": {
+        "height": 0.05,
+        "length": 0.12,
+        "weight": 0.08,
+        "speed": 5,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Tiny insects and grubs",
+        "description": "A palm-sized hatchling with oversized eyes and stubby limbs. Baby Eoraptor scurried through Triassic undergrowth, snapping at beetles and hiding from larger predators."
+      },
+      "juvenile": {
+        "height": 0.2,
+        "length": 0.5,
+        "weight": 2,
+        "speed": 18,
+        "danger": 2,
+        "defense": 1,
+        "dietDescription": "Insects, small lizards, soft plants",
+        "description": "A nimble juvenile learning to hunt. At this stage, Eoraptor's mixed diet helped it survive — eating whatever it could find in the harsh Triassic landscape."
+      },
+      "adult": {
+        "height": 0.4,
+        "length": 1.0,
+        "weight": 10,
+        "speed": 25,
+        "danger": 3,
+        "defense": 2,
+        "dietDescription": "Insects, small vertebrates, plants",
+        "description": "A small but scrappy dinosaur about the size of a beagle. Despite its tiny stature, Eoraptor represents one of the first steps in dinosaur evolution — a glimpse at what would become the most dominant land animals in history."
+      }
+    }
+  },
+  {
+    "id": 2,
+    "name": "Coelophysis",
+    "meaning": "Hollow Form",
+    "pronunciation": "SEE-loh-FY-sis",
+    "era": "triassic",
+    "period": "Late Triassic (228–201 Mya)",
+    "diet": "carnivore",
+    "type": "Theropod",
+    "locomotion": "biped",
+    "region": "North America",
+    "discoveredBy": "Edward Drinker Cope",
+    "discoveredYear": 1889,
+    "funFact": "Hundreds of Coelophysis skeletons were found together at Ghost Ranch, New Mexico — evidence of a mass death event, possibly a flash flood.",
+    "relatedIds": [1, 4, 12],
+    "stages": {
+      "hatchling": {
+        "height": 0.06,
+        "length": 0.15,
+        "weight": 0.1,
+        "speed": 8,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Tiny insects and larvae",
+        "description": "A delicate, bird-like hatchling with hollow bones and a long neck. Barely bigger than a robin, baby Coelophysis darted through the undergrowth snatching up insects."
+      },
+      "juvenile": {
+        "height": 0.4,
+        "length": 1.2,
+        "weight": 8,
+        "speed": 30,
+        "danger": 2,
+        "defense": 1,
+        "dietDescription": "Insects, small reptiles, fish",
+        "description": "A swift and agile hunter beginning to hunt in packs. Juvenile Coelophysis was already one of the fastest animals of the Triassic, using speed rather than strength to catch prey."
+      },
+      "adult": {
+        "height": 1.0,
+        "length": 3.0,
+        "weight": 25,
+        "speed": 35,
+        "danger": 4,
+        "defense": 2,
+        "dietDescription": "Small reptiles, amphibians, fish, insects",
+        "description": "A lightweight, graceful predator built for speed. Coelophysis hunted in packs and could run down almost anything in the Triassic. Its hollow bones — the trait that gave it its name — made it incredibly light for its size."
+      }
+    }
+  },
+  {
+    "id": 3,
+    "name": "Plateosaurus",
+    "meaning": "Broad Lizard",
+    "pronunciation": "PLAT-ee-oh-SORE-us",
+    "era": "triassic",
+    "period": "Late Triassic (214–204 Mya)",
+    "diet": "herbivore",
+    "type": "Sauropodomorph",
+    "locomotion": "both",
+    "region": "Europe",
+    "discoveredBy": "Hermann von Meyer",
+    "discoveredYear": 1837,
+    "funFact": "Plateosaurus was one of the first large dinosaurs, and a distant ancestor of the giant sauropods like Brachiosaurus that would dominate the Jurassic.",
+    "relatedIds": [8, 9, 16],
+    "stages": {
+      "hatchling": {
+        "height": 0.1,
+        "length": 0.3,
+        "weight": 0.5,
+        "speed": 6,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Soft shoots and tender leaves",
+        "description": "A small, clumsy hatchling with a disproportionately long neck. Baby Plateosaurus could already stand on its hind legs to reach low-hanging fronds."
+      },
+      "juvenile": {
+        "height": 1.2,
+        "length": 3.5,
+        "weight": 200,
+        "speed": 14,
+        "danger": 2,
+        "defense": 3,
+        "dietDescription": "Ferns, cycads, conifers",
+        "description": "A growing juvenile that switched between walking on two legs and four. At this size, Plateosaurus was already too large for most Triassic predators to tackle alone."
+      },
+      "adult": {
+        "height": 3.0,
+        "length": 8.0,
+        "weight": 4000,
+        "speed": 15,
+        "danger": 3,
+        "defense": 5,
+        "dietDescription": "Conifers, ferns, cycads",
+        "description": "One of the largest animals of the Triassic, Plateosaurus could rear up on its hind legs to browse treetops. Its bulk provided protection, and its thumb claw could deliver a slashing blow to any predator bold enough to attack."
+      }
+    }
+  },
+  {
+    "id": 4,
+    "name": "Herrerasaurus",
+    "meaning": "Herrera's Lizard",
+    "pronunciation": "heh-RARE-ah-SORE-us",
+    "era": "triassic",
+    "period": "Late Triassic (231–228 Mya)",
+    "diet": "carnivore",
+    "type": "Herrerasaurid",
+    "locomotion": "biped",
+    "region": "South America",
+    "discoveredBy": "Victorino Herrera",
+    "discoveredYear": 1958,
+    "funFact": "Herrerasaurus lived alongside Eoraptor in the same ecosystem, but was a much larger and more formidable predator — an early glimpse of the carnivorous dinosaurs to come.",
+    "relatedIds": [1, 2],
+    "stages": {
+      "hatchling": {
+        "height": 0.08,
+        "length": 0.2,
+        "weight": 0.2,
+        "speed": 7,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Large insects and small lizards",
+        "description": "A fierce-looking hatchling with sharp teeth already visible. Even as a baby, Herrerasaurus had the build of a predator — long jaws, grasping hands, and powerful hind legs."
+      },
+      "juvenile": {
+        "height": 0.6,
+        "length": 2.0,
+        "weight": 30,
+        "speed": 28,
+        "danger": 4,
+        "defense": 2,
+        "dietDescription": "Small reptiles and early mammals",
+        "description": "A lean, fast-growing juvenile already capable of taking down prey its own size. Juvenile Herrerasaurus was one of the top predators in its Triassic ecosystem."
+      },
+      "adult": {
+        "height": 1.5,
+        "length": 4.5,
+        "weight": 210,
+        "speed": 35,
+        "danger": 6,
+        "defense": 3,
+        "dietDescription": "Medium reptiles, rhynchosaurs, other dinosaurs",
+        "description": "A powerful apex predator of the early Triassic. Herrerasaurus had a unique sliding jaw joint that let it grip struggling prey, and its serrated teeth could slice through flesh with ease. It was one of the most dangerous animals of its time."
+      }
+    }
+  },
+  {
+    "id": 5,
+    "name": "Postosuchus",
+    "meaning": "Post Crocodile",
+    "pronunciation": "POST-oh-SOO-kus",
+    "era": "triassic",
+    "period": "Late Triassic (228–202 Mya)",
+    "diet": "carnivore",
+    "type": "Rauisuchid",
+    "locomotion": "quadruped",
+    "region": "North America",
+    "discoveredBy": "Sankar Chatterjee",
+    "discoveredYear": 1985,
+    "funFact": "Postosuchus was not actually a dinosaur — it was a massive crocodilian relative that walked upright and was the apex predator before dinosaurs took over.",
+    "relatedIds": [2, 4],
+    "stages": {
+      "hatchling": {
+        "height": 0.08,
+        "length": 0.25,
+        "weight": 0.3,
+        "speed": 6,
+        "danger": 1,
+        "defense": 2,
+        "dietDescription": "Insects and small amphibians",
+        "description": "A stocky, armored hatchling that looked like a miniature crocodile walking on straight legs. Baby Postosuchus already had rows of bony scutes along its back for protection."
+      },
+      "juvenile": {
+        "height": 0.5,
+        "length": 2.0,
+        "weight": 60,
+        "speed": 22,
+        "danger": 4,
+        "defense": 5,
+        "dietDescription": "Small reptiles and amphibians",
+        "description": "A heavily-built juvenile with powerful jaws and reinforced armor. At this stage, Postosuchus was already a dominant predator, feared by the early dinosaurs sharing its habitat."
+      },
+      "adult": {
+        "height": 1.2,
+        "length": 5.0,
+        "weight": 300,
+        "speed": 25,
+        "danger": 7,
+        "defense": 6,
+        "dietDescription": "Large reptiles, early dinosaurs, aetosaurs",
+        "description": "The undisputed top predator of Late Triassic North America. Postosuchus combined a massive skull with dagger-like teeth and body armor, walking on pillar-like legs like a land crocodile. It was the last hurrah of the crocodilian line before dinosaurs rose to dominance."
+      }
+    }
+  },
+  {
+    "id": 6,
+    "name": "Allosaurus",
+    "meaning": "Different Lizard",
+    "pronunciation": "AL-oh-SORE-us",
+    "era": "jurassic",
+    "period": "Late Jurassic (155–145 Mya)",
+    "diet": "carnivore",
+    "type": "Theropod",
+    "locomotion": "biped",
+    "region": "North America",
+    "discoveredBy": "Othniel Charles Marsh",
+    "discoveredYear": 1877,
+    "funFact": "Allosaurus may have hunted in packs to bring down massive sauropods, using its upper jaw like a hatchet to slash and bleed out prey much larger than itself.",
+    "relatedIds": [13, 18, 17],
+    "stages": {
+      "hatchling": {
+        "height": 0.15,
+        "length": 0.4,
+        "weight": 1,
+        "speed": 10,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Insects and small lizards",
+        "description": "A scrappy little hatchling with a boxy head and tiny horn ridges above its eyes. Baby Allosaurus was a born predator, snapping at anything that moved near its nest."
+      },
+      "juvenile": {
+        "height": 1.5,
+        "length": 4.0,
+        "weight": 400,
+        "speed": 38,
+        "danger": 5,
+        "defense": 2,
+        "dietDescription": "Small dinosaurs and pterosaurs",
+        "description": "A fast, aggressive juvenile already sporting distinctive brow horns. Juvenile Allosaurus likely hunted in groups, learning the pack-hunting tactics that made adults so deadly against giant sauropods."
+      },
+      "adult": {
+        "height": 4.5,
+        "length": 10.5,
+        "weight": 2300,
+        "speed": 34,
+        "danger": 8,
+        "defense": 3,
+        "dietDescription": "Large dinosaurs — sauropods, stegosaurs",
+        "description": "The apex predator of the Late Jurassic. Allosaurus had a lightweight skull reinforced for impact, using its upper jaw like a hatchet to deliver devastating slashing bites. It could open its jaws incredibly wide, and its three-fingered hands bore sharp, curved claws."
+      }
+    }
+  },
+  {
+    "id": 7,
+    "name": "Stegosaurus",
+    "meaning": "Roof Lizard",
+    "pronunciation": "STEG-oh-SORE-us",
+    "era": "jurassic",
+    "period": "Late Jurassic (155–150 Mya)",
+    "diet": "herbivore",
+    "type": "Thyreophoran",
+    "locomotion": "quadruped",
+    "region": "North America",
+    "discoveredBy": "Othniel Charles Marsh",
+    "discoveredYear": 1877,
+    "funFact": "Despite being the size of a bus, Stegosaurus had a brain the size of a walnut — one of the smallest brain-to-body ratios of any dinosaur.",
+    "relatedIds": [14, 22],
+    "stages": {
+      "hatchling": {
+        "height": 0.15,
+        "length": 0.4,
+        "weight": 2,
+        "speed": 6,
+        "danger": 1,
+        "defense": 2,
+        "dietDescription": "Soft ferns and mosses",
+        "description": "A tiny armored baby with soft, flexible back plates that haven't hardened yet. Hatchling Stegosaurus huddled in groups for protection, their developing tail spikes still too small to be useful."
+      },
+      "juvenile": {
+        "height": 1.5,
+        "length": 4.0,
+        "weight": 800,
+        "speed": 10,
+        "danger": 3,
+        "defense": 6,
+        "dietDescription": "Ferns, cycads, low-growing plants",
+        "description": "A stocky juvenile with rapidly growing back plates and hardening tail spikes. At this stage, Stegosaurus was learning to swing its spiked tail — the 'thagomizer' — as a defensive weapon against predators like Allosaurus."
+      },
+      "adult": {
+        "height": 4.0,
+        "length": 9.0,
+        "weight": 5000,
+        "speed": 12,
+        "danger": 4,
+        "defense": 9,
+        "dietDescription": "Ferns, cycads, horsetails, mosses",
+        "description": "A bus-sized herbivore with 17 bony plates along its back and 4 lethal tail spikes. The plates may have been used for temperature regulation or display, flushing with blood to appear larger. Its tail spikes could deliver devastating blows to any predator foolish enough to attack."
+      }
+    }
+  },
+  {
+    "id": 8,
+    "name": "Brachiosaurus",
+    "meaning": "Arm Lizard",
+    "pronunciation": "BRACK-ee-oh-SORE-us",
+    "era": "jurassic",
+    "period": "Late Jurassic (154–150 Mya)",
+    "diet": "herbivore",
+    "type": "Sauropod",
+    "locomotion": "quadruped",
+    "region": "North America",
+    "discoveredBy": "Elmer S. Riggs",
+    "discoveredYear": 1903,
+    "funFact": "Unlike most sauropods, Brachiosaurus had front legs longer than its back legs, giving it a giraffe-like posture that let it browse treetops over 13 meters high.",
+    "relatedIds": [9, 16, 3],
+    "stages": {
+      "hatchling": {
+        "height": 0.5,
+        "length": 1.0,
+        "weight": 10,
+        "speed": 5,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Soft ferns and low vegetation",
+        "description": "A surprisingly small baby for what would become one of the largest land animals ever. Hatchling Brachiosaurus was vulnerable and likely grew rapidly, gaining hundreds of kilograms per year."
+      },
+      "juvenile": {
+        "height": 5.0,
+        "length": 10.0,
+        "weight": 8000,
+        "speed": 10,
+        "danger": 3,
+        "defense": 5,
+        "dietDescription": "Conifers, tree ferns, ginkgoes",
+        "description": "An already-massive juvenile that could reach branches most other herbivores couldn't touch. At this stage, its sheer size was beginning to provide natural protection from all but the largest predators."
+      },
+      "adult": {
+        "height": 13.0,
+        "length": 25.0,
+        "weight": 58000,
+        "speed": 12,
+        "danger": 5,
+        "defense": 8,
+        "dietDescription": "Treetop conifers, ginkgoes, cycads",
+        "description": "A living skyscraper that could look over a four-story building. Brachiosaurus needed to eat over 400 kilograms of vegetation per day to fuel its massive body. A single stomp from its columnar legs could crush any predator."
+      }
+    }
+  },
+  {
+    "id": 9,
+    "name": "Diplodocus",
+    "meaning": "Double Beam",
+    "pronunciation": "dih-PLOD-oh-kus",
+    "era": "jurassic",
+    "period": "Late Jurassic (154–150 Mya)",
+    "diet": "herbivore",
+    "type": "Sauropod",
+    "locomotion": "quadruped",
+    "region": "North America",
+    "discoveredBy": "Othniel Charles Marsh",
+    "discoveredYear": 1878,
+    "funFact": "Diplodocus could crack its long tail like a whip, producing a sonic boom that reached over 200 decibels — louder than a cannon.",
+    "relatedIds": [8, 16, 3],
+    "stages": {
+      "hatchling": {
+        "height": 0.3,
+        "length": 0.8,
+        "weight": 5,
+        "speed": 6,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Soft ground-level plants",
+        "description": "A tiny, long-tailed hatchling that could fit in your arms. Baby Diplodocus grew astonishingly fast — it needed to, since its small size made it a target for every predator in the Jurassic."
+      },
+      "juvenile": {
+        "height": 3.0,
+        "length": 12.0,
+        "weight": 5000,
+        "speed": 12,
+        "danger": 3,
+        "defense": 5,
+        "dietDescription": "Ferns, horsetails, conifers",
+        "description": "A lanky teenager with a whip-like tail already longer than most dinosaurs. Juvenile Diplodocus traveled in herds for safety, using their combined bulk to deter predators like Allosaurus."
+      },
+      "adult": {
+        "height": 5.0,
+        "length": 26.0,
+        "weight": 15000,
+        "speed": 14,
+        "danger": 4,
+        "defense": 7,
+        "dietDescription": "Low and mid-height vegetation, ferns, conifers",
+        "description": "One of the longest animals to ever walk the Earth. Diplodocus used its incredibly long neck to sweep across wide areas of vegetation without moving its massive body. Its whip-crack tail could break the bones of any attacker."
+      }
+    }
+  },
+  {
+    "id": 10,
+    "name": "Archaeopteryx",
+    "meaning": "Ancient Wing",
+    "pronunciation": "ar-kee-OP-ter-ix",
+    "era": "jurassic",
+    "period": "Late Jurassic (150–148 Mya)",
+    "diet": "carnivore",
+    "type": "Avialae",
+    "locomotion": "flight",
+    "region": "Europe",
+    "discoveredBy": "Hermann von Meyer",
+    "discoveredYear": 1861,
+    "funFact": "Archaeopteryx is the most famous transitional fossil ever found — part dinosaur, part bird, with feathered wings, a bony tail, and teeth in its beak.",
+    "relatedIds": [11, 20, 28],
+    "stages": {
+      "hatchling": {
+        "height": 0.03,
+        "length": 0.08,
+        "weight": 0.02,
+        "speed": 3,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Tiny insects",
+        "description": "A downy, sparrow-sized chick with stubby proto-wings. Hatchling Archaeopteryx couldn't fly yet and stayed hidden in vegetation, relying on camouflage to avoid predators."
+      },
+      "juvenile": {
+        "height": 0.12,
+        "length": 0.25,
+        "weight": 0.2,
+        "speed": 15,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Insects, small lizards",
+        "description": "A gangly juvenile with developing flight feathers beginning to take shape. At this stage, it could likely glide short distances from tree to tree, a crucial survival skill in the predator-rich Jurassic."
+      },
+      "adult": {
+        "height": 0.2,
+        "length": 0.5,
+        "weight": 0.9,
+        "speed": 25,
+        "danger": 2,
+        "defense": 2,
+        "dietDescription": "Insects, small lizards, worms",
+        "description": "The bridge between dinosaurs and birds. Archaeopteryx had feathered wings for short flights, but also clawed fingers and a toothed jaw — features no modern bird possesses. It was crow-sized and likely lived in coastal island environments."
+      }
+    }
+  },
+  {
+    "id": 11,
+    "name": "Compsognathus",
+    "meaning": "Elegant Jaw",
+    "pronunciation": "komp-SOG-nah-thus",
+    "era": "jurassic",
+    "period": "Late Jurassic (150–148 Mya)",
+    "diet": "carnivore",
+    "type": "Theropod",
+    "locomotion": "biped",
+    "region": "Europe",
+    "discoveredBy": "Johann A. Wagner",
+    "discoveredYear": 1859,
+    "funFact": "For over a century, Compsognathus held the record as the smallest known dinosaur — about the size of a chicken.",
+    "relatedIds": [10, 2, 20],
+    "stages": {
+      "hatchling": {
+        "height": 0.03,
+        "length": 0.06,
+        "weight": 0.01,
+        "speed": 5,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Tiny insects and larvae",
+        "description": "An adorably tiny hatchling no bigger than a mouse. Baby Compsognathus was featherless and fragile, relying on speed and hiding to survive its first weeks."
+      },
+      "juvenile": {
+        "height": 0.1,
+        "length": 0.3,
+        "weight": 0.5,
+        "speed": 30,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Insects, small lizards",
+        "description": "A lightning-fast juvenile that was one of the quickest little hunters of the Jurassic. Its long legs and light body made it nearly impossible for predators to catch."
+      },
+      "adult": {
+        "height": 0.25,
+        "length": 0.65,
+        "weight": 3,
+        "speed": 40,
+        "danger": 2,
+        "defense": 1,
+        "dietDescription": "Lizards, insects, small mammals",
+        "description": "A chicken-sized speed demon and one of the smallest dinosaurs ever discovered. Compsognathus was an agile pursuit hunter that used its incredible speed and sharp eyesight to run down small prey on Jurassic island coastlines."
+      }
+    }
+  },
+  {
+    "id": 12,
+    "name": "Dilophosaurus",
+    "meaning": "Two-Crested Lizard",
+    "pronunciation": "die-LOAF-oh-SORE-us",
+    "era": "jurassic",
+    "period": "Early Jurassic (193–183 Mya)",
+    "diet": "carnivore",
+    "type": "Theropod",
+    "locomotion": "biped",
+    "region": "North America",
+    "discoveredBy": "Jesse Williams / Sam Welles",
+    "discoveredYear": 1942,
+    "funFact": "Despite what Jurassic Park showed, Dilophosaurus had no frill and couldn't spit venom. It was actually much larger than the movie depicted — about 6 meters long.",
+    "relatedIds": [6, 13, 2],
+    "stages": {
+      "hatchling": {
+        "height": 0.1,
+        "length": 0.25,
+        "weight": 0.5,
+        "speed": 8,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Insects and small amphibians",
+        "description": "A slender hatchling with two tiny bumps on its skull where its signature crests will grow. Baby Dilophosaurus was lightly built and relied on speed to escape danger."
+      },
+      "juvenile": {
+        "height": 1.0,
+        "length": 3.0,
+        "weight": 100,
+        "speed": 32,
+        "danger": 4,
+        "defense": 2,
+        "dietDescription": "Small reptiles and fish",
+        "description": "A sleek juvenile with crests now prominently visible atop its skull. These twin crests were likely used for species recognition and display, possibly flushing with color during social interactions."
+      },
+      "adult": {
+        "height": 2.0,
+        "length": 6.0,
+        "weight": 400,
+        "speed": 35,
+        "danger": 6,
+        "defense": 2,
+        "dietDescription": "Medium dinosaurs, large fish, reptiles",
+        "description": "The largest predator of the Early Jurassic, crowned with two dramatic bony crests. Dilophosaurus was a fast, agile hunter — quite different from its Jurassic Park portrayal. Its crests were too fragile for combat and were likely used for display."
+      }
+    }
+  },
+  {
+    "id": 13,
+    "name": "Ceratosaurus",
+    "meaning": "Horned Lizard",
+    "pronunciation": "seh-RAT-oh-SORE-us",
+    "era": "jurassic",
+    "period": "Late Jurassic (153–148 Mya)",
+    "diet": "carnivore",
+    "type": "Theropod",
+    "locomotion": "biped",
+    "region": "North America",
+    "discoveredBy": "Othniel Charles Marsh",
+    "discoveredYear": 1884,
+    "funFact": "Ceratosaurus had a distinctive horn on its nose and a row of small osteoderms (bony armor) along its back — unusual features for a theropod predator.",
+    "relatedIds": [6, 12, 15],
+    "stages": {
+      "hatchling": {
+        "height": 0.1,
+        "length": 0.3,
+        "weight": 0.8,
+        "speed": 8,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Insects and small lizards",
+        "description": "A tiny hatchling with a small bump on its nose where the signature horn will develop. Baby Ceratosaurus already had the powerful build that would make it a formidable predator."
+      },
+      "juvenile": {
+        "height": 1.0,
+        "length": 3.0,
+        "weight": 150,
+        "speed": 30,
+        "danger": 4,
+        "defense": 3,
+        "dietDescription": "Small to medium reptiles and fish",
+        "description": "A muscular juvenile with its nasal horn becoming prominent and bony scutes forming along its spine. Ceratosaurus at this stage likely hunted near waterways, preying on fish and small dinosaurs."
+      },
+      "adult": {
+        "height": 2.5,
+        "length": 7.0,
+        "weight": 750,
+        "speed": 28,
+        "danger": 7,
+        "defense": 4,
+        "dietDescription": "Medium dinosaurs, large fish, crocodilians",
+        "description": "A powerful, stocky predator with a prominent nasal horn and blade-like teeth. Ceratosaurus lived alongside Allosaurus but likely occupied a different niche, preferring forested and aquatic habitats. Its horn was probably too fragile for combat and served as a display feature."
+      }
+    }
+  },
+  {
+    "id": 14,
+    "name": "Kentrosaurus",
+    "meaning": "Spiked Lizard",
+    "pronunciation": "KEN-troh-SORE-us",
+    "era": "jurassic",
+    "period": "Late Jurassic (155–150 Mya)",
+    "diet": "herbivore",
+    "type": "Thyreophoran",
+    "locomotion": "quadruped",
+    "region": "Africa",
+    "discoveredBy": "Edwin Hennig",
+    "discoveredYear": 1915,
+    "funFact": "Kentrosaurus had long shoulder spikes that pointed sideways and backward — making it a nightmare to attack from almost any angle.",
+    "relatedIds": [7, 22],
+    "stages": {
+      "hatchling": {
+        "height": 0.1,
+        "length": 0.3,
+        "weight": 1,
+        "speed": 5,
+        "danger": 1,
+        "defense": 2,
+        "dietDescription": "Soft mosses and tender plant shoots",
+        "description": "A tiny, well-armored baby with soft nubs where fearsome spikes will grow. Hatchling Kentrosaurus already had the low-slung, tank-like build of its species."
+      },
+      "juvenile": {
+        "height": 0.8,
+        "length": 2.5,
+        "weight": 250,
+        "speed": 8,
+        "danger": 3,
+        "defense": 6,
+        "dietDescription": "Low-growing ferns and cycads",
+        "description": "A bristling juvenile with sharpening spikes along its back and shoulders. The shoulder spikes were already formidable, and combined with its spiked tail, the juvenile Kentrosaurus was well-protected against predators."
+      },
+      "adult": {
+        "height": 1.8,
+        "length": 5.0,
+        "weight": 1600,
+        "speed": 10,
+        "danger": 4,
+        "defense": 9,
+        "dietDescription": "Ferns, cycads, horsetails",
+        "description": "A walking fortress covered in a combination of plates and spikes. Unlike its cousin Stegosaurus, Kentrosaurus had spikes rather than plates along its back, plus distinctive shoulder spikes that made it one of the most well-defended herbivores of the Jurassic."
+      }
+    }
+  },
+  {
+    "id": 15,
+    "name": "Megalosaurus",
+    "meaning": "Great Lizard",
+    "pronunciation": "MEG-ah-loh-SORE-us",
+    "era": "jurassic",
+    "period": "Middle Jurassic (166–163 Mya)",
+    "diet": "carnivore",
+    "type": "Theropod",
+    "locomotion": "biped",
+    "region": "Europe",
+    "discoveredBy": "William Buckland",
+    "discoveredYear": 1824,
+    "funFact": "Megalosaurus was the very first dinosaur ever scientifically named, in 1824 — decades before the word 'dinosaur' was even invented.",
+    "relatedIds": [6, 13, 17],
+    "stages": {
+      "hatchling": {
+        "height": 0.12,
+        "length": 0.3,
+        "weight": 0.6,
+        "speed": 8,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Insects and small reptiles",
+        "description": "A sturdy little hatchling of the most historically significant dinosaur. Baby Megalosaurus was robust from birth, with strong legs and a proportionally large head."
+      },
+      "juvenile": {
+        "height": 1.0,
+        "length": 3.5,
+        "weight": 200,
+        "speed": 28,
+        "danger": 4,
+        "defense": 2,
+        "dietDescription": "Small dinosaurs and large reptiles",
+        "description": "A powerful juvenile already showing the muscular build that made Megalosaurus an effective ambush predator. It likely hunted in dense Jurassic forests, using cover to get close to prey."
+      },
+      "adult": {
+        "height": 2.5,
+        "length": 7.0,
+        "weight": 700,
+        "speed": 30,
+        "danger": 7,
+        "defense": 3,
+        "dietDescription": "Medium to large dinosaurs, stegosaurs",
+        "description": "The first dinosaur to be scientifically described, Megalosaurus was a robust predator that roamed Middle Jurassic Europe. It had powerful jaws with serrated teeth and strong arms, making it an effective hunter of the herbivorous dinosaurs that shared its ecosystem."
+      }
+    }
+  },
+  {
+    "id": 16,
+    "name": "Apatosaurus",
+    "meaning": "Deceptive Lizard",
+    "pronunciation": "ah-PAT-oh-SORE-us",
+    "era": "jurassic",
+    "period": "Late Jurassic (152–150 Mya)",
+    "diet": "herbivore",
+    "type": "Sauropod",
+    "locomotion": "quadruped",
+    "region": "North America",
+    "discoveredBy": "Othniel Charles Marsh",
+    "discoveredYear": 1877,
+    "funFact": "Apatosaurus was once confused with 'Brontosaurus' in one of paleontology's most famous mix-ups, though recent studies suggest they may actually be separate genera after all.",
+    "relatedIds": [8, 9, 3],
+    "stages": {
+      "hatchling": {
+        "height": 0.4,
+        "length": 0.9,
+        "weight": 8,
+        "speed": 5,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Soft ferns and ground-level plants",
+        "description": "A chunky little hatchling with an absurdly long tail relative to its body. Baby Apatosaurus grew at an astounding rate — gaining several kilograms per day in its first years."
+      },
+      "juvenile": {
+        "height": 3.0,
+        "length": 10.0,
+        "weight": 6000,
+        "speed": 12,
+        "danger": 3,
+        "defense": 5,
+        "dietDescription": "Ferns, cycads, conifers",
+        "description": "An already-enormous teenager with a powerful, muscular neck and a whip-like tail. Juvenile Apatosaurus traveled in herds, with the adults forming a protective perimeter around the young."
+      },
+      "adult": {
+        "height": 4.5,
+        "length": 23.0,
+        "weight": 23000,
+        "speed": 14,
+        "danger": 5,
+        "defense": 7,
+        "dietDescription": "Conifers, tree ferns, ginkgoes, horsetails",
+        "description": "A titanic sauropod with a barrel-shaped body and a neck so long it needed special air sacs to breathe efficiently. Apatosaurus was incredibly muscular for a sauropod, with a thick neck that could have been used to shove rivals during dominance fights."
+      }
+    }
+  },
+  {
+    "id": 17,
+    "name": "Yangchuanosaurus",
+    "meaning": "Yangchuan Lizard",
+    "pronunciation": "YANG-chwan-oh-SORE-us",
+    "era": "jurassic",
+    "period": "Late Jurassic (168–155 Mya)",
+    "diet": "carnivore",
+    "type": "Theropod",
+    "locomotion": "biped",
+    "region": "Asia",
+    "discoveredBy": "Dong Zhiming",
+    "discoveredYear": 1978,
+    "funFact": "Yangchuanosaurus was Asia's answer to Allosaurus — a top predator with a large, bony crest on its skull that may have been brightly colored for display.",
+    "relatedIds": [6, 13, 15],
+    "stages": {
+      "hatchling": {
+        "height": 0.12,
+        "length": 0.35,
+        "weight": 0.8,
+        "speed": 9,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Insects and small lizards",
+        "description": "A compact hatchling with a slightly ridged skull — the earliest sign of the elaborate crest it would develop. Baby Yangchuanosaurus was a quick and alert little predator."
+      },
+      "juvenile": {
+        "height": 1.2,
+        "length": 4.0,
+        "weight": 300,
+        "speed": 32,
+        "danger": 5,
+        "defense": 2,
+        "dietDescription": "Small to medium dinosaurs",
+        "description": "A fast-growing juvenile with a developing skull crest and increasingly powerful jaws. At this stage, Yangchuanosaurus was an effective pack hunter in the dense forests of Jurassic Asia."
+      },
+      "adult": {
+        "height": 3.5,
+        "length": 10.0,
+        "weight": 3000,
+        "speed": 30,
+        "danger": 8,
+        "defense": 3,
+        "dietDescription": "Large dinosaurs — sauropods, stegosaurs",
+        "description": "The apex predator of Jurassic China, Yangchuanosaurus was a close relative of Allosaurus but slightly heavier and more robust. Its distinctive skull crest and powerful jaws made it the dominant carnivore of its ecosystem, capable of tackling the giant sauropods that roamed eastern Asia."
+      }
+    }
+  },
+  {
+    "id": 18,
+    "name": "Tyrannosaurus Rex",
+    "meaning": "Tyrant Lizard King",
+    "pronunciation": "tie-RAN-oh-SORE-us REX",
+    "era": "cretaceous",
+    "period": "Late Cretaceous (68–66 Mya)",
+    "diet": "carnivore",
+    "type": "Theropod",
+    "locomotion": "biped",
+    "region": "North America",
+    "discoveredBy": "Barnum Brown",
+    "discoveredYear": 1902,
+    "funFact": "T. Rex had the strongest bite force of any land animal ever — powerful enough to crush bone and swallow prey in massive chunks.",
+    "relatedIds": [6, 27, 25],
+    "stages": {
+      "hatchling": {
+        "height": 0.3,
+        "length": 0.6,
+        "weight": 5,
+        "speed": 10,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Insects and tiny lizards",
+        "description": "A fluffy, downy-feathered hatchling with disproportionately large feet. Baby T. Rex was vulnerable and likely stayed close to its nest, relying on parental protection from larger predators."
+      },
+      "juvenile": {
+        "height": 2.5,
+        "length": 6.0,
+        "weight": 1500,
+        "speed": 40,
+        "danger": 6,
+        "defense": 3,
+        "dietDescription": "Medium-sized dinosaurs and carrion",
+        "description": "A lanky, fast-growing teenager that was actually faster than the adult. Juvenile T. Rex was a pursuit predator, chasing down prey that the heavier adults couldn't catch. Its jaws were already formidable but not yet bone-crushing."
+      },
+      "adult": {
+        "height": 5.6,
+        "length": 12.3,
+        "weight": 8000,
+        "speed": 32,
+        "danger": 10,
+        "defense": 4,
+        "dietDescription": "Large dinosaurs — Triceratops, hadrosaurs",
+        "description": "The undisputed king of the Cretaceous. An adult T. Rex combined a 1.5-meter skull, bone-crushing bite force of 12,800 pounds, and keen binocular vision. It was slower than its juvenile form but far more powerful — a tank rather than a sprinter."
+      }
+    }
+  },
+  {
+    "id": 19,
+    "name": "Triceratops",
+    "meaning": "Three-Horned Face",
+    "pronunciation": "try-SAIR-ah-tops",
+    "era": "cretaceous",
+    "period": "Late Cretaceous (68–66 Mya)",
+    "diet": "herbivore",
+    "type": "Ceratopsian",
+    "locomotion": "quadruped",
+    "region": "North America",
+    "discoveredBy": "John Bell Hatcher",
+    "discoveredYear": 1889,
+    "funFact": "Triceratops' bony frill wasn't just for defense — it was full of blood vessels and may have flushed red or changed color for communication and display.",
+    "relatedIds": [29, 22, 18],
+    "stages": {
+      "hatchling": {
+        "height": 0.15,
+        "length": 0.4,
+        "weight": 2,
+        "speed": 6,
+        "danger": 1,
+        "defense": 2,
+        "dietDescription": "Soft shoots and flowering plants",
+        "description": "A stubby, round-bodied hatchling with tiny horn nubs and a small frill. Baby Triceratops likely stayed in large nursery groups, protected by vigilant adults."
+      },
+      "juvenile": {
+        "height": 1.2,
+        "length": 3.5,
+        "weight": 500,
+        "speed": 18,
+        "danger": 4,
+        "defense": 6,
+        "dietDescription": "Ferns, palms, flowering plants",
+        "description": "A feisty juvenile with rapidly growing horns and an expanding frill. Young Triceratops were already capable of charging predators, and their horns — while not fully grown — could deliver a painful jab."
+      },
+      "adult": {
+        "height": 3.0,
+        "length": 9.0,
+        "weight": 8000,
+        "speed": 25,
+        "danger": 6,
+        "defense": 9,
+        "dietDescription": "Palms, cycads, ferns, flowering plants",
+        "description": "A rhinoceros-like tank with three lethal horns and a massive bony frill. Triceratops was T. Rex's most formidable opponent — fossils show healed bite marks from T. Rex attacks, proving these giants fought and sometimes survived. Its parrot-like beak could shear through the toughest vegetation."
+      }
+    }
+  },
+  {
+    "id": 20,
+    "name": "Velociraptor",
+    "meaning": "Swift Thief",
+    "pronunciation": "veh-LOSS-ih-RAP-tor",
+    "era": "cretaceous",
+    "period": "Late Cretaceous (75–71 Mya)",
+    "diet": "carnivore",
+    "type": "Dromaeosaurid",
+    "locomotion": "biped",
+    "region": "Asia",
+    "discoveredBy": "Henry Fairfield Osborn",
+    "discoveredYear": 1924,
+    "funFact": "Real Velociraptors were turkey-sized and covered in feathers — nothing like the human-sized monsters in Jurassic Park (those were closer to Deinonychus).",
+    "relatedIds": [28, 10, 11],
+    "stages": {
+      "hatchling": {
+        "height": 0.05,
+        "length": 0.1,
+        "weight": 0.05,
+        "speed": 8,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Tiny insects and grubs",
+        "description": "A fluffy, feathered hatchling no bigger than a pigeon. Baby Velociraptor was born with a tiny curved claw on each foot — a miniature version of its lethal adult weapon."
+      },
+      "juvenile": {
+        "height": 0.2,
+        "length": 0.8,
+        "weight": 3,
+        "speed": 38,
+        "danger": 3,
+        "defense": 2,
+        "dietDescription": "Lizards, small mammals, insects",
+        "description": "A lightning-quick juvenile already mastering the use of its sickle-shaped killing claw. Young Velociraptor was one of the fastest small predators, using agility and intelligence to hunt in the Mongolian desert."
+      },
+      "adult": {
+        "height": 0.5,
+        "length": 1.8,
+        "weight": 15,
+        "speed": 40,
+        "danger": 5,
+        "defense": 2,
+        "dietDescription": "Small dinosaurs, mammals, lizards, eggs",
+        "description": "A feathered, turkey-sized predator with one of the sharpest minds and deadliest weapons in the dinosaur kingdom. Its retractable sickle claw could pin prey while its jaws tore flesh. The famous 'Fighting Dinosaurs' fossil shows a Velociraptor locked in combat with a Protoceratops — both killed mid-battle."
+      }
+    }
+  },
+  {
+    "id": 21,
+    "name": "Spinosaurus",
+    "meaning": "Spine Lizard",
+    "pronunciation": "SPY-noh-SORE-us",
+    "era": "cretaceous",
+    "period": "Late Cretaceous (99–93 Mya)",
+    "diet": "carnivore",
+    "type": "Theropod",
+    "locomotion": "both",
+    "region": "Africa",
+    "discoveredBy": "Ernst Stromer",
+    "discoveredYear": 1912,
+    "funFact": "Spinosaurus was the largest carnivorous dinosaur ever — bigger than T. Rex — and likely spent much of its life in water, hunting giant fish like a 15-meter crocodile.",
+    "relatedIds": [18, 27, 6],
+    "stages": {
+      "hatchling": {
+        "height": 0.2,
+        "length": 0.5,
+        "weight": 3,
+        "speed": 8,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Small fish and aquatic insects",
+        "description": "A long-snouted hatchling drawn to water from birth. Baby Spinosaurus had a crocodile-like snout and already showed an instinctive preference for aquatic environments."
+      },
+      "juvenile": {
+        "height": 2.0,
+        "length": 6.0,
+        "weight": 1200,
+        "speed": 25,
+        "danger": 5,
+        "defense": 3,
+        "dietDescription": "Large fish, small crocodilians, turtles",
+        "description": "A semi-aquatic juvenile with a developing sail on its back and conical, fish-catching teeth. Juvenile Spinosaurus was an adept swimmer, using its paddle-like tail to pursue prey through rivers."
+      },
+      "adult": {
+        "height": 6.0,
+        "length": 15.0,
+        "weight": 7500,
+        "speed": 20,
+        "danger": 9,
+        "defense": 4,
+        "dietDescription": "Giant fish, sharks, crocodilians, other dinosaurs",
+        "description": "The largest predatory dinosaur ever, surpassing even T. Rex in length. Spinosaurus was semi-aquatic with a massive sail on its back, conical teeth for gripping fish, and a paddle-shaped tail for swimming. It was essentially a dinosaur-crocodile hybrid that dominated North African river systems."
+      }
+    }
+  },
+  {
+    "id": 22,
+    "name": "Ankylosaurus",
+    "meaning": "Fused Lizard",
+    "pronunciation": "an-KY-loh-SORE-us",
+    "era": "cretaceous",
+    "period": "Late Cretaceous (68–66 Mya)",
+    "diet": "herbivore",
+    "type": "Thyreophoran",
+    "locomotion": "quadruped",
+    "region": "North America",
+    "discoveredBy": "Barnum Brown",
+    "discoveredYear": 1908,
+    "funFact": "Ankylosaurus' tail club was solid bone and could swing with enough force to shatter the leg bones of a T. Rex.",
+    "relatedIds": [7, 14, 19],
+    "stages": {
+      "hatchling": {
+        "height": 0.1,
+        "length": 0.3,
+        "weight": 1.5,
+        "speed": 4,
+        "danger": 1,
+        "defense": 3,
+        "dietDescription": "Soft mosses and low plants",
+        "description": "A squat little tank covered in small, pebbly armor plates. Even as a hatchling, Ankylosaurus had more natural armor than most adult dinosaurs of other species."
+      },
+      "juvenile": {
+        "height": 0.8,
+        "length": 3.0,
+        "weight": 600,
+        "speed": 8,
+        "danger": 3,
+        "defense": 7,
+        "dietDescription": "Ferns, low shrubs, mosses",
+        "description": "A heavily armored juvenile with its tail club beginning to calcify into solid bone. Young Ankylosaurus was already nearly impervious to predator attacks — its fused armor plates creating an almost unbreakable shell."
+      },
+      "adult": {
+        "height": 1.7,
+        "length": 7.0,
+        "weight": 6000,
+        "speed": 10,
+        "danger": 5,
+        "defense": 10,
+        "dietDescription": "Ferns, shrubs, flowering plants",
+        "description": "The ultimate dinosaur tank. Ankylosaurus was covered head-to-tail in fused bony armor, with even its eyelids armored. Its massive tail club — a solid ball of fused bone — could swing with devastating force. Even T. Rex had to flip this beast over to find a vulnerable spot."
+      }
+    }
+  },
+  {
+    "id": 23,
+    "name": "Parasaurolophus",
+    "meaning": "Near Crested Lizard",
+    "pronunciation": "par-ah-SORE-ol-oh-fus",
+    "era": "cretaceous",
+    "period": "Late Cretaceous (76–73 Mya)",
+    "diet": "herbivore",
+    "type": "Hadrosaur",
+    "locomotion": "both",
+    "region": "North America",
+    "discoveredBy": "William Parks",
+    "discoveredYear": 1922,
+    "funFact": "The hollow, tubular crest on Parasaurolophus' head worked like a trombone — it could produce deep, resonating calls that traveled for kilometers.",
+    "relatedIds": [19, 24],
+    "stages": {
+      "hatchling": {
+        "height": 0.12,
+        "length": 0.35,
+        "weight": 1.5,
+        "speed": 6,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Soft shoots and tender leaves",
+        "description": "A gangly baby with just a tiny bump where its magnificent crest will grow. Hatchling Parasaurolophus stayed close to the herd, communicating with high-pitched chirps."
+      },
+      "juvenile": {
+        "height": 1.5,
+        "length": 4.0,
+        "weight": 600,
+        "speed": 28,
+        "danger": 2,
+        "defense": 3,
+        "dietDescription": "Ferns, conifers, flowering plants",
+        "description": "A lanky juvenile with a half-grown crest that produced higher-pitched calls than the adults. The crest was still growing and its tone would deepen with age, like a teenager's changing voice."
+      },
+      "adult": {
+        "height": 3.0,
+        "length": 10.0,
+        "weight": 3500,
+        "speed": 35,
+        "danger": 3,
+        "defense": 3,
+        "dietDescription": "Conifers, ferns, flowering plants, magnolias",
+        "description": "An elegant, duck-billed dinosaur crowned with a spectacular 1-meter-long hollow crest. Parasaurolophus could walk on two or four legs and used its crest to blast deep, resonating calls across Cretaceous floodplains — like a living foghorn warning the herd of approaching predators."
+      }
+    }
+  },
+  {
+    "id": 24,
+    "name": "Pachycephalosaurus",
+    "meaning": "Thick-Headed Lizard",
+    "pronunciation": "PAK-ee-SEF-ah-loh-SORE-us",
+    "era": "cretaceous",
+    "period": "Late Cretaceous (70–66 Mya)",
+    "diet": "herbivore",
+    "type": "Pachycephalosaur",
+    "locomotion": "biped",
+    "region": "North America",
+    "discoveredBy": "Donald Baird",
+    "discoveredYear": 1943,
+    "funFact": "Pachycephalosaurus' skull dome was 25 centimeters of solid bone — but scientists still debate whether it used headbutting or flank-butting in fights.",
+    "relatedIds": [23, 19],
+    "stages": {
+      "hatchling": {
+        "height": 0.1,
+        "length": 0.25,
+        "weight": 0.5,
+        "speed": 8,
+        "danger": 1,
+        "defense": 2,
+        "dietDescription": "Soft fruits and tender plants",
+        "description": "A small, flat-headed hatchling — its signature dome hasn't grown in yet. Baby Pachycephalosaurus had a ring of tiny knobs around its skull that hinted at the armored dome to come."
+      },
+      "juvenile": {
+        "height": 0.8,
+        "length": 2.0,
+        "weight": 50,
+        "speed": 30,
+        "danger": 3,
+        "defense": 4,
+        "dietDescription": "Fruits, seeds, soft vegetation",
+        "description": "A quick-footed juvenile with a rapidly thickening skull dome surrounded by bony studs. At this age, young Pachycephalosaurus likely practiced head-shoving contests to establish dominance."
+      },
+      "adult": {
+        "height": 1.8,
+        "length": 4.5,
+        "weight": 450,
+        "speed": 35,
+        "danger": 5,
+        "defense": 5,
+        "dietDescription": "Fruits, seeds, leaves, possibly small animals",
+        "description": "The hardest head in the dinosaur kingdom. Pachycephalosaurus had a skull dome of solid bone 25 cm thick, ringed with bony studs and spikes. Whether it headbutted rivals or struck them from the side, the impact would have been bone-jarring. It was also surprisingly fast for its build."
+      }
+    }
+  },
+  {
+    "id": 25,
+    "name": "Carnotaurus",
+    "meaning": "Meat-Eating Bull",
+    "pronunciation": "KAR-noh-TOR-us",
+    "era": "cretaceous",
+    "period": "Late Cretaceous (72–69 Mya)",
+    "diet": "carnivore",
+    "type": "Theropod",
+    "locomotion": "biped",
+    "region": "South America",
+    "discoveredBy": "José Bonaparte",
+    "discoveredYear": 1985,
+    "funFact": "Carnotaurus had the tiniest arms of any large theropod — even smaller proportionally than T. Rex's — and two devilish horns above its eyes.",
+    "relatedIds": [18, 27],
+    "stages": {
+      "hatchling": {
+        "height": 0.12,
+        "length": 0.3,
+        "weight": 0.8,
+        "speed": 10,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Insects and small reptiles",
+        "description": "A compact hatchling with tiny horn buds above its eyes and comically small arms. Baby Carnotaurus was built for speed from day one, with long, powerful legs even as a newborn."
+      },
+      "juvenile": {
+        "height": 1.2,
+        "length": 3.5,
+        "weight": 300,
+        "speed": 45,
+        "danger": 5,
+        "defense": 2,
+        "dietDescription": "Small to medium dinosaurs",
+        "description": "A sleek, fast-growing juvenile with prominent horns and a deep skull. Juvenile Carnotaurus was one of the fastest dinosaurs alive, its powerful legs and lightweight build making it a terrifying pursuit predator."
+      },
+      "adult": {
+        "height": 3.0,
+        "length": 8.0,
+        "weight": 1500,
+        "speed": 50,
+        "danger": 8,
+        "defense": 3,
+        "dietDescription": "Large dinosaurs, hadrosaurs, sauropod juveniles",
+        "description": "A demon-horned speed machine. Carnotaurus was built like a sprinter — deep tail muscles, powerful legs, and a lightweight skull. It may have been the fastest large theropod ever, chasing down prey at highway speeds. Its absurdly tiny arms were essentially vestigial, but it didn't need them."
+      }
+    }
+  },
+  {
+    "id": 26,
+    "name": "Therizinosaurus",
+    "meaning": "Scythe Lizard",
+    "pronunciation": "THER-ih-ZEE-noh-SORE-us",
+    "era": "cretaceous",
+    "period": "Late Cretaceous (70–66 Mya)",
+    "diet": "herbivore",
+    "type": "Theropod",
+    "locomotion": "biped",
+    "region": "Asia",
+    "discoveredBy": "Evgeny Maleev",
+    "discoveredYear": 1954,
+    "funFact": "Therizinosaurus had the longest claws of any animal ever — up to 1 meter long — but used them for pulling down branches, not attacking prey.",
+    "relatedIds": [20, 29],
+    "stages": {
+      "hatchling": {
+        "height": 0.15,
+        "length": 0.4,
+        "weight": 2,
+        "speed": 5,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Soft vegetation and grubs",
+        "description": "A fuzzy, feathered hatchling with disproportionately long fingers tipped with tiny claws. Baby Therizinosaurus looked more like a strange bird than the massive beast it would become."
+      },
+      "juvenile": {
+        "height": 2.0,
+        "length": 4.5,
+        "weight": 800,
+        "speed": 15,
+        "danger": 3,
+        "defense": 4,
+        "dietDescription": "Leaves, branches, bark, fruits",
+        "description": "A bizarre-looking juvenile with rapidly growing claws already longer than steak knives. Young Therizinosaurus used its developing claws to strip bark and pull down branches, feeding on vegetation most dinosaurs couldn't access."
+      },
+      "adult": {
+        "height": 5.0,
+        "length": 10.0,
+        "weight": 5000,
+        "speed": 18,
+        "danger": 6,
+        "defense": 6,
+        "dietDescription": "Treetop foliage, bark, fruits, roots",
+        "description": "The strangest dinosaur ever discovered — a theropod that gave up meat and evolved meter-long scythe claws for harvesting plants. Therizinosaurus stood upright like a giant ground sloth, using its terrifying claws to rake down branches. Those same claws made it extremely dangerous to any predator foolish enough to attack."
+      }
+    }
+  },
+  {
+    "id": 27,
+    "name": "Giganotosaurus",
+    "meaning": "Giant Southern Lizard",
+    "pronunciation": "JIG-ah-NOT-oh-SORE-us",
+    "era": "cretaceous",
+    "period": "Late Cretaceous (99–95 Mya)",
+    "diet": "carnivore",
+    "type": "Theropod",
+    "locomotion": "biped",
+    "region": "South America",
+    "discoveredBy": "Rubén Carolini",
+    "discoveredYear": 1993,
+    "funFact": "Giganotosaurus may have hunted the largest land animal ever — Argentinosaurus — by working in groups to take down prey ten times its own weight.",
+    "relatedIds": [18, 25, 6],
+    "stages": {
+      "hatchling": {
+        "height": 0.2,
+        "length": 0.5,
+        "weight": 3,
+        "speed": 10,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Insects and small reptiles",
+        "description": "A long-skulled hatchling that would grow into one of the largest land predators ever. Baby Giganotosaurus was already larger than most adult lizards at birth."
+      },
+      "juvenile": {
+        "height": 2.5,
+        "length": 6.0,
+        "weight": 1200,
+        "speed": 38,
+        "danger": 6,
+        "defense": 2,
+        "dietDescription": "Medium dinosaurs and carrion",
+        "description": "A lean, fast-growing juvenile with a skull already longer than a human arm. Juvenile Giganotosaurus hunted in packs, developing the cooperative strategies needed to tackle the enormous sauropods of Cretaceous South America."
+      },
+      "adult": {
+        "height": 5.2,
+        "length": 13.0,
+        "weight": 7000,
+        "speed": 35,
+        "danger": 9,
+        "defense": 3,
+        "dietDescription": "Giant sauropods, large dinosaurs",
+        "description": "A challenger to T. Rex's crown — Giganotosaurus was slightly longer but lighter, with a longer skull and razor-sharp slicing teeth. Unlike T. Rex's bone-crushing bite, Giganotosaurus used its teeth like steak knives, slashing and bleeding out prey. It may have hunted in groups to bring down titanosaurs."
+      }
+    }
+  },
+  {
+    "id": 28,
+    "name": "Deinonychus",
+    "meaning": "Terrible Claw",
+    "pronunciation": "die-NON-ih-kus",
+    "era": "cretaceous",
+    "period": "Early Cretaceous (115–108 Mya)",
+    "diet": "carnivore",
+    "type": "Dromaeosaurid",
+    "locomotion": "biped",
+    "region": "North America",
+    "discoveredBy": "John Ostrom",
+    "discoveredYear": 1969,
+    "funFact": "Deinonychus revolutionized paleontology — its discovery proved that dinosaurs were active, warm-blooded animals, not sluggish reptiles. It also inspired the 'raptors' in Jurassic Park.",
+    "relatedIds": [20, 10],
+    "stages": {
+      "hatchling": {
+        "height": 0.08,
+        "length": 0.2,
+        "weight": 0.3,
+        "speed": 10,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Insects and small lizards",
+        "description": "A feathered hatchling with razor-sharp sickle claws already visible on its feet. Baby Deinonychus was alert and active from birth, with large eyes and quick reflexes."
+      },
+      "juvenile": {
+        "height": 0.4,
+        "length": 1.5,
+        "weight": 20,
+        "speed": 42,
+        "danger": 4,
+        "defense": 2,
+        "dietDescription": "Small dinosaurs, mammals, lizards",
+        "description": "A fast, intelligent juvenile already capable of hunting in coordinated packs. Young Deinonychus practiced leaping attacks and claw strikes, honing the skills that made adults such devastating predators."
+      },
+      "adult": {
+        "height": 1.0,
+        "length": 3.4,
+        "weight": 73,
+        "speed": 40,
+        "danger": 7,
+        "defense": 2,
+        "dietDescription": "Medium dinosaurs, Tenontosaurus, ornithopods",
+        "description": "The raptor that changed everything. Deinonychus hunted in packs, using its 13-cm sickle claw to pin and slash prey much larger than itself. Multiple Deinonychus skeletons have been found alongside Tenontosaurus kills, providing evidence of pack-hunting behavior. It was the real-world inspiration for Jurassic Park's Velociraptors."
+      }
+    }
+  },
+  {
+    "id": 29,
+    "name": "Protoceratops",
+    "meaning": "First Horned Face",
+    "pronunciation": "PRO-toe-SAIR-ah-tops",
+    "era": "cretaceous",
+    "period": "Late Cretaceous (75–71 Mya)",
+    "diet": "herbivore",
+    "type": "Ceratopsian",
+    "locomotion": "quadruped",
+    "region": "Asia",
+    "discoveredBy": "Walter Granger & W.K. Gregory",
+    "discoveredYear": 1923,
+    "funFact": "Protoceratops fossils may have inspired the legend of the griffin — beaked skulls found in Mongolian deserts by ancient traders who imagined winged, lion-bodied creatures.",
+    "relatedIds": [19, 20],
+    "stages": {
+      "hatchling": {
+        "height": 0.05,
+        "length": 0.12,
+        "weight": 0.1,
+        "speed": 5,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Soft shoots and desert plants",
+        "description": "A tiny, beaked baby with a barely visible frill. Nests containing dozens of Protoceratops hatchlings have been found, suggesting large communal nurseries in the Mongolian desert."
+      },
+      "juvenile": {
+        "height": 0.2,
+        "length": 0.8,
+        "weight": 10,
+        "speed": 14,
+        "danger": 2,
+        "defense": 3,
+        "dietDescription": "Desert shrubs, roots, tough plants",
+        "description": "A scrappy juvenile with a growing neck frill and a powerful parrot-like beak. Young Protoceratops were abundant in their ecosystem and formed a critical part of the food chain for predators like Velociraptor."
+      },
+      "adult": {
+        "height": 0.6,
+        "length": 1.8,
+        "weight": 180,
+        "speed": 16,
+        "danger": 3,
+        "defense": 5,
+        "dietDescription": "Tough desert vegetation, roots, shrubs",
+        "description": "A sheep-sized ceratopsian with a large frill and a wickedly sharp beak. Protoceratops was the ancestor of the mighty Triceratops lineage. Though small, it was feisty — the famous 'Fighting Dinosaurs' fossil captures one locked in mortal combat with a Velociraptor, proving it didn't go down without a fight."
+      }
+    }
+  },
+  {
+    "id": 30,
+    "name": "Quetzalcoatlus",
+    "meaning": "Feathered Serpent God",
+    "pronunciation": "KWET-zal-koh-AT-lus",
+    "era": "cretaceous",
+    "period": "Late Cretaceous (68–66 Mya)",
+    "diet": "carnivore",
+    "type": "Pterosaur",
+    "locomotion": "flight",
+    "region": "North America",
+    "discoveredBy": "Douglas Lawson",
+    "discoveredYear": 1971,
+    "funFact": "Quetzalcoatlus was the largest flying animal ever — with a wingspan of 10+ meters, it was the size of a small airplane and could fly thousands of kilometers nonstop.",
+    "relatedIds": [10, 21],
+    "stages": {
+      "hatchling": {
+        "height": 0.15,
+        "length": 0.3,
+        "weight": 0.5,
+        "speed": 5,
+        "danger": 1,
+        "defense": 1,
+        "dietDescription": "Small fish and insects",
+        "description": "A gangly, membrane-winged hatchling with a head already disproportionately large for its body. Baby Quetzalcoatlus could likely flutter short distances within days of hatching."
+      },
+      "juvenile": {
+        "height": 1.5,
+        "length": 2.5,
+        "weight": 30,
+        "speed": 40,
+        "danger": 3,
+        "defense": 2,
+        "dietDescription": "Fish, small dinosaurs, mammals",
+        "description": "A graceful young flier already soaring on thermal currents. Juvenile Quetzalcoatlus had a wingspan of over 4 meters and was learning to hunt on the wing, snatching fish and small animals from the ground."
+      },
+      "adult": {
+        "height": 5.0,
+        "length": 6.0,
+        "weight": 250,
+        "speed": 65,
+        "danger": 6,
+        "defense": 3,
+        "dietDescription": "Fish, small dinosaurs, carrion, baby sauropods",
+        "description": "The largest flying animal in Earth's history. Quetzalcoatlus had a 10-meter wingspan, stood as tall as a giraffe on the ground, and could fly at highway speeds for days without landing. On the ground, it walked on all fours and stalked prey like a giant stork — swallowing animals up to the size of a small dog whole."
+      }
+    }
+  }
+]

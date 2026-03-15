@@ -1,14 +1,16 @@
-export default function Home() {
+import { getAllDinos } from "@/lib/data";
+import { Header } from "@/components/Header";
+import { DinoGrid } from "@/components/DinoGrid";
+
+export default function HomePage() {
+  const dinos = getAllDinos();
+
   return (
-    <main className="min-h-screen">
-      <div className="mx-auto max-w-[1200px] px-4 py-8">
-        <h1 className="font-display text-4xl font-black text-text-primary">
-          DINODEX
-        </h1>
-        <p className="font-body text-text-secondary">
-          Dinosaur Encyclopedia
-        </p>
-      </div>
-    </main>
+    <>
+      <Header />
+      <main className="max-w-[1200px] mx-auto px-4 py-4">
+        <DinoGrid dinos={dinos} />
+      </main>
+    </>
   );
 }

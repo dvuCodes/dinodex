@@ -30,6 +30,9 @@ bun run lint       # Lint check
 bun install        # Install dependencies
 ```
 
+## Skills
+- **Always use the `frontend-design` skill** when working on frontend components, pages, layouts, or styling. Invoke it via `/frontend-design` before making UI changes.
+
 ## Code Style
 - Use TypeScript strict mode
 - Prefer named exports

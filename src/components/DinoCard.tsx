@@ -15,8 +15,10 @@ export function DinoCard({ dino }: { dino: DinoEntry }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      variants={{
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+      }}
       whileHover={{ y: -6, transition: { duration: 0.2 } }}
       className="group"
     >

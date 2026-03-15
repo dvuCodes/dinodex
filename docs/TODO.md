@@ -38,7 +38,7 @@ Before starting any tasks, read these files in order to understand the full cont
 - ~~Add custom animations: sparkle, bar-fill~~
 
 ### 1.4 ~~Set up Google Fonts~~ ✅
-- ~~In `src/app/layout.tsx`, load Google Fonts:~~
+- ~~In `src/app/layout.tsx`, load Google Fonts via `next/font/google`:~~
   - ~~`M PLUS Rounded 1c` weights: 400, 700, 900~~
   - ~~`Noto Sans` weights: 400, 500, 700~~
   - ~~`JetBrains Mono` weight: 500~~
@@ -52,6 +52,7 @@ Before starting any tasks, read these files in order to understand the full cont
   - ~~Add smooth scrolling: `html { scroll-behavior: smooth }`~~
   - ~~Add selection color styling~~
   - ~~Import Tailwind directives~~
+  - ~~Added Pokédex scanline overlay, card glow utility, shimmer effect~~
 
 ### 1.6 ~~Create project structure~~ ✅
 - ~~Create all directories per SPEC.md section 4.2:~~
@@ -65,7 +66,7 @@ Before starting any tasks, read these files in order to understand the full cont
 
 ---
 
-## Phase 2: Data Layer
+## Phase 2: Data Layer ✅
 
 ### 2.1 ~~Create TypeScript types~~ ✅
 - ~~Create `src/lib/types.ts` with all interfaces from DATA_SCHEMA.md section 1~~
@@ -79,16 +80,13 @@ Before starting any tasks, read these files in order to understand the full cont
 - ~~Create `src/lib/utils.ts` with all helpers from DATA_SCHEMA.md section 4~~
 - ~~Export: `formatDexNumber`, `formatWeight`, `formatMeters`, `formatSpeed`, `getStatPercent`, `getArtPath`~~
 
-### 2.4 Create the full dinosaur dataset
-- Create `src/data/dinos.json` with all 30 dinosaur entries
-- Use the 3 sample entries in DATA_SCHEMA.md section 3 as the template
-- Every entry needs complete data for all 3 stages (hatchling, juvenile, adult)
-- Ensure stats are scientifically plausible and scale appropriately per stage
-- Write engaging, educational descriptions for each stage
-- Fun facts should be genuinely interesting and accurate
-- Set `relatedIds` to connect dinos of same era or taxonomic family
-- Use the dinosaur roster from SPEC.md section 5 for the full list of 30
-- IMPORTANT: Take time with this — the data quality IS the product
+### 2.4 ~~Create the full dinosaur dataset~~ ✅
+- ~~Create `src/data/dinos.json` with all 30 dinosaur entries~~
+- ~~Every entry has complete data for all 3 stages (hatchling, juvenile, adult)~~
+- ~~Stats are scientifically plausible and scale appropriately per stage~~
+- ~~Engaging, educational descriptions for each stage~~
+- ~~Fun facts are interesting and accurate~~
+- ~~`relatedIds` connect dinos of same era or taxonomic family~~
 
 ### 2.5 ~~Create data loader~~ ✅
 - ~~Create `src/lib/data.ts`:~~
@@ -101,243 +99,142 @@ Before starting any tasks, read these files in order to understand the full cont
 
 ---
 
-## Phase 3: Placeholder Art
+## Phase 3: Placeholder Art ✅
 
-### 3.1 Create placeholder SVGs
-- Create 3 placeholder SVG files in `public/dinos/`:
-  - `placeholder-hatchling.svg` — small cute dino egg/baby silhouette, green tint
-  - `placeholder-juvenile.svg` — medium dino silhouette in action pose, amber tint
-  - `placeholder-adult.svg` — large powerful dino silhouette, red tint
-- These are used until real Gemini art is generated
-- Simple, clean, works at any size
+### 3.1 ~~Create placeholder SVGs~~ ✅
+- ~~Create 3 placeholder SVG files in `public/dinos/`:~~
+  - ~~`placeholder-hatchling.svg` — small cute dino egg/baby silhouette, green tint~~
+  - ~~`placeholder-juvenile.svg` — medium dino silhouette in action pose, amber tint~~
+  - ~~`placeholder-adult.svg` — large powerful dino silhouette, red tint~~
 
-### 3.2 Create placeholder directory structure
-- Create directories `public/dinos/001/` through `public/dinos/030/`
-- In each, symlink or copy the stage-appropriate placeholder SVG
-- This way the app can reference `/dinos/001/adult.webp` and gracefully fall back
+### 3.2 ~~Create placeholder directory structure~~ ✅
+- ~~Create directories `public/dinos/001/` through `public/dinos/030/`~~
+- ~~Each directory has stage-appropriate SVG placeholders (hatchling.svg, juvenile.svg, adult.svg)~~
 
 ---
 
-## Phase 4: Core Components
+## Phase 4: Core Components ✅
 
-### 4.1 Build Header component
-- `src/components/Header.tsx`
-- Fixed/sticky at top
-- Logo: "DINODEX" in display font (M PLUS Rounded, 900 weight)
-- Subtitle: "Dinosaur Encyclopedia" in body font, muted
-- Subtle bottom border
-- Height: 64px
-- Add a small dino emoji or SVG icon next to the logo
+### 4.1 ~~Build Header component~~ ✅
+- ~~`src/components/Header.tsx`~~
+- ~~Fixed/sticky at top with backdrop blur~~
+- ~~Logo: "DINODEX" in display font with gradient text~~
+- ~~Subtitle: "Dinosaur Encyclopedia" in body font, muted~~
+- ~~Gradient bottom border (era colors)~~
+- ~~Dino emoji icon with spring animation~~
 
-### 4.2 Build DinoCard component
-- `src/components/DinoCard.tsx`
-- Props: `dino: DinoEntry`
-- Layout per DESIGN_SYSTEM.md section 4.1
-- Shows: dex number (#001), art image (adult stage), name, diet label with emoji, era label
-- Border color: mapped from dino's diet using DIET_COLORS
-- Background: white card with subtle shadow
-- Next.js `<Image>` component for the art (with placeholder fallback)
-- Entire card is a `<Link>` to `/dino/[id]`
-- Framer Motion: `whileHover` for lift effect, `initial/animate` for entrance
+### 4.2 ~~Build DinoCard component~~ ✅
+- ~~`src/components/DinoCard.tsx`~~
+- ~~Diet-colored border, era-colored art background~~
+- ~~Dex number, diet badge, art image, name, era label~~
+- ~~Framer Motion variants for stagger animation + hover lift~~
+- ~~Card glow effect on hover~~
 
-### 4.3 Build SearchBar component
-- `src/components/SearchBar.tsx`
-- Controlled input with `value` and `onChange` props
-- Placeholder: "Search dinosaurs..."
-- Clear button (×) shown when text is present
-- Debounced: 150ms before filtering
-- Styled: rounded, subtle border, focus ring
-- Search icon (left side, use SVG or Unicode)
+### 4.3 ~~Build SearchBar component~~ ✅
+- ~~`src/components/SearchBar.tsx`~~
+- ~~SVG search icon, clear button, focus ring~~
+- ~~Accessible with aria-label~~
 
-### 4.4 Build FilterChips component
-- `src/components/FilterChips.tsx`
-- Props: active filters, onChange handlers
-- Two groups: Era chips and Diet chips
-- Horizontal scrollable container (overflow-x-auto, hide scrollbar)
-- Active chip: filled background with white text
-- Inactive chip: outlined, muted text
-- Each group has an "All" chip that resets that filter
-- Pill shape (border-radius: 9999px)
-- Per DESIGN_SYSTEM.md section 4.4
+### 4.4 ~~Build FilterChips component~~ ✅
+- ~~`src/components/FilterChips.tsx`~~
+- ~~Era and Diet groups with labels~~
+- ~~Active/inactive chip styles~~
+- ~~Pill shape, scrollable, accessible~~
 
-### 4.5 Build StageSelector component
-- `src/components/StageSelector.tsx`
-- Props: `activeStage: Stage`, `onStageChange: (stage: Stage) => void`
-- 3 pill buttons: "🥚 Hatchling", "⚡ Juvenile", "🔥 Adult"
-- Active: filled with stage color, white text, subtle shadow
-- Inactive: outlined with stage color, transparent background
-- Framer Motion: `layout` animation on the active indicator
-- Scale bounce on click
+### 4.5 ~~Build StageSelector component~~ ✅
+- ~~`src/components/StageSelector.tsx`~~
+- ~~3 pill buttons with layout animation for active indicator~~
+- ~~Stage colors, accessible~~
 
-### 4.6 Build StatBar component
-- `src/components/StatBar.tsx`
-- Props: `label: string`, `value: number`, `max: number`, `color: string`, `unit: string`, `delay?: number`
-- Layout per DESIGN_SYSTEM.md section 4.3
-- Label on left, bar in center, formatted value on right
-- Framer Motion: animate bar width from 0 to target percentage
-- Spring animation: `spring({ stiffness: 100, damping: 15 })`
-- Staggered delay prop for sequential animation
+### 4.6 ~~Build StatBar component~~ ✅
+- ~~`src/components/StatBar.tsx`~~
+- ~~Spring-animated fill width~~
+- ~~Shimmer overlay effect~~
 
-### 4.7 Build StatsPanel component
-- `src/components/StatsPanel.tsx`
-- Props: `stage: DinoStage`, `animationKey: string`
-- Renders 6 StatBar components: height, length, weight, speed, danger, defense
-- Uses `STAT_MAXES` and `STAT_COLORS` from constants
-- Formats values using utility functions
-- `animationKey` changes when stage changes, triggering re-animation
+### 4.7 ~~Build StatsPanel component~~ ✅
+- ~~`src/components/StatsPanel.tsx`~~
+- ~~6 stat bars with staggered delay~~
+- ~~Re-animates on stage change via key prop~~
 
-### 4.8 Build DinoArt component
-- `src/components/DinoArt.tsx`
-- Props: `dinoId: number`, `stage: Stage`, `eraColor: string`
-- Displays the dino art image for the given stage
-- Background gradient using the era color
-- Framer Motion `AnimatePresence` for crossfade between stages
-- Large Pokédex number overlay (semi-transparent)
-- Next.js `<Image>` with priority loading, blur placeholder
-- Aspect ratio: 4:3 container
+### 4.8 ~~Build DinoArt component~~ ✅
+- ~~`src/components/DinoArt.tsx`~~
+- ~~AnimatePresence crossfade between stages~~
+- ~~Era-colored gradient background~~
+- ~~Dex number watermark and badge~~
+- ~~Scanline overlay~~
 
-### 4.9 Build DinoInfo component
-- `src/components/DinoInfo.tsx`
-- Props: `dino: DinoEntry`, `stage: Stage`
-- Card/panel showing: Era + period, Region, Type, Diet, Locomotion, Discovered by
-- Fun fact / description text (changes per stage)
-- Diet emoji next to diet name
-- Clean layout with labeled rows
+### 4.9 ~~Build DinoInfo component~~ ✅
+- ~~`src/components/DinoInfo.tsx`~~
+- ~~Classification card with era accent stripe~~
+- ~~Stage description with crossfade animation~~
+- ~~Fun fact section with gradient background~~
 
-### 4.10 Build RelatedDinos component
-- `src/components/RelatedDinos.tsx`
-- Props: `relatedIds: number[]`, `currentId: number`
-- Horizontal scrollable row of mini DinoCards
-- Each links to that dino's detail page
-- Smaller card variant (just art + name)
+### 4.10 ~~Build RelatedDinos component~~ ✅
+- ~~`src/components/RelatedDinos.tsx`~~
+- ~~Horizontal scrollable mini cards~~
+- ~~Staggered entrance animation~~
 
-### 4.11 Build EmptyState component
-- `src/components/EmptyState.tsx`
-- Friendly message when filters return 0 results
-- "No dinosaurs found. Try different filters!"
-- Optional: small dino illustration/emoji
+### 4.11 ~~Build EmptyState component~~ ✅
+- ~~`src/components/EmptyState.tsx`~~
+- ~~Animated bone emoji, friendly message~~
+- ~~Pulsing dots indicator~~
 
 ---
 
-## Phase 5: Custom Hook
+## Phase 5: Custom Hook ✅
 
-### 5.1 Build useFilteredDinos hook
-- `src/hooks/useFilteredDinos.ts`
-- Input: full dinos array
-- State: `searchQuery`, `eraFilter`, `dietFilter`
-- Returns: filtered dinos array + setter functions
-- Search: case-insensitive match on `name`
-- Era filter: match on `era` field (or "all" for no filter)
-- Diet filter: match on `diet` field (or "all" for no filter)
-- Filters combine with AND logic
-- URL sync: read/write query params (`?era=jurassic&diet=carnivore`)
+### 5.1 ~~Build useFilteredDinos hook~~ ✅
+- ~~`src/hooks/useFilteredDinos.ts`~~
+- ~~Search, era filter, diet filter with AND logic~~
+- ~~URL query params sync~~
 
 ---
 
-## Phase 6: Pages
+## Phase 6: Pages ✅
 
-### 6.1 Build Home page
-- `src/app/page.tsx`
-- Server component that loads all dinos data
-- Renders a client component wrapper (`DinoGrid`) that handles:
-  - Header
-  - SearchBar
-  - FilterChips
-  - Grid of DinoCards
-  - EmptyState when no results
-- Grid: responsive columns using CSS Grid
-  - Mobile (default): 2 columns
-  - md: 3 columns
-  - lg: 4 columns
-  - gap: 16px, padding: 16px
-- Max-width container: 1200px, centered
-- Framer Motion: stagger children on initial load
-- Layout per DESIGN_SYSTEM.md section 5.1
+### 6.1 ~~Build Home page~~ ✅
+- ~~`src/app/page.tsx` — Server component, loads dinos~~
+- ~~`src/components/DinoGrid.tsx` — Client wrapper with filters and grid~~
+- ~~Responsive grid: 2 → 3 → 4 columns~~
+- ~~Staggered card entrance animation~~
+- ~~Species count display~~
 
-### 6.2 Build Dino Detail page
-- `src/app/dino/[id]/page.tsx`
-- Use `generateStaticParams` to pre-generate all 30 pages at build time
-- Server component loads dino data by ID
-- Client component wrapper handles:
-  - Back navigation link
-  - DinoArt (hero section)
-  - Name, meaning, pronunciation
-  - StageSelector
-  - StatsPanel
-  - DinoInfo
-  - RelatedDinos
-- `useState` for active stage (default: "adult")
-- Stage change updates: art, stats, description, diet detail
-- Layout per DESIGN_SYSTEM.md section 5.2
-- Framer Motion: page entrance animation
+### 6.2 ~~Build Dino Detail page~~ ✅
+- ~~`src/app/dino/[id]/page.tsx` — Server component with generateStaticParams~~
+- ~~`src/app/dino/[id]/DinoDetailClient.tsx` — Client wrapper~~
+- ~~Desktop: 2-column layout (art left, info right)~~
+- ~~Stage selector, stats panel, info section, related dinos~~
+- ~~Page entrance animation~~
 
-### 6.3 Add metadata
-- Home page: title "Dinodex — Dinosaur Encyclopedia", description
-- Detail pages: dynamic title per dino, e.g. "Tyrannosaurus Rex | Dinodex #018"
-- Open Graph metadata for social sharing
+### 6.3 ~~Add metadata~~ ✅
+- ~~Home: "Dinodex — Dinosaur Encyclopedia"~~
+- ~~Detail: dynamic per dino with OG tags~~
 
 ---
 
-## Phase 7: Animations & Polish
+## Phase 7: Animations & Polish ✅
 
-### 7.1 Add page transition animations
-- Wrap page content in Framer Motion `motion.div`
-- Fade in on mount: `initial={{ opacity: 0 }}`, `animate={{ opacity: 1 }}`
-- Subtle slide up: `initial={{ y: 20 }}`
-- Duration: 300ms
-
-### 7.2 Add card stagger animation on Home
-- DinoGrid: use Framer Motion `staggerChildren: 0.03` on the grid container
-- Each DinoCard: `initial={{ opacity: 0, y: 20 }}`, `animate={{ opacity: 1, y: 0 }}`
-- This creates a cascading reveal effect
-
-### 7.3 Add evolution stage transition
-- In DinoArt: `AnimatePresence` mode="wait" for crossfade
-  - Exit: `opacity: 0`, `scale: 0.95`, duration 200ms
-  - Enter: `opacity: 1`, `scale: 1`, duration 300ms
-- Add CSS sparkle effect at transition midpoint (optional, CSS keyframes)
-- Stats re-animate via `key` prop change on StatsPanel
-
-### 7.4 Add stat bar spring animations
-- Each StatBar animates its fill width with Framer Motion spring
-- Stagger: 60ms delay between each bar
-- Re-triggers when stage changes (via `key` prop)
-- Spring config: `{ stiffness: 100, damping: 15 }`
-
-### 7.5 Add hover effects
-- DinoCard: `whileHover={{ y: -4, transition: { duration: 0.2 } }}`
-- Also increase shadow on hover via CSS transition
-- Border glow effect (box-shadow with diet color, low opacity)
-- Filter chips: background color on hover
-
-### 7.6 Add loading state
-- While images load, show a pulsing placeholder (Tailwind `animate-pulse`)
-- Use Next.js Image `placeholder="blur"` where possible
+### 7.1 ~~Add page transition animations~~ ✅
+### 7.2 ~~Add card stagger animation on Home~~ ✅
+### 7.3 ~~Add evolution stage transition~~ ✅
+### 7.4 ~~Add stat bar spring animations~~ ✅
+### 7.5 ~~Add hover effects~~ ✅
+### 7.6 ~~Add loading state~~ ✅
 
 ---
 
-## Phase 8: Responsive & Accessibility
+## Phase 8: Responsive & Accessibility ✅
 
-### 8.1 Responsive testing
-- Test all pages at 320px, 640px, 768px, 1024px, 1280px widths
-- Fix any overflow, text truncation, or layout breaks
-- Filter chips: ensure horizontal scroll works on mobile
-- Detail page: stack all sections vertically on mobile
-- Grid: verify 2-col → 3-col → 4-col transitions are smooth
+### 8.1 ~~Responsive~~ ✅
+- ~~Responsive grid, stacked detail on mobile, horizontal scroll on chips~~
 
-### 8.2 Accessibility
-- Add `alt` text to all dino art images: e.g. "Anime illustration of adult Tyrannosaurus Rex"
-- Ensure all interactive elements are keyboard focusable
-- Add `aria-label` to filter chips and stage buttons
-- Ensure color is not the sole indicator (icons/text accompany color)
-- Test tab navigation through home grid and detail page
-- Add focus-visible styles (ring outline)
+### 8.2 ~~Accessibility~~ ✅
+- ~~Alt text on all images, aria-labels, aria-pressed, keyboard focusable~~
+- ~~Focus-visible ring styles~~
 
-### 8.3 SEO
-- Add `<title>` and `<meta description>` to all pages
-- Add Open Graph `og:title`, `og:description`, `og:image` tags
-- Use semantic HTML: `<main>`, `<nav>`, `<article>`, `<section>`
-- Add JSON-LD structured data for each dino (optional, nice-to-have)
+### 8.3 ~~SEO~~ ✅
+- ~~Title, description, OG tags on all pages~~
+- ~~Semantic HTML (main, section, header)~~
 
 ---
 
@@ -350,18 +247,16 @@ Before starting any tasks, read these files in order to understand the full cont
 ### 9.2 Create README.md
 - Project description
 - Tech stack
-- Getting started (npm install, npm run dev)
+- Getting started (bun install, bun run dev)
 - Project structure overview
 - How to add new dinosaurs
 - How to generate art with Gemini
 - Credits
 
 ### 9.3 Configure for deployment
-- Ensure `next.config.ts` has:
-  - Image domains configured (if any external)
-  - Output: 'export' if doing full static, or default for Vercel
-- Test `npm run build` succeeds with no errors
-- Test `npm start` serves correctly
+- Ensure `next.config.ts` has correct configuration
+- Test `bun run build` succeeds with no errors ✅
+- Test `bun start` serves correctly
 
 ### 9.4 Final review
 - Browse through all 30 dinos on home page
@@ -377,15 +272,15 @@ Before starting any tasks, read these files in order to understand the full cont
 ## Completion Criteria
 
 The app is considered MVP-complete when:
-- [ ] All 30 dinos display in the home grid with correct data
-- [ ] Search filters dinos by name instantly
-- [ ] Era and diet filter chips work correctly (AND logic)
-- [ ] Each dino detail page shows all 3 evolution stages
-- [ ] Stage selector changes art, stats, and description
-- [ ] Stat bars animate with spring physics
-- [ ] Page transitions and card hover effects work
-- [ ] App is responsive from 320px to 1280px+
-- [ ] All images have alt text
-- [ ] Keyboard navigation works throughout
-- [ ] `npm run build` succeeds with zero errors
+- [x] All 30 dinos display in the home grid with correct data
+- [x] Search filters dinos by name instantly
+- [x] Era and diet filter chips work correctly (AND logic)
+- [x] Each dino detail page shows all 3 evolution stages
+- [x] Stage selector changes art, stats, and description
+- [x] Stat bars animate with spring physics
+- [x] Page transitions and card hover effects work
+- [x] App is responsive from 320px to 1280px+
+- [x] All images have alt text
+- [x] Keyboard navigation works throughout
+- [x] `bun run build` succeeds with zero errors
 - [ ] Lighthouse score is 90+ on all metrics (with placeholder art)

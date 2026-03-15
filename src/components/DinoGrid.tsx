@@ -59,8 +59,8 @@ export function DinoGrid({ dinos }: DinoGridProps) {
             hidden: {},
             visible: {
               transition: {
-                staggerChildren: 0.04,
-                delayChildren: 0.1,
+                staggerChildren: 0.03,
+                delayChildren: 0.3,
               },
             },
           }}

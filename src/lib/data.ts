@@ -1,7 +1,7 @@
 import type { DinoEntry, Era, Diet } from "./types";
+import dinosData from "@/data/dinos.json";
 
-// Will be populated when dinos.json is created
-const dinos: DinoEntry[] = [];
+const dinos: DinoEntry[] = dinosData as DinoEntry[];
 
 export function getAllDinos(): DinoEntry[] {
   return dinos;

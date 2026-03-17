@@ -2,7 +2,24 @@
   "permissions": {
     "allow": [
       "Bash(git config:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(cd:*)",
+      "Bash(gh api:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl:*)",
+      "Bash(git checkout:*)",
+      "Bash(which infsh:*)",
+      "Bash(where infsh:*)",
+      "Bash(bun pm:*)",
+      "Read(//c/Users/datvu/.bun/bin//**)",
+      "Bash(bun run:*)",
+      "Bash(npm install:*)",
+      "Bash(pip install:*)",
+      "Bash(infsh:*)",
+      "Bash(python:*)",
+      "Bash(pip show:*)",
+      "Bash(npx:*)",
+      "Bash(find:*)"
     ]
   }
 }

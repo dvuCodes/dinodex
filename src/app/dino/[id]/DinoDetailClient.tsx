@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import type { DinoEntry, Stage } from "@/lib/types";
 import { ERA_COLORS, DIET_COLORS } from "@/lib/constants";
-import { formatDexNumber } from "@/lib/utils";
+import { formatStageDexNumber } from "@/lib/utils";
 import { DinoArt } from "@/components/DinoArt";
 import { StageSelector } from "@/components/StageSelector";
 import { StatsPanel } from "@/components/StatsPanel";
@@ -77,7 +77,7 @@ export function DinoDetailClient({ dino, relatedDinos }: DinoDetailClientProps) 
             <div className="mb-5">
               <div className="flex items-center gap-3 mb-1">
                 <span className="font-mono text-sm text-text-muted/70 tracking-wider">
-                  {formatDexNumber(dino.id)}
+                  {formatStageDexNumber(dino.id, stage)}
                 </span>
                 <span
                   className="text-[10px] font-mono uppercase tracking-widest px-2.5 py-0.5 rounded-pill font-medium"

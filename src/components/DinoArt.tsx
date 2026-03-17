@@ -4,7 +4,12 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useArtSource } from "@/hooks/useArtSource";
 import type { Stage } from "@/lib/types";
-import { formatDexNumber, getArtPath, getPlaceholderArtPath } from "@/lib/utils";
+import {
+  formatStageDexNumber,
+  getArtPath,
+  getPlaceholderArtPath,
+  getStageDexId,
+} from "@/lib/utils";
 import { STAGE_COLORS } from "@/lib/constants";
 
 interface DinoArtProps {
@@ -16,6 +21,7 @@ interface DinoArtProps {
 
 export function DinoArt({ dinoId, dinoName, stage, eraColor }: DinoArtProps) {
   const paddedId = String(dinoId).padStart(3, "0");
+  const paddedStageDexId = String(getStageDexId(dinoId, stage)).padStart(2, "0");
   const expectedArtSrc = getArtPath(dinoId, stage);
   const fallbackArtSrc = getPlaceholderArtPath(stage);
   const { artSrc, handleArtError } = useArtSource(expectedArtSrc, fallbackArtSrc);
@@ -44,13 +50,13 @@ export function DinoArt({ dinoId, dinoName, stage, eraColor }: DinoArtProps) {
 
       {/* Large watermark dex number */}
       <span className="absolute -bottom-2 -right-1 font-mono text-[120px] font-black leading-none text-black/[0.03] select-none z-0">
-        {paddedId}
+        {paddedStageDexId}
       </span>
 
       {/* Top-left dex badge */}
       <div className="absolute top-3 left-3 z-20 flex items-center gap-2">
         <span className="font-mono text-lg font-bold text-white/50 drop-shadow-sm">
-          {formatDexNumber(dinoId)}
+          {formatStageDexNumber(dinoId, stage)}
         </span>
       </div>
 

@@ -50,19 +50,21 @@ async function processImage(dinoId: number, stage: Stage): Promise<boolean> {
 
   try {
     await sharp(rawPath)
+      .ensureAlpha()
       .resize(1024, 1024, {
         fit: "contain",
-        background: { r: 255, g: 255, b: 255, alpha: 1 },
+        background: { r: 0, g: 0, b: 0, alpha: 0 },
       })
-      .webp({ quality: 85 })
+      .webp({ quality: 85, alphaQuality: 100 })
       .toFile(fullPath);
 
     await sharp(rawPath)
+      .ensureAlpha()
       .resize(512, 512, {
         fit: "contain",
-        background: { r: 255, g: 255, b: 255, alpha: 1 },
+        background: { r: 0, g: 0, b: 0, alpha: 0 },
       })
-      .webp({ quality: 80 })
+      .webp({ quality: 80, alphaQuality: 100 })
       .toFile(thumbPath);
 
     const fullSize = Math.round(statSync(fullPath).size / 1024);

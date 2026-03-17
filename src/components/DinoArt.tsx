@@ -20,7 +20,6 @@ interface DinoArtProps {
 }
 
 export function DinoArt({ dinoId, dinoName, stage, eraColor }: DinoArtProps) {
-  const paddedId = String(dinoId).padStart(3, "0");
   const paddedStageDexId = String(getStageDexId(dinoId, stage)).padStart(2, "0");
   const expectedArtSrc = getArtPath(dinoId, stage);
   const fallbackArtSrc = getPlaceholderArtPath(stage);

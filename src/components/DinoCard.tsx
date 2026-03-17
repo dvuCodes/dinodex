@@ -3,15 +3,18 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useArtSource } from "@/hooks/useArtSource";
 import type { DinoEntry } from "@/lib/types";
 import { DIET_COLORS, ERA_COLORS } from "@/lib/constants";
-import { formatDexNumber } from "@/lib/utils";
+import { formatDexNumber, getArtPath, getPlaceholderArtPath } from "@/lib/utils";
 
 export function DinoCard({ dino }: { dino: DinoEntry }) {
   const dietColor = DIET_COLORS[dino.diet];
   const eraColor = ERA_COLORS[dino.era];
   const paddedId = String(dino.id).padStart(3, "0");
-  const artSrc = `/dinos/${paddedId}/adult.svg`;
+  const expectedArtSrc = getArtPath(dino.id, "adult", "thumb");
+  const fallbackArtSrc = getPlaceholderArtPath("adult");
+  const { artSrc, handleArtError } = useArtSource(expectedArtSrc, fallbackArtSrc);
 
   return (
     <motion.div
@@ -57,14 +60,21 @@ export function DinoCard({ dino }: { dino: DinoEntry }) {
 
           {/* Art container with radial glow */}
           <div
-            className="relative aspect-square rounded-xl overflow-hidden mb-2.5 dex-scanline"
+            className="relative aspect-square rounded-xl overflow-hidden mb-2.5 dex-scanline border border-white/80"
             style={{
-              background: `radial-gradient(circle at 50% 40%, ${eraColor.light}, ${eraColor.light}80 70%, ${eraColor.light}40)`,
+              background: "linear-gradient(180deg, rgba(255,255,255,0.99), rgba(255,255,255,0.97))",
+              boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.7), 0 10px 24px ${eraColor.primary}14`,
             }}
           >
+            <div
+              className="pointer-events-none absolute inset-x-0 top-0 h-10 z-0"
+              style={{
+                background: `linear-gradient(180deg, ${eraColor.primary}10, transparent)`,
+              }}
+            />
             {/* Faint dex number watermark */}
             <span
-              className="absolute bottom-1 right-2 font-mono text-[40px] font-black leading-none opacity-[0.04] select-none"
+              className="absolute bottom-1 right-2 font-mono text-[40px] font-black leading-none opacity-[0.04] select-none z-0"
             >
               {paddedId}
             </span>
@@ -73,7 +83,9 @@ export function DinoCard({ dino }: { dino: DinoEntry }) {
               alt={`Anime illustration of adult ${dino.name}`}
               width={512}
               height={512}
+              sizes="(max-width: 639px) 45vw, (max-width: 1023px) 30vw, 20vw"
               className="w-full h-full object-contain relative z-[1] group-hover:scale-105 transition-transform duration-500"
+              onError={handleArtError}
             />
           </div>
 

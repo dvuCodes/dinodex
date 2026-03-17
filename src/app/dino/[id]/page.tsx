@@ -30,6 +30,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title: `${dino.name} | Dinodex ${formatStageDexNumber(dino.id, "adult")}`,
       description: dino.funFact,
+      images: ["/opengraph-image"],
     },
   };
 }

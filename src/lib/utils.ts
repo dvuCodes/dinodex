@@ -39,7 +39,21 @@ export function getStatPercent(value: number, max: number): number {
   return Math.min(100, Math.round((value / max) * 100));
 }
 
-export function getArtPath(id: number, stage: Stage): string {
+export function getArtPath(id: number, stage: Stage, size: "full" | "thumb" = "full"): string {
   const paddedId = String(id).padStart(3, "0");
-  return `/dinos/${paddedId}/${stage}.webp`;
+  const suffix = size === "thumb" ? "-thumb" : "";
+  return `/dinos/${paddedId}/${stage}${suffix}.webp`;
+}
+
+export function getPlaceholderArtPath(stage: Stage): string {
+  return `/dinos/placeholder-${stage}.svg`;
+}
+
+export function shouldAttemptArtRecovery(currentArtSrc: string, fallbackArtSrc: string): boolean {
+  return currentArtSrc === fallbackArtSrc;
+}
+
+export function getArtRecoveryProbeSrc(expectedArtSrc: string, recoveryToken: string): string {
+  const separator = expectedArtSrc.includes("?") ? "&" : "?";
+  return `${expectedArtSrc}${separator}art-retry=${encodeURIComponent(recoveryToken)}`;
 }

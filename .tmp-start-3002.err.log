@@ -1,0 +1,4 @@
+$ next start --hostname "127.0.0.1" --port "3002"
+⨯ The requested resource isn't a valid image for /dinos/001/adult.webp received null
+⨯ The requested resource isn't a valid image for /dinos/002/adult-thumb.webp received null
+⨯ The requested resource isn't a valid image for /dinos/004/adult-thumb.webp received null

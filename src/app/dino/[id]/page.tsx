@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getAllDinos, getDinoById, getRelatedDinos } from "@/lib/data";
-import { formatDexNumber } from "@/lib/utils";
+import { formatStageDexNumber } from "@/lib/utils";
 import { DinoDetailClient } from "./DinoDetailClient";
 
 interface PageProps {
@@ -25,10 +25,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   return {
-    title: `${dino.name} | Dinodex ${formatDexNumber(dino.id)}`,
+    title: `${dino.name} | Dinodex ${formatStageDexNumber(dino.id, "adult")}`,
     description: `${dino.funFact} Learn about ${dino.name} — ${dino.meaning}.`,
     openGraph: {
-      title: `${dino.name} | Dinodex ${formatDexNumber(dino.id)}`,
+      title: `${dino.name} | Dinodex ${formatStageDexNumber(dino.id, "adult")}`,
       description: dino.funFact,
     },
   };

@@ -4,6 +4,22 @@ export function formatDexNumber(id: number): string {
   return `#${String(id).padStart(3, "0")}`;
 }
 
+const STAGE_DEX_ORDER: Stage[] = ["hatchling", "juvenile", "adult"];
+
+export function getStageDexId(id: number, stage: Stage): number {
+  const stageOffset = STAGE_DEX_ORDER.indexOf(stage);
+
+  if (stageOffset === -1) {
+    throw new Error(`Unsupported stage: ${stage}`);
+  }
+
+  return ((id - 1) * STAGE_DEX_ORDER.length) + stageOffset + 1;
+}
+
+export function formatStageDexNumber(id: number, stage: Stage): string {
+  return `#${String(getStageDexId(id, stage)).padStart(2, "0")}`;
+}
+
 export function formatWeight(kg: number): string {
   if (kg >= 1000) return `${(kg / 1000).toFixed(1)}T`;
   if (kg < 1) return `${(kg * 1000).toFixed(0)}g`;

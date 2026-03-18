@@ -24,3 +24,11 @@ export function getRelatedDinos(dino: DinoEntry): DinoEntry[] {
     .map((id) => getDinoById(id))
     .filter((d): d is DinoEntry => d !== undefined);
 }
+
+export function getAdjacentDinos(id: number): { prev: DinoEntry; next: DinoEntry } {
+  const total = dinos.length;
+  const index = dinos.findIndex((d) => d.id === id);
+  const prevIndex = index <= 0 ? total - 1 : index - 1;
+  const nextIndex = index >= total - 1 ? 0 : index + 1;
+  return { prev: dinos[prevIndex], next: dinos[nextIndex] };
+}

@@ -28,18 +28,20 @@ export function DinoArt({ dinoId, dinoName, stage, eraColor }: DinoArtProps) {
 
   return (
     <div
-      className="relative aspect-[4/3] rounded-card overflow-hidden dex-scanline border border-white/80"
+      className="relative aspect-[4/3] rounded-card overflow-hidden dex-scanline dex-stripes border border-white/80"
       style={{
-        background: "linear-gradient(180deg, rgba(255,255,255,0.99), rgba(255,255,255,0.97))",
-        boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.8), 0 18px 44px ${eraColor}20`,
+        background: `linear-gradient(135deg, ${eraColor}12, rgba(255,255,255,0.97) 50%, ${stageColor.bg}20)`,
+        boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.8), 0 20px 50px ${eraColor}18, 0 8px 24px rgba(0,0,0,0.06)`,
       }}
     >
+      {/* Top era gradient */}
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-20 z-[1]"
         style={{
-          background: `linear-gradient(180deg, ${eraColor}12, transparent)`,
+          background: `linear-gradient(180deg, ${eraColor}15, transparent)`,
         }}
       />
+      {/* Bottom stage gradient */}
       <div
         className="pointer-events-none absolute inset-x-0 bottom-0 h-24 z-[1]"
         style={{
@@ -63,7 +65,7 @@ export function DinoArt({ dinoId, dinoName, stage, eraColor }: DinoArtProps) {
       <div className="absolute top-3 right-3 z-20">
         <div
           className="w-3 h-3 rounded-full border-2 border-white/40"
-          style={{ backgroundColor: stageColor.primary, boxShadow: `0 0 8px ${stageColor.primary}60` }}
+          style={{ backgroundColor: stageColor.primary, boxShadow: `0 0 10px ${stageColor.primary}60` }}
         />
       </div>
 
@@ -90,14 +92,6 @@ export function DinoArt({ dinoId, dinoName, stage, eraColor }: DinoArtProps) {
           />
         </motion.div>
       </AnimatePresence>
-
-      {/* Bottom gradient fade for depth */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none z-[1]"
-        style={{
-          background: `linear-gradient(to top, ${eraColor}10, transparent)`,
-        }}
-      />
     </div>
   );
 }

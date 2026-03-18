@@ -1,11 +1,17 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getAllDinos, getDinoById, getRelatedDinos } from "@/lib/data";
-import { formatStageDexNumber } from "@/lib/utils";
+import { getDinoPageTitle, parseStageParam } from "@/lib/utils";
+import type { Stage } from "@/lib/types";
 import { DinoDetailClient } from "./DinoDetailClient";
 
 interface PageProps {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ stage?: string | string[] }>;
+}
+
+function getRequestedStage(stageParam?: string | string[]): Stage {
+  return parseStageParam(Array.isArray(stageParam) ? stageParam[0] : stageParam);
 }
 
 export async function generateStaticParams() {
@@ -15,8 +21,9 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
   const { id } = await params;
+  const { stage } = await searchParams;
   const dinoId = parseInt(id, 10);
   const dino = getDinoById(dinoId);
 
@@ -24,19 +31,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return { title: "Dino Not Found | Dinodex" };
   }
 
+  const requestedStage = getRequestedStage(stage);
+
   return {
-    title: `${dino.name} | Dinodex ${formatStageDexNumber(dino.id, "adult")}`,
+    title: getDinoPageTitle(dino.name, dino.id, requestedStage),
     description: `${dino.funFact} Learn about ${dino.name} — ${dino.meaning}.`,
     openGraph: {
-      title: `${dino.name} | Dinodex ${formatStageDexNumber(dino.id, "adult")}`,
+      title: getDinoPageTitle(dino.name, dino.id, requestedStage),
       description: dino.funFact,
       images: ["/opengraph-image"],
     },
   };
 }
 
-export default async function DinoDetailPage({ params }: PageProps) {
+export default async function DinoDetailPage({ params, searchParams }: PageProps) {
   const { id } = await params;
+  const { stage } = await searchParams;
   const dinoId = parseInt(id, 10);
   const dino = getDinoById(dinoId);
 
@@ -45,6 +55,7 @@ export default async function DinoDetailPage({ params }: PageProps) {
   }
 
   const relatedDinos = getRelatedDinos(dino);
+  const initialStage = getRequestedStage(stage);
 
-  return <DinoDetailClient dino={dino} relatedDinos={relatedDinos} />;
+  return <DinoDetailClient dino={dino} relatedDinos={relatedDinos} initialStage={initialStage} />;
 }

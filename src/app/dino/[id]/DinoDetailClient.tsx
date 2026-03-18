@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import type { DinoEntry, Stage } from "@/lib/types";
 import { ERA_COLORS, DIET_COLORS } from "@/lib/constants";
-import { formatStageDexNumber } from "@/lib/utils";
+import { formatStageDexNumber, getDinoPageTitle } from "@/lib/utils";
 import { DinoArt } from "@/components/DinoArt";
 import { StageSelector } from "@/components/StageSelector";
 import { StatsPanel } from "@/components/StatsPanel";
@@ -15,12 +16,42 @@ import { RelatedDinos } from "@/components/RelatedDinos";
 interface DinoDetailClientProps {
   dino: DinoEntry;
   relatedDinos: DinoEntry[];
+  initialStage: Stage;
 }
 
-export function DinoDetailClient({ dino, relatedDinos }: DinoDetailClientProps) {
-  const [stage, setStage] = useState<Stage>("adult");
+export function DinoDetailClient({ dino, relatedDinos, initialStage }: DinoDetailClientProps) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [stage, setStage] = useState<Stage>(initialStage);
   const eraColor = ERA_COLORS[dino.era];
   const dietColor = DIET_COLORS[dino.diet];
+
+  useEffect(() => {
+    setStage(initialStage);
+  }, [initialStage]);
+
+  useEffect(() => {
+    document.title = getDinoPageTitle(dino.name, dino.id, stage);
+  }, [dino.id, dino.name, stage]);
+
+  function handleStageChange(nextStage: Stage) {
+    setStage(nextStage);
+
+    const nextSearchParams = new URLSearchParams(searchParams.toString());
+
+    if (nextStage === "adult") {
+      nextSearchParams.delete("stage");
+    } else {
+      nextSearchParams.set("stage", nextStage);
+    }
+
+    const nextUrl = nextSearchParams.toString() ? `${pathname}?${nextSearchParams.toString()}` : pathname;
+
+    startTransition(() => {
+      router.replace(nextUrl, { scroll: false });
+    });
+  }
 
   return (
     <motion.main
@@ -102,7 +133,7 @@ export function DinoDetailClient({ dino, relatedDinos }: DinoDetailClientProps) 
 
             {/* Stage selector */}
             <div className="mb-7">
-              <StageSelector activeStage={stage} onStageChange={setStage} />
+              <StageSelector activeStage={stage} onStageChange={handleStageChange} />
             </div>
 
             {/* Stats */}

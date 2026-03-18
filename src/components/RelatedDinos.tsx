@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { useArtSource } from "@/hooks/useArtSource";
 import type { DinoEntry } from "@/lib/types";
 import { ERA_COLORS } from "@/lib/constants";
-import { formatDexNumber, getArtPath, getPlaceholderArtPath } from "@/lib/utils";
+import { formatDefaultDexNumber, getArtPath, getPlaceholderArtPath } from "@/lib/utils";
 
 interface RelatedDinosProps {
   relatedDinos: DinoEntry[];
@@ -49,13 +49,14 @@ function RelatedDinoCard({ dino, delay }: { dino: DinoEntry; delay: number }) {
               alt={`${dino.name}`}
               width={128}
               height={128}
+              unoptimized
               sizes="112px"
               className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
               onError={handleArtError}
             />
           </div>
           <p className="font-mono text-[10px] text-text-muted tracking-wider">
-            {formatDexNumber(dino.id)}
+            {formatDefaultDexNumber(dino.id)}
           </p>
           <p className="font-display text-xs font-bold text-text-primary truncate">
             {dino.name}

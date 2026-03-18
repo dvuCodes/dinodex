@@ -83,6 +83,7 @@ export function DinoArt({ dinoId, dinoName, stage, eraColor }: DinoArtProps) {
             width={1024}
             height={1024}
             priority
+            unoptimized
             sizes="(max-width: 1023px) 100vw, 40vw"
             className="w-full h-full object-contain drop-shadow-lg"
             onError={handleArtError}

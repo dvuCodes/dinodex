@@ -20,6 +20,18 @@ export function formatStageDexNumber(id: number, stage: Stage): string {
   return `#${String(getStageDexId(id, stage)).padStart(2, "0")}`;
 }
 
+export function formatDefaultDexNumber(id: number): string {
+  return formatDexNumber(id);
+}
+
+export function getDinoPageTitle(name: string, id: number, stage: Stage = "adult"): string {
+  return `${name} | Dinodex ${formatStageDexNumber(id, stage)}`;
+}
+
+export function parseStageParam(stageParam?: string | null): Stage {
+  return STAGE_DEX_ORDER.includes(stageParam as Stage) ? (stageParam as Stage) : "adult";
+}
+
 export function formatWeight(kg: number): string {
   if (kg >= 1000) return `${(kg / 1000).toFixed(1)}T`;
   if (kg < 1) return `${(kg * 1000).toFixed(0)}g`;

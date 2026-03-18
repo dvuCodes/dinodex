@@ -16,6 +16,9 @@
 - When working on frontend design, use playwright to test and confirm desired feature implemention.
 - When validating a dev server, confirm the listening port belongs to the current worktree before debugging UI behavior.
 - Generated raster art under `public/dinos` can fail direct dev serving in this environment; use the custom dev server to intercept `/dinos/...` raster requests when validating rendered art.
+- WebP conversion alone does not create transparency; for the current dinosaur art set, exact-preservation transparency should default to deterministic edge-connected background removal, `scripts/process-images.ts` should prefer `scripts/transparent-output` over `scripts/raw-output`, and generative image editing should be opt-in only when a real redraw is acceptable.
+- Dinosaur art served from `/dinos/...` must bypass `next/image` optimization when validating or shipping transparency-sensitive renders, because the optimized path can flatten alpha in this environment.
+- When the main dex is species-first, card numbering and watermarks must use the species ID (`#001`, `#002`, ...) rather than stage-specific dex IDs.
 
 ## Context7 MCP (library docs)
 

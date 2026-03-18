@@ -6,7 +6,12 @@ import { motion } from "framer-motion";
 import { useArtSource } from "@/hooks/useArtSource";
 import type { DinoEntry } from "@/lib/types";
 import { DIET_COLORS, ERA_COLORS } from "@/lib/constants";
-import { formatDexNumber, getArtPath, getPlaceholderArtPath } from "@/lib/utils";
+import {
+  formatDefaultDexNumber,
+  getArtPath,
+  getPlaceholderArtPath,
+  getStageDexId,
+} from "@/lib/utils";
 
 export function DinoCard({ dino }: { dino: DinoEntry }) {
   const dietColor = DIET_COLORS[dino.diet];
@@ -45,7 +50,7 @@ export function DinoCard({ dino }: { dino: DinoEntry }) {
           {/* Dex number with mono treatment */}
           <div className="flex items-center justify-between mb-2 relative z-10">
             <span className="font-mono text-[13px] font-medium text-text-muted tracking-wider">
-              {formatDexNumber(dino.id)}
+              {formatDefaultDexNumber(dino.id)}
             </span>
             <span
               className="text-[10px] font-body font-semibold uppercase tracking-wider px-2 py-0.5 rounded-pill"
@@ -83,6 +88,7 @@ export function DinoCard({ dino }: { dino: DinoEntry }) {
               alt={`Anime illustration of adult ${dino.name}`}
               width={512}
               height={512}
+              unoptimized
               sizes="(max-width: 639px) 45vw, (max-width: 1023px) 30vw, 20vw"
               className="w-full h-full object-contain relative z-[1] group-hover:scale-105 transition-transform duration-500"
               onError={handleArtError}

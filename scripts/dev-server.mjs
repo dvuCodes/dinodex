@@ -3,6 +3,7 @@ import { stat } from "node:fs/promises";
 import { createServer } from "node:http";
 import { join } from "node:path";
 import next from "next";
+import { getDevServerUrl } from "./dev-server-url.mjs";
 
 const port = parseInt(process.env.PORT || "3000", 10);
 const hostname = process.env.HOSTNAME || "0.0.0.0";
@@ -70,6 +71,6 @@ app.prepare().then(() => {
 
     handle(req, res);
   }).listen(port, hostname, () => {
-    console.log(`> Dev server listening at http://${hostname}:${port}`);
+    console.log(`> Dev server listening at ${getDevServerUrl(hostname, port)}`);
   });
 });

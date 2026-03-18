@@ -1,18 +1,14 @@
 import { existsSync, mkdirSync, readdirSync, statSync } from "fs";
 import { join } from "path";
 import sharp from "sharp";
+import { findPreferredArtSourcePath, padDinoId } from "./art-pipeline";
 
 const PROJECT_ROOT = join(import.meta.dirname, "..");
 const RAW_OUTPUT_DIR = join(PROJECT_ROOT, "scripts", "raw-output");
 const PUBLIC_DINOS_DIR = join(PROJECT_ROOT, "public", "dinos");
-const RAW_EXTENSIONS = ["png", "jpg", "jpeg", "webp"] as const;
 
 type Stage = "hatchling" | "juvenile" | "adult";
 const STAGES: Stage[] = ["hatchling", "juvenile", "adult"];
-
-function padId(id: number): string {
-  return String(id).padStart(3, "0");
-}
 
 function ensureDir(dirPath: string) {
   if (!existsSync(dirPath)) {
@@ -21,20 +17,11 @@ function ensureDir(dirPath: string) {
 }
 
 function findRawPath(dinoId: number, stage: Stage): string | null {
-  const paddedId = padId(dinoId);
-
-  for (const extension of RAW_EXTENSIONS) {
-    const candidate = join(RAW_OUTPUT_DIR, paddedId, `${stage}.${extension}`);
-    if (existsSync(candidate)) {
-      return candidate;
-    }
-  }
-
-  return null;
+  return findPreferredArtSourcePath(PROJECT_ROOT, dinoId, stage, existsSync);
 }
 
 async function processImage(dinoId: number, stage: Stage): Promise<boolean> {
-  const paddedId = padId(dinoId);
+  const paddedId = padDinoId(dinoId);
   const rawPath = findRawPath(dinoId, stage);
 
   if (!rawPath) {
@@ -109,7 +96,7 @@ async function main() {
     for (const stage of specificStage ? [specificStage] : STAGES) {
       tasks.push({ dinoId: specificDino, stage });
     }
-    console.log(`\nProcessing ${tasks.length} image(s) for dino #${padId(specificDino)}...\n`);
+    console.log(`\nProcessing ${tasks.length} image(s) for dino #${padDinoId(specificDino)}...\n`);
   } else {
     console.log("Usage:");
     console.log("  bun run scripts/process-images.ts --all");

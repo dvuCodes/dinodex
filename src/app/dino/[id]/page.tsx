@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getAllDinos, getDinoById, getRelatedDinos } from "@/lib/data";
+import { getAllDinos, getDinoById, getRelatedDinos, getAdjacentDinos } from "@/lib/data";
 import { getDinoPageTitle, parseStageParam } from "@/lib/utils";
 import type { Stage } from "@/lib/types";
 import { DinoDetailClient } from "./DinoDetailClient";
@@ -55,7 +55,16 @@ export default async function DinoDetailPage({ params, searchParams }: PageProps
   }
 
   const relatedDinos = getRelatedDinos(dino);
+  const { prev: prevDino, next: nextDino } = getAdjacentDinos(dino.id);
   const initialStage = getRequestedStage(stage);
 
-  return <DinoDetailClient dino={dino} relatedDinos={relatedDinos} initialStage={initialStage} />;
+  return (
+    <DinoDetailClient
+      dino={dino}
+      relatedDinos={relatedDinos}
+      prevDino={prevDino}
+      nextDino={nextDino}
+      initialStage={initialStage}
+    />
+  );
 }

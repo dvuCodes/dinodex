@@ -28,39 +28,36 @@ function RelatedDinoCard({ dino, delay }: { dino: DinoEntry; delay: number }) {
     >
       <Link
         href={`/dino/${paddedId}`}
-        className="shrink-0 w-28 block group"
+        className="shrink-0 w-28 block group text-center"
       >
-        <div className="bg-white rounded-xl p-2 shadow-sm border border-border-default group-hover:shadow-md group-hover:border-border-hover transition-all duration-200">
+        <div className="flex flex-col items-center gap-2">
+          {/* Circular portrait */}
           <div
-            className="aspect-square rounded-lg overflow-hidden mb-1.5 relative dex-scanline border border-white/80"
+            className="w-20 h-20 rounded-full overflow-hidden border-2 relative group-hover:scale-110 transition-transform duration-300"
             style={{
-              background: "linear-gradient(180deg, rgba(255,255,255,0.99), rgba(255,255,255,0.97))",
-              boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.7), 0 8px 18px ${eraColor.primary}14`,
+              borderColor: `${eraColor.primary}60`,
+              background: `linear-gradient(135deg, ${eraColor.light}40, rgba(255,255,255,0.1))`,
             }}
           >
-            <div
-              className="pointer-events-none absolute inset-x-0 top-0 h-8 z-0"
-              style={{
-                background: `linear-gradient(180deg, ${eraColor.primary}10, transparent)`,
-              }}
-            />
             <Image
               src={artSrc}
-              alt={`${dino.name}`}
+              alt={dino.name}
               width={128}
               height={128}
               unoptimized
-              sizes="112px"
-              className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+              sizes="80px"
+              className="w-full h-full object-contain p-1"
               onError={handleArtError}
             />
           </div>
-          <p className="font-mono text-[10px] text-text-muted tracking-wider">
-            {formatDefaultDexNumber(dino.id)}
-          </p>
-          <p className="font-display text-xs font-bold text-text-primary truncate">
-            {dino.name}
-          </p>
+          <div>
+            <p className="font-mono text-[10px] text-white/50 tracking-wider">
+              {formatDefaultDexNumber(dino.id)}
+            </p>
+            <p className="font-display text-xs font-bold text-white/90 truncate max-w-[100px]">
+              {dino.name}
+            </p>
+          </div>
         </div>
       </Link>
     </motion.div>
@@ -73,14 +70,13 @@ export function RelatedDinos({ relatedDinos, currentId }: RelatedDinosProps) {
   if (dinos.length === 0) return null;
 
   return (
-    <div>
-      <div className="flex items-center gap-2 mb-3">
-        <h3 className="font-display text-sm font-bold text-text-primary">
+    <div className="rounded-card overflow-hidden" style={{ backgroundColor: "#1C1917" }}>
+      <div className="px-5 pt-4 pb-1">
+        <h3 className="font-display text-sm font-bold text-white/80">
           Related Species
         </h3>
-        <div className="flex-1 h-px bg-border-default" />
       </div>
-      <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+      <div className="flex gap-4 overflow-x-auto px-5 pb-5 pt-2 scrollbar-hide">
         {dinos.map((dino, i) => (
           <RelatedDinoCard key={dino.id} dino={dino} delay={i * 0.08} />
         ))}

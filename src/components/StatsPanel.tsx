@@ -3,7 +3,7 @@
 import type { DinoStage } from "@/lib/types";
 import { STAT_MAXES, STAT_COLORS } from "@/lib/constants";
 import { formatMeters, formatWeight, formatSpeed } from "@/lib/utils";
-import { StatBar } from "./StatBar";
+import { SegmentedStatBar } from "./SegmentedStatBar";
 
 interface StatsPanelProps {
   stage: DinoStage;
@@ -59,7 +59,7 @@ export function StatsPanel({ stage, animationKey }: StatsPanelProps) {
   return (
     <div key={animationKey} className="flex flex-col gap-3">
       {stats.map((stat, i) => (
-        <StatBar
+        <SegmentedStatBar
           key={stat.label}
           label={stat.label}
           value={stat.value}

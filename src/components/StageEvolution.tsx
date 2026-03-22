@@ -122,7 +122,7 @@ function ChevronArrow({ color }: { color: string }) {
       height="24"
       viewBox="0 0 24 24"
       fill="none"
-      className="shrink-0 mt-2"
+      className="shrink-0"
       aria-hidden="true"
     >
       <path
@@ -171,9 +171,11 @@ export function StageEvolution({ dinoId, dinoName, activeStage, onStageChange }:
             onClick={() => onStageChange(stage.key)}
           />
           {i < STAGES.length - 1 && (
-            <ChevronArrow
-              color={STAGE_COLORS[stage.key].primary}
-            />
+            <div className="h-16 md:h-20 flex items-center">
+              <ChevronArrow
+                color={STAGE_COLORS[stage.key].primary}
+              />
+            </div>
           )}
         </div>
       ))}

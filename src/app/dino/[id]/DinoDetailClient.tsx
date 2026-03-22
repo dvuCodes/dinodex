@@ -79,7 +79,7 @@ export function DinoDetailClient({ dino, relatedDinos, prevDino, nextDino, initi
           transition={{ duration: 0.3, delay: 0.05 }}
         >
           <Link
-            href="/"
+            href="/dex"
             className="inline-flex items-center gap-1.5 font-body text-sm text-text-secondary hover:text-accent transition-colors mb-4 group"
           >
             <span className="group-hover:-translate-x-1 transition-transform" aria-hidden="true">&larr;</span>

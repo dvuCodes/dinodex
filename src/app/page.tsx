@@ -9,7 +9,7 @@ export default function HomePage() {
   return (
     <>
       <Header />
-      <main className="max-w-[1200px] mx-auto px-4 py-4">
+      <main id="main-content" className="max-w-[1200px] mx-auto px-4 py-4">
         <Suspense
           fallback={
             <div className="space-y-4">

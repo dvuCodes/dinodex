@@ -19,6 +19,9 @@
 - WebP conversion alone does not create transparency; for the current dinosaur art set, exact-preservation transparency should default to deterministic edge-connected background removal, `scripts/process-images.ts` should prefer `scripts/transparent-output` over `scripts/raw-output`, and generative image editing should be opt-in only when a real redraw is acceptable.
 - Dinosaur art served from `/dinos/...` must bypass `next/image` optimization when validating or shipping transparency-sensitive renders, because the optimized path can flatten alpha in this environment.
 - When the main dex is species-first, card numbering and watermarks must use the species ID (`#001`, `#002`, ...) rather than stage-specific dex IDs.
+- Use the nano banana 2 skill to generate visual assets for your work, and every time you generate a collection of assets, save the prompts you used to be able to continue generating more of the same assets later (create files in .prompts)
+- Log your work under .logs (create new log files as you see fit) to record your thought process and decisions, and reference them when iterating on features
+- Use playwright to test the visual output of your work, and iterate if it doesn't look right or fit the vibe
 
 ## Context7 MCP (library docs)
 
@@ -36,3 +39,5 @@ Use Context7 to fetch accurate, version-matched documentation during coding task
 - Prefer patch-style edits (small, reviewable diffs) over full-file rewrites.
 - After making changes, run the project's standard checks when feasible (format/lint, unit tests, build/typecheck).
 - For frontend/UI changes, when possible, do a quick smoke test using Playwright MCP (navigate key routes, click primary flows, check console errors, and capture a screenshot if helpful).
+
+

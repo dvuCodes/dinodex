@@ -1,4 +1,7 @@
 import type { Stage } from "./types";
+import { DINO_HATCH_TIMES, DEFAULT_HATCH_TIME } from "./constants";
+
+export type TamagotchiStage = "egg" | Stage;
 
 export interface TamagotchiStats {
   hunger: number;   // 0-100
@@ -8,12 +11,14 @@ export interface TamagotchiStats {
 
 export interface TamagotchiState {
   dinoId: number;
-  stage: Stage;
+  stage: TamagotchiStage;
   stats: TamagotchiStats;
   careScore: number;
   totalInteractions: number;
   lastAction: string | null;
   lastActionTime: number;
+  eggStartTime: number | null;
+  hatchDurationMs: number | null;
 }
 
 export type TamagotchiAction = "feed" | "play" | "sleep";
@@ -24,14 +29,17 @@ const EVOLUTION_THRESHOLD = 30; // interactions needed to evolve
 const DECAY_AMOUNT = 3; // stats decay per action
 
 export function createInitialState(dinoId: number): TamagotchiState {
+  const hatchDuration = DINO_HATCH_TIMES[dinoId] ?? DEFAULT_HATCH_TIME;
   return {
     dinoId,
-    stage: "hatchling",
-    stats: { hunger: 60, happiness: 60, energy: 60 },
+    stage: "egg",
+    stats: { hunger: 50, happiness: 50, energy: 50 },
     careScore: 0,
     totalInteractions: 0,
     lastAction: null,
     lastActionTime: Date.now(),
+    eggStartTime: Date.now(),
+    hatchDurationMs: hatchDuration,
   };
 }
 
@@ -48,6 +56,8 @@ export function applyDecay(stats: TamagotchiStats): TamagotchiStats {
 }
 
 export function applyAction(state: TamagotchiState, action: TamagotchiAction): TamagotchiState {
+  if (state.stage === "egg") return state;
+
   // First apply decay to simulate time passing
   const decayed = applyDecay(state.stats);
 
@@ -130,7 +140,36 @@ export function getMoodMessage(mood: Mood, dinoName: string): string {
   }
 }
 
+export function checkHatch(state: TamagotchiState): TamagotchiState {
+  if (state.stage !== "egg" || !state.eggStartTime || !state.hatchDurationMs) {
+    return state;
+  }
+  const elapsed = Date.now() - state.eggStartTime;
+  if (elapsed >= state.hatchDurationMs) {
+    return {
+      ...state,
+      stage: "hatchling",
+      stats: { hunger: 60, happiness: 60, energy: 60 },
+      eggStartTime: null,
+      hatchDurationMs: null,
+    };
+  }
+  return state;
+}
+
+export function getHatchProgress(state: TamagotchiState): number {
+  if (state.stage !== "egg" || !state.eggStartTime || !state.hatchDurationMs) return 100;
+  const elapsed = Date.now() - state.eggStartTime;
+  return Math.min(100, (elapsed / state.hatchDurationMs) * 100);
+}
+
+export function getHatchTimeRemaining(state: TamagotchiState): number {
+  if (state.stage !== "egg" || !state.eggStartTime || !state.hatchDurationMs) return 0;
+  return Math.max(0, state.hatchDurationMs - (Date.now() - state.eggStartTime));
+}
+
 export function getNextEvolutionProgress(state: TamagotchiState): number {
+  if (state.stage === "egg") return 0;
   if (state.stage === "adult") return 100;
 
   const threshold = state.stage === "hatchling" ? EVOLUTION_THRESHOLD : EVOLUTION_THRESHOLD * 2;
@@ -158,7 +197,13 @@ export function loadState(): TamagotchiState | null {
   const stored = localStorage.getItem(STORAGE_KEY);
   if (!stored) return null;
   try {
-    return JSON.parse(stored) as TamagotchiState;
+    const parsed = JSON.parse(stored) as Partial<TamagotchiState>;
+    // Migration: add egg fields if missing (pre-egg-feature saves)
+    return {
+      ...parsed,
+      eggStartTime: parsed.eggStartTime ?? null,
+      hatchDurationMs: parsed.hatchDurationMs ?? null,
+    } as TamagotchiState;
   } catch {
     return null;
   }

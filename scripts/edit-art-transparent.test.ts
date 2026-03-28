@@ -3,6 +3,7 @@ import {
   buildTransparencyEditPrompt,
   createPilotTasks,
   resolveEditBackend,
+  resolveSharpRawChannels,
   shouldPreferAiEdits,
   stripEdgeConnectedNearWhiteBackground,
   shouldAcceptTransparencyEdit,
@@ -121,6 +122,19 @@ describe("resolveEditBackend", () => {
   test("throws when neither backend is available", () => {
     expect(() => resolveEditBackend({ infshAvailable: false, geminiApiKey: "" })).toThrow(
       "No available image editing backend"
+    );
+  });
+});
+
+describe("resolveSharpRawChannels", () => {
+  test("accepts 3 and 4 channel raw images", () => {
+    expect(resolveSharpRawChannels(3)).toBe(3);
+    expect(resolveSharpRawChannels(4)).toBe(4);
+  });
+
+  test("rejects unsupported raw channel counts", () => {
+    expect(() => resolveSharpRawChannels(2)).toThrow(
+      "Unsupported raw image channel count: 2"
     );
   });
 });

@@ -29,7 +29,7 @@ function Chip({
     <motion.button
       onClick={onClick}
       whileTap={{ scale: 0.93 }}
-      className="shrink-0 h-8 px-4 rounded-pill font-body text-[13px] font-medium capitalize transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+      className="shrink-0 h-8 px-4 rounded-pill font-body text-[13px] font-medium capitalize transition-[background-color,color,box-shadow,border-color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
       style={
         active
           ? {

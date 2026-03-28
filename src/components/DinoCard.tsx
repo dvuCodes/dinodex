@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useArtSource } from "@/hooks/useArtSource";
 import type { DinoEntry } from "@/lib/types";
 import { DIET_COLORS, ERA_COLORS } from "@/lib/constants";
@@ -14,6 +14,7 @@ import {
 } from "@/lib/utils";
 
 export function DinoCard({ dino }: { dino: DinoEntry }) {
+  const reduceMotion = useReducedMotion();
   const dietColor = DIET_COLORS[dino.diet];
   const eraColor = ERA_COLORS[dino.era];
   const paddedId = String(dino.id).padStart(3, "0");
@@ -23,16 +24,23 @@ export function DinoCard({ dino }: { dino: DinoEntry }) {
 
   return (
     <motion.div
-      variants={{
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
-      }}
-      whileHover={{ y: -6, transition: { duration: 0.2 } }}
+      variants={
+        reduceMotion
+          ? {
+              hidden: { opacity: 0 },
+              visible: { opacity: 1, transition: { duration: 0 } },
+            }
+          : {
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+            }
+      }
+      whileHover={reduceMotion ? undefined : { y: -6, transition: { duration: 0.2 } }}
       className="group"
     >
       <Link href={`/dino/${paddedId}`} className="block">
         <div
-          className="relative bg-white rounded-card p-3 transition-all duration-300 card-glow overflow-hidden"
+          className="relative bg-white rounded-card p-3 transition-[transform,box-shadow,border-color] duration-300 card-glow overflow-hidden"
           style={{
             border: `2px solid ${dietColor.primary}`,
             boxShadow: `0 2px 8px rgba(0,0,0,0.06)`,
@@ -90,7 +98,11 @@ export function DinoCard({ dino }: { dino: DinoEntry }) {
               height={512}
               unoptimized
               sizes="(max-width: 639px) 45vw, (max-width: 1023px) 30vw, 20vw"
-              className="w-full h-full object-contain relative z-[1] group-hover:scale-105 transition-transform duration-500"
+              className={
+                reduceMotion
+                  ? "w-full h-full object-contain relative z-[1]"
+                  : "w-full h-full object-contain relative z-[1] group-hover:scale-105 transition-transform duration-500"
+              }
               onError={handleArtError}
             />
           </div>

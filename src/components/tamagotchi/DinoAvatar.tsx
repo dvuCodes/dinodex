@@ -1,9 +1,8 @@
 "use client";
 
-import { useId } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import type { TamagotchiStage, Mood } from "@/lib/tamagotchi";
-import { getMoodEmoji } from "@/lib/tamagotchi";
+import type { TamagotchiStage, Mood, TamagotchiAction } from "@/lib/tamagotchi";
+import { getActionFeedbackKey, getMoodEmoji } from "@/lib/tamagotchi";
 import { TAMAGOTCHI_STAGE_COLORS, ERA_COLORS } from "@/lib/constants";
 import type { Era } from "@/lib/types";
 
@@ -13,6 +12,7 @@ interface DinoAvatarProps {
   mood: Mood;
   era: Era;
   lastAction: string | null;
+  lastActionTime: number;
 }
 
 const STAGE_EMOJI: Record<TamagotchiStage, string> = {
@@ -22,8 +22,7 @@ const STAGE_EMOJI: Record<TamagotchiStage, string> = {
   adult: "🦖",
 };
 
-export function DinoAvatar({ dinoName, stage, mood, era, lastAction }: DinoAvatarProps) {
-  const feedbackId = useId();
+export function DinoAvatar({ dinoName, stage, mood, era, lastAction, lastActionTime }: DinoAvatarProps) {
   const reduceMotion = useReducedMotion();
   const stageColor = TAMAGOTCHI_STAGE_COLORS[stage];
   const eraColor = ERA_COLORS[era];
@@ -98,7 +97,7 @@ export function DinoAvatar({ dinoName, stage, mood, era, lastAction }: DinoAvata
       <AnimatePresence>
         {lastAction && (
           <motion.div
-            key={lastAction + feedbackId}
+            key={getActionFeedbackKey(lastAction as TamagotchiAction, lastActionTime)}
             initial={reduceMotion ? false : { opacity: 1, y: 0, scale: 1 }}
             animate={reduceMotion ? { opacity: 1 } : { opacity: 0, y: -40, scale: 1.3 }}
             exit={{ opacity: 0 }}

@@ -111,6 +111,15 @@ export function applyAction(state: TamagotchiState, action: TamagotchiAction): T
   };
 }
 
+export function syncStateRef<T>(
+  ref: { current: T },
+  nextState: T,
+  applyState: (state: T) => void
+): void {
+  ref.current = nextState;
+  applyState(nextState);
+}
+
 export function getMood(stats: TamagotchiStats): Mood {
   const avg = (stats.hunger + stats.happiness + stats.energy) / 3;
   if (avg >= 85) return "ecstatic";
@@ -182,6 +191,10 @@ export function getActionFeedback(action: TamagotchiAction): string {
     case "play": return "Wheee! So fun! 🎮";
     case "sleep": return "Zzz... sweet dreams 😴";
   }
+}
+
+export function getActionFeedbackKey(action: TamagotchiAction, lastActionTime: number): string {
+  return `${action}-${lastActionTime}`;
 }
 
 const STORAGE_KEY = "dinodex-tamagotchi";

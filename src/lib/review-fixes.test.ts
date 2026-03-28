@@ -8,6 +8,8 @@ import {
   shouldAttemptArtRecovery,
 } from "./utils";
 import { createFilterQueryString, parseFilterState } from "./filter-state";
+import { buildCanonicalDexHref } from "./routes";
+import { getActionFeedbackKey, syncStateRef } from "./tamagotchi";
 
 describe("getArtPath", () => {
   test("resolves generated WebP art for each stage and size", () => {
@@ -88,5 +90,49 @@ describe("filter state helpers", () => {
         searchQuery: "",
       })
     ).toBe("");
+  });
+});
+
+describe("canonical dex routing", () => {
+  test("preserves active filters when redirecting /dex to the home route", () => {
+    expect(buildCanonicalDexHref(new URLSearchParams("era=cretaceous&diet=carnivore&q=rex"))).toBe(
+      "/?era=cretaceous&diet=carnivore&q=rex"
+    );
+    expect(buildCanonicalDexHref(new URLSearchParams(""))).toBe("/");
+  });
+});
+
+describe("tamagotchi state sync helpers", () => {
+  test("updates the ref before notifying React state setters", () => {
+    const previousState = {
+      dinoId: 1,
+      stage: "egg",
+      stats: { hunger: 50, happiness: 50, energy: 50 },
+      careScore: 0,
+      totalInteractions: 0,
+      lastAction: null,
+      lastActionTime: 100,
+      eggStartTime: 100,
+      hatchDurationMs: 1_000,
+    } as const;
+    const nextState = {
+      ...previousState,
+      dinoId: 2,
+      lastActionTime: 200,
+    };
+    const ref = { current: previousState };
+    let observedDuringSetState = previousState;
+
+    syncStateRef(ref, nextState, () => {
+      observedDuringSetState = ref.current;
+    });
+
+    expect(ref.current).toEqual(nextState);
+    expect(observedDuringSetState).toEqual(nextState);
+  });
+
+  test("creates a fresh action-feedback key for repeated identical actions", () => {
+    expect(getActionFeedbackKey("feed", 100)).toBe("feed-100");
+    expect(getActionFeedbackKey("feed", 101)).toBe("feed-101");
   });
 });

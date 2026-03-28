@@ -22,4 +22,10 @@ test.describe("route integrity", () => {
     await expect(page).toHaveURL(/\/$/);
     await expect(page).toHaveTitle(/Dinodex/i);
   });
+
+  test("/dex keeps query-string filters when redirecting to home", async ({ page }) => {
+    await page.goto("/dex?era=cretaceous&diet=carnivore&q=rex");
+
+    await expect(page).toHaveURL(/\/\?era=cretaceous&diet=carnivore&q=rex$/);
+  });
 });

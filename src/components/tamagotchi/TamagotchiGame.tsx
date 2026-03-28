@@ -16,6 +16,7 @@ import {
   getMoodMessage,
   getNextEvolutionProgress,
   getActionFeedback,
+  syncStateRef,
   saveState,
   loadState,
   clearState,
@@ -64,10 +65,11 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
     const checked = checkHatch(saved);
     const justHatched = checked.stage !== saved.stage;
     if (justHatched) saveState(checked);
-    stateRef.current = checked;
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- client-only localStorage init on mount
-    setState(checked);
-    if (justHatched) setHatchAlert(true);
+    syncStateRef(stateRef, checked, setState);
+    if (justHatched) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- client-only localStorage init on mount
+      setHatchAlert(true);
+    }
   }, []);
 
   // Clear hatch alert after delay
@@ -88,14 +90,13 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
 
       const hatched = checkHatch(current);
       if (hatched.stage !== "egg") {
-        stateRef.current = hatched;
-        setState(hatched);
+        syncStateRef(stateRef, hatched, setState);
         saveState(hatched);
         setHatchAlert(true);
         setTimeout(() => setHatchAlert(false), 4000);
       } else {
         // Force re-render for countdown update
-        setState({ ...current });
+        syncStateRef(stateRef, { ...current }, setState);
       }
     }, 1000);
 
@@ -106,7 +107,7 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
 
   const handleSelectDino = useCallback((dinoId: number) => {
     const newState = createInitialState(dinoId);
-    setState(newState);
+    syncStateRef(stateRef, newState, setState);
     saveState(newState);
     setShowSelector(false);
     setFeedback(null);
@@ -138,7 +139,7 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
 
   const handleReset = useCallback(() => {
     clearState();
-    setState(null);
+    syncStateRef(stateRef, null, setState);
     setFeedback(null);
     setEvolved(false);
     setHatchAlert(false);
@@ -283,6 +284,7 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
             mood={mood}
             era={currentDino.era}
             lastAction={state.lastAction}
+            lastActionTime={state.lastActionTime}
           />
         </motion.div>
 

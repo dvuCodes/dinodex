@@ -181,3 +181,24 @@ body {
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+
+  .animate-pulse,
+  .animate-float,
+  .animate-scanline,
+  .animate-ring-pulse,
+  .animate-sparkle,
+  .shimmer {
+    animation: none !important;
+  }
+}

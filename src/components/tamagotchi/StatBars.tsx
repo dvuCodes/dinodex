@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import type { TamagotchiStats } from "@/lib/tamagotchi";
 
 const STAT_CONFIG = [
@@ -20,6 +20,8 @@ interface StatBarsProps {
 }
 
 export function StatBars({ stats }: StatBarsProps) {
+  const reduceMotion = useReducedMotion();
+
   return (
     <div className="space-y-3">
       {STAT_CONFIG.map((stat, i) => {
@@ -39,15 +41,19 @@ export function StatBars({ stats }: StatBarsProps) {
               <motion.div
                 className="h-full rounded-pill relative"
                 style={{ backgroundColor: barColor }}
-                initial={{ width: 0 }}
+                initial={reduceMotion ? false : { width: 0 }}
                 animate={{ width: `${value}%` }}
-                transition={{
-                  duration: 0.5,
-                  delay: i * 0.05,
-                  type: "spring",
-                  stiffness: 100,
-                  damping: 15,
-                }}
+                transition={
+                  reduceMotion
+                    ? { duration: 0 }
+                    : {
+                        duration: 0.5,
+                        delay: i * 0.05,
+                        type: "spring",
+                        stiffness: 100,
+                        damping: 15,
+                      }
+                }
               >
                 {/* Shimmer effect */}
                 <div

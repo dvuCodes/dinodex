@@ -87,10 +87,20 @@ interface RawRgbaImage extends RawRgbImage {
   channels: number;
 }
 
+type SharpRawChannels = 3 | 4;
+
 function ensureDir(path: string) {
   if (!existsSync(path)) {
     mkdirSync(path, { recursive: true });
   }
+}
+
+export function resolveSharpRawChannels(channels: number): SharpRawChannels {
+  if (channels === 3 || channels === 4) {
+    return channels;
+  }
+
+  throw new Error(`Unsupported raw image channel count: ${channels}`);
 }
 
 function parseStage(stageArg?: string): Stage | null {
@@ -378,6 +388,7 @@ async function writeDeterministicTransparentFallback(
   outputPath: string
 ): Promise<TransparencyValidationMetrics> {
   const rawImage = await readRawRgbaImage(inputPath);
+  const rawChannels = resolveSharpRawChannels(rawImage.channels);
   const stripped = stripEdgeConnectedNearWhiteBackground(
     rawImage.data,
     rawImage.width,
@@ -390,7 +401,7 @@ async function writeDeterministicTransparentFallback(
     raw: {
       width: rawImage.width,
       height: rawImage.height,
-      channels: rawImage.channels,
+      channels: rawChannels,
     },
   })
     .png()

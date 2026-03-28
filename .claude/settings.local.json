@@ -19,7 +19,9 @@
       "Bash(python:*)",
       "Bash(pip show:*)",
       "Bash(npx:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(node -e \"const d=require\\(''''./src/data/dinos.json''''\\); d.forEach\\(x=>console.log\\(x.id+''''. ''''+x.name+'''' \\(''''+x.type+'''', ''''+x.era+''''\\)''''\\)\\)\")",
+      "Bash(bunx tsc:*)"
     ]
   }
 }

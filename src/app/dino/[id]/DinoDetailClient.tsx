@@ -3,7 +3,7 @@
 import { startTransition, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import type { DinoEntry, Stage } from "@/lib/types";
 import { ERA_COLORS, DIET_COLORS } from "@/lib/constants";
 import { formatStageDexNumber, formatDexNumber, getDinoPageTitle } from "@/lib/utils";
@@ -27,9 +27,14 @@ export function DinoDetailClient({ dino, relatedDinos, prevDino, nextDino, initi
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const reduceMotion = useReducedMotion();
   const [stage, setStage] = useState<Stage>(initialStage);
   const eraColor = ERA_COLORS[dino.era];
   const dietColor = DIET_COLORS[dino.diet];
+  const fadeMotion = (delay = 0, y = 12) =>
+    reduceMotion
+      ? { initial: false, animate: { opacity: 1 }, transition: { duration: 0 } }
+      : { initial: { opacity: 0, y }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.4, delay } };
 
   useEffect(() => {
     setStage(initialStage);
@@ -59,9 +64,10 @@ export function DinoDetailClient({ dino, relatedDinos, prevDino, nextDino, initi
 
   return (
     <motion.main
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.4 }}
+      id="main-content"
+      {...(reduceMotion
+        ? { initial: false, animate: { opacity: 1 }, transition: { duration: 0 } }
+        : { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.4 } })}
       className="min-h-screen"
     >
       {/* Nav strip */}
@@ -74,12 +80,10 @@ export function DinoDetailClient({ dino, relatedDinos, prevDino, nextDino, initi
       <div className="max-w-[1200px] mx-auto px-4 py-5">
         {/* Back link */}
         <motion.div
-          initial={{ opacity: 0, x: -12 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.3, delay: 0.05 }}
+          {...fadeMotion(0.05, -12)}
         >
           <Link
-            href="/dex"
+            href="/"
             className="inline-flex items-center gap-1.5 font-body text-sm text-text-secondary hover:text-accent transition-colors mb-4 group"
           >
             <span className="group-hover:-translate-x-1 transition-transform" aria-hidden="true">&larr;</span>
@@ -89,9 +93,7 @@ export function DinoDetailClient({ dino, relatedDinos, prevDino, nextDino, initi
 
         {/* Hero header — centered */}
         <motion.header
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
+          {...fadeMotion(0.1, 12)}
           className="text-center mb-6"
         >
           <div className="flex items-center justify-center gap-3 mb-1">
@@ -114,9 +116,7 @@ export function DinoDetailClient({ dino, relatedDinos, prevDino, nextDino, initi
 
           {/* Badge pills */}
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.25 }}
+            {...fadeMotion(0.25, 8)}
             className="flex flex-wrap items-center justify-center gap-2 mt-3"
           >
             <BadgePill
@@ -144,9 +144,7 @@ export function DinoDetailClient({ dino, relatedDinos, prevDino, nextDino, initi
           {/* Left column: Art + Stage Evolution */}
           <div>
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.15 }}
+              {...fadeMotion(0.15, 16)}
             >
               <DinoArt
                 dinoId={dino.id}
@@ -158,9 +156,7 @@ export function DinoDetailClient({ dino, relatedDinos, prevDino, nextDino, initi
 
             {/* Stage Evolution Timeline */}
             <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.25 }}
+              {...fadeMotion(0.25, 12)}
             >
               <StageEvolution
                 dinoId={dino.id}
@@ -173,9 +169,7 @@ export function DinoDetailClient({ dino, relatedDinos, prevDino, nextDino, initi
 
           {/* Right column: Info */}
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            {...fadeMotion(0.3, 16)}
             className="mt-2 lg:mt-0"
           >
             {/* Stats */}

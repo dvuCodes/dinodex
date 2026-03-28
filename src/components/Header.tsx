@@ -2,24 +2,29 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 const NAV_LINKS = [
-  { href: "/dex", label: "Dex" },
+  { href: "/", label: "Dex" },
   { href: "/tamagotchi", label: "Dino Care" },
 ];
 
 export function Header() {
   const pathname = usePathname();
+  const reduceMotion = useReducedMotion();
 
   return (
     <header className="sticky top-0 z-50 bg-cream/90 backdrop-blur-md">
       <div className="max-w-[1200px] mx-auto px-4 h-16 flex items-center gap-3">
         <Link href="/" className="flex items-center gap-3 group">
           <motion.div
-            initial={{ rotate: -20, scale: 0 }}
+            initial={reduceMotion ? false : { rotate: -20, scale: 0 }}
             animate={{ rotate: 0, scale: 1 }}
-            transition={{ type: "spring", stiffness: 200, damping: 12, delay: 0.1 }}
+            transition={
+              reduceMotion
+                ? { duration: 0 }
+                : { type: "spring", stiffness: 200, damping: 12, delay: 0.1 }
+            }
             className="relative"
           >
             <span className="text-3xl drop-shadow-sm" aria-hidden="true">
@@ -29,9 +34,9 @@ export function Header() {
           </motion.div>
           <div>
             <motion.span
-              initial={{ opacity: 0, x: -12 }}
+              initial={reduceMotion ? false : { opacity: 0, x: -12 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4, delay: 0.2 }}
+              transition={reduceMotion ? { duration: 0 } : { duration: 0.4, delay: 0.2 }}
               className="font-display text-[28px] font-black leading-tight tracking-tight block"
             >
               <span className="bg-gradient-to-r from-era-cretaceous via-accent to-era-jurassic bg-clip-text text-transparent">
@@ -39,9 +44,9 @@ export function Header() {
               </span>
             </motion.span>
             <motion.span
-              initial={{ opacity: 0, x: -8 }}
+              initial={reduceMotion ? false : { opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3, delay: 0.35 }}
+              transition={reduceMotion ? { duration: 0 } : { duration: 0.3, delay: 0.35 }}
               className="font-body text-[11px] text-text-muted -mt-1 tracking-widest uppercase block"
             >
               Dinosaur Encyclopedia
@@ -51,14 +56,18 @@ export function Header() {
 
         {/* Navigation */}
         <motion.nav
-          initial={{ opacity: 0 }}
+          initial={reduceMotion ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
+          transition={reduceMotion ? { duration: 0 } : { delay: 0.4 }}
           className="ml-auto flex items-center gap-1"
           aria-label="Main navigation"
         >
           {NAV_LINKS.map((link) => {
-            const isActive = pathname === link.href || pathname.startsWith(link.href + "/");
+            const isActive =
+              (link.href === "/" && pathname === "/") ||
+              pathname === link.href ||
+              pathname.startsWith(link.href + "/") ||
+              (link.href === "/" && pathname.startsWith("/dex"));
             return (
               <Link
                 key={link.href}

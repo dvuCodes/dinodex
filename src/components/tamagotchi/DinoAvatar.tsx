@@ -13,6 +13,7 @@ import type {
 import { getMoodEmoji } from "@/lib/tamagotchi";
 import type { Era } from "@/lib/types";
 import { getEggVariantLabel, getTamagotchiEggSheet, getTamagotchiSpriteSheet } from "@/lib/tamagotchi-sprites";
+import { PixelSprite } from "./PixelSprite";
 
 interface DinoAvatarProps {
   attentionReason: AttentionReason | null;
@@ -41,54 +42,6 @@ const ACTION_BADGES: Partial<Record<TamagotchiAction, string>> = {
   status: "Vitals check",
 };
 
-type PixelSpriteProps = {
-  ariaLabel: string;
-  artSrc: string;
-  displaySizePx: number;
-  expectedFrameCount: number;
-  fallbackFrameCount: number;
-  frameDurationMs: number;
-  reduceMotion: boolean | null;
-  usingFallback: boolean;
-};
-
-function PixelSprite({
-  ariaLabel,
-  artSrc,
-  displaySizePx,
-  expectedFrameCount,
-  fallbackFrameCount,
-  frameDurationMs,
-  reduceMotion,
-  usingFallback,
-}: PixelSpriteProps) {
-  const frameCount = usingFallback ? fallbackFrameCount : expectedFrameCount;
-  return (
-    <div
-      role="img"
-      aria-label={ariaLabel}
-      data-testid="tamagotchi-pixel-screen"
-      className="pixel-screen"
-      style={{ width: displaySizePx, height: displaySizePx }}
-    >
-      <div
-        data-testid="tamagotchi-pixel-sprite"
-        className="pixel-sprite"
-        style={{
-          backgroundImage: `url("${artSrc}")`,
-          backgroundSize: `${frameCount * displaySizePx}px ${displaySizePx}px`,
-          animation:
-            reduceMotion || frameCount <= 1
-              ? "none"
-              : `tamagotchi-sprite ${frameCount * frameDurationMs}ms steps(${frameCount}) infinite`,
-          width: displaySizePx,
-          height: displaySizePx,
-        }}
-      />
-    </div>
-  );
-}
-
 export function DinoAvatar({
   attentionReason,
   animationState,
@@ -113,6 +66,7 @@ export function DinoAvatar({
       : getTamagotchiSpriteSheet(dinoId, stage, animationState);
   const { artSrc, usingFallback } = useArtSource(spriteDescriptor.expectedSrc, spriteDescriptor.fallbackSrc);
   const crackCount = eggProgress > 90 ? 3 : eggProgress > 72 ? 2 : eggProgress > 48 ? 1 : 0;
+  const usesPrototypeStripMotion = dinoId === 1 && stage !== "egg";
 
   const statusChips = [
     { label: sleeping ? "Sleep: On" : "Sleep: Awake", active: sleeping },
@@ -149,22 +103,27 @@ export function DinoAvatar({
           animate={
             reduceMotion
               ? { y: 0 }
-              : {
-                  y: sleeping ? [0, 2, 0] : mood === "ecstatic" ? [0, -8, 0] : mood === "happy" ? [0, -4, 0] : [0, 0, 0],
-                }
+              : usesPrototypeStripMotion
+                ? { y: 0 }
+                : {
+                    y: sleeping ? [0, 2, 0] : mood === "ecstatic" ? [0, -8, 0] : mood === "happy" ? [0, -4, 0] : [0, 0, 0],
+                  }
           }
-          transition={reduceMotion ? { duration: 0 } : { duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+          transition={
+            reduceMotion || usesPrototypeStripMotion
+              ? { duration: 0 }
+              : { duration: 2.6, repeat: Infinity, ease: "easeInOut" }
+          }
           className="relative mx-auto flex aspect-square max-w-[280px] items-center justify-center"
         >
           <PixelSprite
+            key={`${artSrc}-${usingFallback ? spriteDescriptor.fallbackFrameCount : spriteDescriptor.expectedFrameCount}-${spriteDescriptor.displaySizePx}`}
             ariaLabel={stage === "egg" ? `${dinoName} egg in tamagotchi mode` : `${dinoName} pixel sprite in tamagotchi mode`}
             artSrc={artSrc}
             displaySizePx={spriteDescriptor.displaySizePx}
-            expectedFrameCount={spriteDescriptor.expectedFrameCount}
-            fallbackFrameCount={spriteDescriptor.fallbackFrameCount}
+            frameCount={usingFallback ? spriteDescriptor.fallbackFrameCount : spriteDescriptor.expectedFrameCount}
             frameDurationMs={spriteDescriptor.frameDurationMs}
             reduceMotion={reduceMotion}
-            usingFallback={usingFallback}
           />
 
           {stage === "egg" ? (

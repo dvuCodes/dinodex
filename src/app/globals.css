@@ -97,11 +97,6 @@
   50% { opacity: 0.6; }
 }
 
-@keyframes tamagotchi-sprite {
-  from { background-position: 0 0; }
-  to { background-position: 100% 0; }
-}
-
 html {
   scroll-behavior: smooth;
 }
@@ -190,9 +185,6 @@ body {
 .pixel-screen {
   position: relative;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   border-radius: 1.5rem;
   border: 2px solid rgba(15, 23, 42, 0.14);
   background: linear-gradient(180deg, rgba(249, 255, 240, 0.95) 0%, rgba(219, 242, 194, 0.98) 100%);
@@ -215,6 +207,14 @@ body {
 
 .pixel-sprite {
   position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.pixel-sprite-strip {
+  position: relative;
+  height: 100%;
   background-repeat: no-repeat;
   background-position: 0 0;
   image-rendering: pixelated;

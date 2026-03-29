@@ -29,7 +29,8 @@
 - Dinosaur art served from `/dinos/...` must bypass `next/image` optimization when validating or shipping transparency-sensitive renders, because the optimized path can flatten alpha in this environment.
 - When the main dex is species-first, card numbering and watermarks must use the species ID (`#001`, `#002`, ...) rather than stage-specific dex IDs.
 - Use the nano banana 2 skill to generate visual assets for your work, and every time you generate a collection of assets, save the prompts you used to be able to continue generating more of the same assets later (create files in .prompts)
-- On Windows, do not assume the PyPI `inferencesh` install provides a working `infsh` CLI: the upstream wheels can ship `infsh.exe` with an `infsh.__main__` entrypoint but no matching module, and the official `cli.inference.sh` manifest currently has no Windows build. Verify `infsh version` and `infsh me` before relying on Nano Banana, and if the packaged CLI is broken either repair the local compatibility shim or fall back to a deterministic local asset pipeline with the blocker recorded in `.logs/`.
+- The local `nano-banana-2` skill now uses the Gemini API directly through `GEMINI_API_KEY`; do not route new Nano Banana 2 work through `infsh`.
+- For Gemini-generated sprite assets in this repo, prefer a pure solid white background plus deterministic edge-connected near-white removal over asking the model for true transparency, because direct image generations can return baked preview backgrounds.
 - Log your work under .logs (create new log files as you see fit) to record your thought process and decisions, and reference them when iterating on features
 - Use playwright to test the visual output of your work, and iterate if it doesn't look right or fit the vibe
 

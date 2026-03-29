@@ -1,0 +1,72 @@
+<h2>Eoraptor Prototype Scope</h2>
+<p class="subtitle">Full pixel-sprite prototype for species 001 across hatchling, juvenile, and adult using a two-pass AI workflow.</p>
+
+<div class="split">
+  <div class="mockup">
+    <div class="mockup-header">Pipeline</div>
+    <div class="mockup-body">
+      <div style="display:grid;gap:12px;">
+        <div style="padding:12px;border:1px solid #d6d3d1;border-radius:14px;background:#fff7ed;"><strong>1. Anchor frame approval</strong><br><span style="color:#57534e;">Pick one clean Eoraptor frame per stage that defines silhouette, palette, and camera.</span></div>
+        <div style="padding:12px;border:1px solid #d6d3d1;border-radius:14px;background:#fef3c7;"><strong>2. Pose exploration pass</strong><br><span style="color:#57534e;">Generate rough mood poses and shortlist the best idle / happy / sleepy / sick motion ideas.</span></div>
+        <div style="padding:12px;border:1px solid #d6d3d1;border-radius:14px;background:#dcfce7;"><strong>3. Final strip pass</strong><br><span style="color:#57534e;">Regenerate each chosen loop as a full strip with stronger consistency and cleaner timing.</span></div>
+        <div style="padding:12px;border:1px solid #d6d3d1;border-radius:14px;background:#dbeafe;"><strong>4. Normalize + wire</strong><br><span style="color:#57534e;">Crop, align, scale, and export game-ready sheets for the Eoraptor stages only.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mockup">
+    <div class="mockup-header">Coverage Matrix</div>
+    <div class="mockup-body">
+      <div style="display:grid;grid-template-columns:110px repeat(4,1fr);gap:8px;align-items:stretch;font-size:14px;">
+        <div></div>
+        <div style="padding:10px;border-radius:12px;background:#111827;color:white;text-align:center;">Idle</div>
+        <div style="padding:10px;border-radius:12px;background:#14532d;color:white;text-align:center;">Happy</div>
+        <div style="padding:10px;border-radius:12px;background:#1d4ed8;color:white;text-align:center;">Sleepy</div>
+        <div style="padding:10px;border-radius:12px;background:#7c2d12;color:white;text-align:center;">Sick</div>
+
+        <div style="padding:10px;border-radius:12px;background:#fef3c7;font-weight:700;">Hatchling</div>
+        <div style="padding:10px;border:1px solid #d6d3d1;border-radius:12px;background:white;">4-frame loop</div>
+        <div style="padding:10px;border:1px solid #d6d3d1;border-radius:12px;background:white;">4-frame loop</div>
+        <div style="padding:10px;border:1px solid #d6d3d1;border-radius:12px;background:white;">4-frame loop</div>
+        <div style="padding:10px;border:1px solid #d6d3d1;border-radius:12px;background:white;">4-frame loop</div>
+
+        <div style="padding:10px;border-radius:12px;background:#fde68a;font-weight:700;">Juvenile</div>
+        <div style="padding:10px;border:1px solid #d6d3d1;border-radius:12px;background:white;">4-frame loop</div>
+        <div style="padding:10px;border:1px solid #d6d3d1;border-radius:12px;background:white;">4-frame loop</div>
+        <div style="padding:10px;border:1px solid #d6d3d1;border-radius:12px;background:white;">4-frame loop</div>
+        <div style="padding:10px;border:1px solid #d6d3d1;border-radius:12px;background:white;">4-frame loop</div>
+
+        <div style="padding:10px;border-radius:12px;background:#fdba74;font-weight:700;">Adult</div>
+        <div style="padding:10px;border:1px solid #d6d3d1;border-radius:12px;background:white;">4-frame loop</div>
+        <div style="padding:10px;border:1px solid #d6d3d1;border-radius:12px;background:white;">4-frame loop</div>
+        <div style="padding:10px;border:1px solid #d6d3d1;border-radius:12px;background:white;">4-frame loop</div>
+        <div style="padding:10px;border:1px solid #d6d3d1;border-radius:12px;background:white;">4-frame loop</div>
+      </div>
+      <p style="margin-top:14px;color:#57534e;">Prototype output: 12 final strips for Eoraptor, plus exploratory pose sheets that never ship.</p>
+    </div>
+  </div>
+</div>
+
+<div class="options">
+  <div class="option" data-choice="scope-right" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Scope Feels Right</h3>
+      <p>Keep all 3 stages and all 4 mood loops in the prototype.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="trim-scope" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Trim It</h3>
+      <p>The matrix is too large for a first pass. Reduce stages or moods.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="change-pipeline" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Change Pipeline</h3>
+      <p>The two-pass AI flow is wrong; keep the scope but change how strips are produced.</p>
+    </div>
+  </div>
+</div>

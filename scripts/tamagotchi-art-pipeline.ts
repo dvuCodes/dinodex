@@ -1,5 +1,6 @@
 import { join } from "node:path";
 import type { Stage } from "../src/lib/types";
+import type { TamagotchiAnimationState } from "../src/lib/tamagotchi";
 
 const NORMALIZED_STAGES: Array<"egg" | Stage> = ["egg", "hatchling", "juvenile", "adult"];
 
@@ -27,6 +28,25 @@ export function getTamagotchiManifestPath(projectRoot: string): string {
 
 export function getTamagotchiSpriteUrl(dinoId: number, stage: TamagotchiStage): string {
   return `/tamagotchi/${padTamagotchiId(dinoId)}/${stage}.png`;
+}
+
+export function getTamagotchiMoodSpriteOutputPath(
+  projectRoot: string,
+  dinoId: number,
+  stage: Stage,
+  animationState: TamagotchiAnimationState
+): string {
+  return normalizePath(
+    join(projectRoot, "public", "tamagotchi", padTamagotchiId(dinoId), `${stage}-${animationState}.png`)
+  );
+}
+
+export function getTamagotchiMoodSpriteUrl(
+  dinoId: number,
+  stage: Stage,
+  animationState: TamagotchiAnimationState
+): string {
+  return `/tamagotchi/${padTamagotchiId(dinoId)}/${stage}-${animationState}.png`;
 }
 
 export function getTamagotchiStageList(): TamagotchiStage[] {

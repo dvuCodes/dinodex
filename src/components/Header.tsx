@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
+import { buttonVariants } from "@/components/ui/Button";
 
 const NAV_LINKS = [
   { href: "/", label: "Dex" },
@@ -16,7 +17,10 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 bg-cream/90 backdrop-blur-md">
       <div className="max-w-[1200px] mx-auto px-4 h-16 flex items-center gap-3">
-        <Link href="/" className="flex items-center gap-3 group">
+        <Link
+          href="/"
+          className="group flex items-center gap-3 rounded-2xl px-2 py-1.5 transition-[background-color,box-shadow] duration-200 hover:bg-white/80 hover:shadow-[0_12px_26px_rgba(28,25,23,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
+        >
           <motion.div
             initial={reduceMotion ? false : { rotate: -20, scale: 0 }}
             animate={{ rotate: 0, scale: 1 }}
@@ -72,11 +76,15 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`px-3 py-1.5 rounded-lg font-body text-sm transition-colors ${
-                  isActive
-                    ? "bg-accent/10 text-accent font-medium"
-                    : "text-text-secondary hover:text-text-primary hover:bg-black/[0.03]"
-                }`}
+                aria-current={isActive ? "page" : undefined}
+                className={buttonVariants({
+                  variant: "nav",
+                  size: "sm",
+                  active: isActive,
+                  className: isActive
+                    ? "font-medium"
+                    : "text-text-secondary",
+                })}
               >
                 {link.label}
               </Link>

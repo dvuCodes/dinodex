@@ -84,9 +84,9 @@ export function DinoDetailClient({ dino, relatedDinos, prevDino, nextDino, initi
         >
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 font-body text-sm text-text-secondary hover:text-accent transition-colors mb-4 group"
+            className="group mb-4 inline-flex items-center gap-1.5 rounded-pill px-2 py-1 font-body text-sm text-text-secondary transition-[color,box-shadow] hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-parchment focus-visible:text-accent"
           >
-            <span className="group-hover:-translate-x-1 transition-transform" aria-hidden="true">&larr;</span>
+            <span className="transition-transform group-hover:-translate-x-1 group-focus-visible:-translate-x-1" aria-hidden="true">&larr;</span>
             Back to Dinodex
           </Link>
         </motion.div>

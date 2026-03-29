@@ -5,10 +5,61 @@ import { join } from "node:path";
 import next from "next";
 import { getDevServerUrl } from "./dev-server-url.mjs";
 
-const port = parseInt(process.env.PORT || "3000", 10);
+const requestedPort = parseInt(process.env.PORT || "3000", 10);
 const hostname = process.env.HOSTNAME || "0.0.0.0";
 const dev = process.env.NODE_ENV !== "production";
 const dir = process.cwd();
+const MAX_PORT_PROBES = 10;
+
+function canListen(port, hostname) {
+  return new Promise((resolve, reject) => {
+    const probe = createServer();
+
+    probe.once("error", (error) => {
+      if (error?.code === "EADDRINUSE") {
+        resolve(false);
+        return;
+      }
+
+      reject(error);
+    });
+
+    probe.once("listening", () => {
+      probe.close((error) => {
+        if (error) {
+          reject(error);
+          return;
+        }
+
+        resolve(true);
+      });
+    });
+
+    probe.listen(port, hostname);
+  });
+}
+
+async function resolvePort(preferredPort, hostname) {
+  if (process.env.PORT) {
+    return preferredPort;
+  }
+
+  for (let port = preferredPort; port < preferredPort + MAX_PORT_PROBES; port += 1) {
+    if (await canListen(port, hostname)) {
+      return port;
+    }
+  }
+
+  throw new Error(
+    `Unable to find an open dev port between ${preferredPort} and ${preferredPort + MAX_PORT_PROBES - 1}.`
+  );
+}
+
+const port = await resolvePort(requestedPort, hostname);
+
+if (port !== requestedPort) {
+  console.log(`> Port ${requestedPort} is busy, using ${port} instead.`);
+}
 
 const app = next({
   dev,

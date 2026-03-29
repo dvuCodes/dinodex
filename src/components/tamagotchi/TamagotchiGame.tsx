@@ -24,6 +24,7 @@ import {
   simulateElapsedTime,
 } from "@/lib/tamagotchi";
 import { formatDexNumber } from "@/lib/utils";
+import { Button, buttonVariants } from "@/components/ui/Button";
 import { ActionButtons } from "./ActionButtons";
 import { DinoAvatar } from "./DinoAvatar";
 import { DinoSelector } from "./DinoSelector";
@@ -189,7 +190,14 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
       <div className="min-h-screen bg-[radial-gradient(circle_at_top,#fff2d6,transparent_35%),linear-gradient(180deg,#fff9ee_0%,#fff3dc_100%)]">
         <header className="border-b border-border-default/80 bg-cream/90 backdrop-blur-md">
           <div className="mx-auto flex h-16 max-w-[860px] items-center justify-between px-4">
-            <Link href="/" className="font-body text-sm text-text-secondary transition-colors hover:text-accent">
+            <Link
+              href="/"
+              className={buttonVariants({
+                variant: "ghost",
+                size: "sm",
+                className: "px-0 text-text-secondary hover:bg-transparent hover:text-accent active:bg-transparent",
+              })}
+            >
               ← Home
             </Link>
             <h1 className="font-display text-lg font-bold text-text-primary">Dino Care</h1>
@@ -211,20 +219,22 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
                 even while you are away. Raise one companion well and unlock stronger branches for future runs.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <button
-                  type="button"
+                <Button
                   onClick={openSelector}
-                  className="rounded-pill bg-text-primary px-6 py-3 font-display text-sm font-bold text-white shadow-[0_16px_30px_rgba(28,25,23,0.18)] transition-transform hover:-translate-y-0.5"
+                  variant="default"
+                  size="lg"
+                  className="font-display font-bold motion-safe:hover:-translate-y-0.5"
                 >
                   Choose Your Dino
-                </button>
-                <button
-                  type="button"
+                </Button>
+                <Button
                   onClick={openSelector}
-                  className="rounded-pill border border-border-default bg-white px-6 py-3 font-body text-sm text-text-secondary"
+                  variant="outline"
+                  size="lg"
+                  className="bg-white"
                 >
                   Browse Hatchery
-                </button>
+                </Button>
               </div>
               <div className="mt-8 grid gap-3 sm:grid-cols-2">
                 {[
@@ -281,17 +291,25 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,#fff2d6,transparent_35%),linear-gradient(180deg,#fff9ee_0%,#fff3dc_100%)]">
       <header className="border-b border-border-default/80 bg-cream/90 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-[960px] items-center justify-between px-4">
-          <Link href="/" className="font-body text-sm text-text-secondary transition-colors hover:text-accent">
+          <Link
+            href="/"
+            className={buttonVariants({
+              variant: "ghost",
+              size: "sm",
+              className: "px-0 text-text-secondary hover:bg-transparent hover:text-accent active:bg-transparent",
+            })}
+          >
             ← Home
           </Link>
           <h1 className="font-display text-lg font-bold text-text-primary">Dino Care</h1>
-          <button
-            type="button"
+          <Button
             onClick={openSelector}
-            className="font-body text-xs uppercase tracking-[0.2em] text-text-muted transition-colors hover:text-accent"
+            variant="ghost"
+            size="sm"
+            className="text-xs uppercase tracking-[0.2em] text-text-muted hover:text-accent"
           >
             Hatchery
-          </button>
+          </Button>
         </div>
       </header>
 
@@ -447,13 +465,14 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
                     <p className="mt-1 font-body text-sm text-rose-800">
                       Your unlock history stays, but this pet needs to be reset into a fresh egg.
                     </p>
-                    <button
-                      type="button"
+                    <Button
                       onClick={handleResetRun}
-                      className="mt-3 rounded-pill bg-rose-600 px-5 py-2.5 font-display text-sm font-bold text-white"
+                      variant="danger"
+                      size="md"
+                      className="mt-3 bg-rose-600 text-white hover:border-rose-700 hover:bg-rose-700 hover:text-white active:bg-rose-800"
                     >
                       Reset current run
-                    </button>
+                    </Button>
                   </div>
                 ) : null}
               </div>
@@ -461,27 +480,29 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
           </div>
 
           <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
-            <button
-              type="button"
+            <Button
               onClick={openSelector}
-              className="rounded-pill border border-border-default bg-white px-5 py-2.5 font-body text-sm text-text-secondary"
+              variant="outline"
+              size="md"
+              className="bg-white"
             >
               Open Hatchery
-            </button>
-            <button
-              type="button"
+            </Button>
+            <Button
               onClick={handleResetRun}
-              className="rounded-pill border border-border-default bg-white px-5 py-2.5 font-body text-sm text-text-secondary"
+              variant="outline"
+              size="md"
+              className="bg-white"
             >
               Reset Run
-            </button>
-            <button
-              type="button"
+            </Button>
+            <Button
               onClick={handleClearProgress}
-              className="rounded-pill border border-rose-200 bg-rose-50 px-5 py-2.5 font-body text-sm text-rose-700"
+              variant="danger"
+              size="md"
             >
               Clear All Progress
-            </button>
+            </Button>
           </div>
         </div>
       </main>

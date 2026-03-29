@@ -13,7 +13,13 @@ import {
   getStageDexId,
 } from "@/lib/utils";
 
-export function DinoCard({ dino }: { dino: DinoEntry }) {
+export function DinoCard({
+  dino,
+  eagerImage = false,
+}: {
+  dino: DinoEntry;
+  eagerImage?: boolean;
+}) {
   const reduceMotion = useReducedMotion();
   const dietColor = DIET_COLORS[dino.diet];
   const eraColor = ERA_COLORS[dino.era];
@@ -96,6 +102,7 @@ export function DinoCard({ dino }: { dino: DinoEntry }) {
               alt={`Anime illustration of adult ${dino.name}`}
               width={512}
               height={512}
+              loading={eagerImage ? "eager" : undefined}
               unoptimized
               sizes="(max-width: 639px) 45vw, (max-width: 1023px) 30vw, 20vw"
               className={

@@ -12,6 +12,7 @@
 - Always mark tasks off when complete.
 - After every correction to assumptions/process, update this `AGENTS.md`.
 - Use the existing Linear team `Rio31` for non-trivial work. Start from a Linear issue whenever practical instead of treating chat as the task tracker.
+- Before completing non-trivial work, create the relevant Linear issue if it does not already exist, or update the existing issue so status and verification are current.
 - Linear is the source of truth for backlog, priority, assignment, project membership, and status. Repo files remain the source of truth for implementation detail and evidence.
 - Model time-bound initiatives as Linear projects and keep implementation work as atomic Linear issues. Use parent/sub-issues only when a task is too large for one reviewable change.
 - Standardize non-trivial issue descriptions around `Context`, `Acceptance Criteria`, and `Verification`.
@@ -22,6 +23,7 @@
 - Do not propose follow-up tasks or enhancements at the end of your final answer.
 - When working on frontend design, use playwright to test and confirm desired feature implemention.
 - When validating a dev server, confirm the listening port belongs to the current worktree before debugging UI behavior.
+- `bun run dev` should auto-select the next free local port starting at `3000` when `PORT` is unset; when `PORT` is set explicitly, keep port binding strict so scripted tooling does not silently move.
 - `bun` is the default package manager for this repo. Prefer `bun install`, `bun run`, and `bunx` for installs, scripts, tests, and Playwright unless a documented exception exists.
 - Use `bun run <script>` for package scripts such as `dev`; do not use `bunx run <script>`, because `bunx` executes package CLIs and will invoke the external `run` binary instead of this repo's `package.json` scripts.
 - Generated raster art under `public/dinos` can fail direct dev serving in this environment; use the custom dev server to intercept `/dinos/...` raster requests when validating rendered art.

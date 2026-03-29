@@ -23,6 +23,7 @@ const applyPlayerAction = () => getFunction("applyPlayerAction");
 const resetCurrentRun = () => getFunction("resetCurrentRun");
 const clearAllProgress = () => getFunction("clearAllProgress");
 const evaluateStageGate = () => getFunction("evaluateStageGate");
+const getMood = () => getFunction("getMood");
 const STORAGE_KEY = () => getValue<string>("STORAGE_KEY");
 const META_STORAGE_KEY = () => getValue<string>("META_STORAGE_KEY");
 
@@ -141,6 +142,75 @@ describe("tamagotchi storage and migration", () => {
 });
 
 describe("tamagotchi simulation", () => {
+  test("preserves the egg seed until the hatch time is reached", () => {
+    const state = createInitialState()(18, 10_000);
+    const beforeHatch = state.eggStartTime + state.hatchDurationMs - 1_000;
+
+    const reconciled = simulateElapsedTime()(state, beforeHatch);
+
+    expect(reconciled.stage).toBe("egg");
+    expect(reconciled.eggStartTime).toBe(state.eggStartTime);
+    expect(reconciled.hatchDurationMs).toBe(state.hatchDurationMs);
+    expect(reconciled.lastSimulatedAt).toBe(beforeHatch);
+  });
+
+  test("maps care stats into the mood buckets used by the avatar animation", () => {
+    expect(
+      getMood()({
+        hunger: 100,
+        happiness: 100,
+        energy: 100,
+        cleanliness: 100,
+        health: 100,
+        discipline: 100,
+      })
+    ).toBe("ecstatic");
+
+    expect(
+      getMood()({
+        hunger: 70,
+        happiness: 70,
+        energy: 70,
+        cleanliness: 70,
+        health: 70,
+        discipline: 70,
+      })
+    ).toBe("happy");
+
+    expect(
+      getMood()({
+        hunger: 50,
+        happiness: 50,
+        energy: 50,
+        cleanliness: 50,
+        health: 50,
+        discipline: 50,
+      })
+    ).toBe("neutral");
+
+    expect(
+      getMood()({
+        hunger: 30,
+        happiness: 30,
+        energy: 30,
+        cleanliness: 30,
+        health: 30,
+        discipline: 30,
+      })
+    ).toBe("sad");
+
+    expect(
+      getMood()({
+        hunger: 10,
+        happiness: 10,
+        energy: 10,
+        cleanliness: 10,
+        health: 10,
+        discipline: 10,
+      })
+    ).toBe("critical");
+  });
+
   test("offline reconciliation hatches the egg exactly once when enough time passes", () => {
     const state = createInitialState()(18);
     const future = state.eggStartTime + state.hatchDurationMs + 1_000;

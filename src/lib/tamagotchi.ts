@@ -3,7 +3,7 @@ import { DINO_HATCH_TIMES, DEFAULT_HATCH_TIME } from "./constants";
 
 export const STORAGE_KEY = "dinodex-tamagotchi";
 export const META_STORAGE_KEY = "dinodex-tamagotchi-meta";
-export const CURRENT_VERSION = 1;
+export const CURRENT_VERSION = 2;
 
 const MAX_STAT = 100;
 const MIN_STAT = 0;
@@ -18,6 +18,7 @@ const SLEEP_END_HOUR = 7;
 export type TamagotchiStage = "egg" | Stage;
 export type TamagotchiBranchKey = "ideal" | "steady" | "rough";
 export type TamagotchiRunStatus = "active" | "soft-failed";
+export type TamagotchiAnimationState = "idle" | "happy" | "sleepy" | "sick";
 
 export type TamagotchiAction =
   | "feed"
@@ -72,6 +73,7 @@ export interface TamagotchiState {
   runStatus: TamagotchiRunStatus;
   eggStartTime: number | null;
   hatchDurationMs: number | null;
+  eggVariantSeed: number;
 }
 
 export interface TamagotchiMetaProgression {
@@ -152,6 +154,10 @@ function createMetaProgression(): TamagotchiMetaProgression {
   };
 }
 
+export function createEggVariantSeed(speciesId: number, now = Date.now()): number {
+  return (Math.imul(speciesId + 17, 2654435761) ^ now) >>> 0;
+}
+
 export function createInitialState(speciesId: number, now = Date.now()): TamagotchiState {
   const hatchDuration = DINO_HATCH_TIMES[speciesId] ?? DEFAULT_HATCH_TIME;
 
@@ -176,6 +182,7 @@ export function createInitialState(speciesId: number, now = Date.now()): Tamagot
     runStatus: "active",
     eggStartTime: now,
     hatchDurationMs: hatchDuration,
+    eggVariantSeed: createEggVariantSeed(speciesId, now),
   };
 }
 
@@ -230,6 +237,19 @@ function migrateLegacyState(legacy: LegacyState): TamagotchiState {
     runStatus: "active",
     eggStartTime: legacy.eggStartTime,
     hatchDurationMs: legacy.hatchDurationMs,
+    eggVariantSeed: createEggVariantSeed(legacy.dinoId, legacy.eggStartTime ?? legacy.lastActionTime),
+  };
+}
+
+function normalizeStoredState(state: TamagotchiState): TamagotchiState {
+  return {
+    ...state,
+    version: CURRENT_VERSION,
+    dinoId: typeof state.dinoId === "number" ? state.dinoId : state.speciesId,
+    eggVariantSeed:
+      typeof state.eggVariantSeed === "number"
+        ? state.eggVariantSeed
+        : createEggVariantSeed(state.speciesId, state.eggStartTime ?? state.lastSimulatedAt),
   };
 }
 
@@ -247,11 +267,11 @@ function parseStoredState(raw: string | null): TamagotchiState | null {
     const parsed = JSON.parse(raw) as unknown;
 
     if (isVersionedState(parsed)) {
-      return parsed;
+      return normalizeStoredState(parsed);
     }
 
     if (isLegacyState(parsed)) {
-      return migrateLegacyState(parsed);
+      return normalizeStoredState(migrateLegacyState(parsed));
     }
 
     return null;
@@ -671,6 +691,37 @@ export function getMoodMessage(mood: Mood, dinoName: string): string {
     case "critical":
       return `${dinoName} is struggling badly.`;
   }
+}
+
+export function getTamagotchiAnimationState(
+  state: Pick<
+    TamagotchiState,
+    "stage" | "sleeping" | "sick" | "attentionReason" | "lastAction" | "lastActionTime" | "stats"
+  >,
+  now = Date.now()
+): TamagotchiAnimationState {
+  if (state.stage === "egg") {
+    return "idle";
+  }
+
+  if (state.sleeping || state.attentionReason === "sleep" || state.stats.energy <= 18) {
+    return "sleepy";
+  }
+
+  if (state.sick || state.attentionReason === "health" || state.stats.health <= 35) {
+    return "sick";
+  }
+
+  const recentPositiveAction =
+    now - state.lastActionTime <= 20 * 60 * 1000 &&
+    (state.lastAction === "play" || state.lastAction === "feed" || state.lastAction === "snack");
+
+  const mood = getMood(state.stats);
+  if (recentPositiveAction || mood === "ecstatic" || mood === "happy") {
+    return "happy";
+  }
+
+  return "idle";
 }
 
 export function checkHatch(state: TamagotchiState): TamagotchiState {

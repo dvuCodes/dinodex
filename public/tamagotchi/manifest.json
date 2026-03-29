@@ -1,0 +1,704 @@
+{
+  "version": 1,
+  "generatedAt": "2026-03-29T06:31:50.461Z",
+  "spriteSize": 256,
+  "sourceGridSize": 64,
+  "stageOrder": [
+    "egg",
+    "hatchling",
+    "juvenile",
+    "adult"
+  ],
+  "species": [
+    {
+      "id": 1,
+      "name": "Eoraptor",
+      "eggVariant": "banded",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/001/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/001/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/001/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/001/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Coelophysis",
+      "eggVariant": "speckled",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/002/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/002/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/002/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/002/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Plateosaurus",
+      "eggVariant": "ringed",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/003/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/003/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/003/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/003/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Herrerasaurus",
+      "eggVariant": "zigzag",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/004/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/004/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/004/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/004/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Postosuchus",
+      "eggVariant": "swirled",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/005/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/005/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/005/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/005/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Allosaurus",
+      "eggVariant": "banded",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/006/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/006/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/006/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/006/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Stegosaurus",
+      "eggVariant": "speckled",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/007/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/007/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/007/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/007/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Brachiosaurus",
+      "eggVariant": "ringed",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/008/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/008/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/008/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/008/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Diplodocus",
+      "eggVariant": "zigzag",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/009/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/009/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/009/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/009/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Archaeopteryx",
+      "eggVariant": "swirled",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/010/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/010/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/010/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/010/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Compsognathus",
+      "eggVariant": "banded",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/011/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/011/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/011/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/011/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Dilophosaurus",
+      "eggVariant": "speckled",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/012/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/012/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/012/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/012/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Ceratosaurus",
+      "eggVariant": "ringed",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/013/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/013/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/013/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/013/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Kentrosaurus",
+      "eggVariant": "zigzag",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/014/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/014/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/014/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/014/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "name": "Megalosaurus",
+      "eggVariant": "swirled",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/015/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/015/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/015/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/015/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "name": "Apatosaurus",
+      "eggVariant": "banded",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/016/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/016/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/016/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/016/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "name": "Yangchuanosaurus",
+      "eggVariant": "speckled",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/017/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/017/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/017/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/017/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "name": "Tyrannosaurus Rex",
+      "eggVariant": "ringed",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/018/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/018/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/018/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/018/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "name": "Triceratops",
+      "eggVariant": "zigzag",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/019/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/019/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/019/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/019/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "name": "Velociraptor",
+      "eggVariant": "swirled",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/020/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/020/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/020/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/020/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "name": "Spinosaurus",
+      "eggVariant": "banded",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/021/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/021/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/021/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/021/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "name": "Ankylosaurus",
+      "eggVariant": "speckled",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/022/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/022/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/022/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/022/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "name": "Parasaurolophus",
+      "eggVariant": "ringed",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/023/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/023/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/023/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/023/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "name": "Pachycephalosaurus",
+      "eggVariant": "zigzag",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/024/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/024/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/024/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/024/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "name": "Carnotaurus",
+      "eggVariant": "swirled",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/025/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/025/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/025/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/025/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "name": "Therizinosaurus",
+      "eggVariant": "banded",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/026/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/026/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/026/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/026/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "name": "Giganotosaurus",
+      "eggVariant": "speckled",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/027/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/027/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/027/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/027/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "name": "Deinonychus",
+      "eggVariant": "ringed",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/028/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/028/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/028/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/028/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "name": "Protoceratops",
+      "eggVariant": "zigzag",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/029/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/029/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/029/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/029/adult.png"
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "name": "Quetzalcoatlus",
+      "eggVariant": "swirled",
+      "sprites": [
+        {
+          "stage": "egg",
+          "url": "/tamagotchi/030/egg.png"
+        },
+        {
+          "stage": "hatchling",
+          "url": "/tamagotchi/030/hatchling.png"
+        },
+        {
+          "stage": "juvenile",
+          "url": "/tamagotchi/030/juvenile.png"
+        },
+        {
+          "stage": "adult",
+          "url": "/tamagotchi/030/adult.png"
+        }
+      ]
+    }
+  ]
+}

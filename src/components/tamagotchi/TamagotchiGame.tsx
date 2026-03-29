@@ -16,6 +16,7 @@ import {
   getMood,
   getMoodMessage,
   getNextEvolutionProgress,
+  getTamagotchiAnimationState,
   loadAndReconcileState,
   loadMetaProgression,
   resetCurrentRun,
@@ -274,6 +275,8 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
   }
 
   const isEgg = state.stage === "egg";
+  const eggProgress = getHatchProgress(state);
+  const animationState = getTamagotchiAnimationState(state);
   const moodMessage = isEgg ? `${currentDino.name}'s egg is incubating.` : getMoodMessage(mood, currentDino.name);
   const statusHeadline = getStatusHeadline(state.attentionReason, currentDino.name);
 
@@ -297,12 +300,12 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
 
       <main id="main-content" className="mx-auto max-w-[960px] px-4 py-6">
         <div
-          className="rounded-[2.75rem] border border-stone-900/12 p-5 shadow-[0_40px_90px_rgba(217,119,6,0.16)]"
+          className="rounded-[2.75rem] border-2 border-stone-900/18 p-5 shadow-[0_40px_90px_rgba(217,119,6,0.16)] dex-stripes"
           style={{
-            background: `linear-gradient(160deg, ${shellAccent.light} 0%, #ffd58a 45%, ${stageColor.bg} 100%)`,
+            background: `linear-gradient(160deg, ${shellAccent.light} 0%, #f8cd75 42%, ${stageColor.bg} 100%)`,
           }}
         >
-          <div className="mb-4 flex items-center justify-between gap-3 rounded-[1.5rem] border border-white/40 bg-black/10 px-4 py-3">
+          <div className="mb-4 flex items-center justify-between gap-3 rounded-[1.5rem] border border-stone-900/10 bg-[#fff8ea]/75 px-4 py-3 shadow-[inset_0_0_0_2px_rgba(255,255,255,0.3)]">
             <div>
               <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-muted">Run active</p>
               <h2 className="font-display text-xl font-black text-text-primary">
@@ -316,11 +319,14 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
           </div>
 
           <div className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
-            <section className="rounded-[2.2rem] border border-white/55 bg-white/55 p-4 backdrop-blur">
+            <section className="rounded-[2.2rem] border border-white/65 bg-white/62 p-4 backdrop-blur">
               <DinoAvatar
                 attentionReason={state.attentionReason}
+                animationState={animationState}
                 dinoId={currentDino.id}
                 dinoName={currentDino.name}
+                eggProgress={eggProgress}
+                eggVariantSeed={state.eggVariantSeed}
                 era={currentDino.era}
                 lastAction={state.lastAction}
                 mood={mood}
@@ -386,11 +392,11 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
               </div>
             </section>
 
-            <section className="rounded-[2.2rem] border border-white/55 bg-white/55 p-4 backdrop-blur">
-              <div className="rounded-[1.75rem] border border-border-default bg-white/85 p-4">
+            <section className="rounded-[2.2rem] border border-white/65 bg-white/62 p-4 backdrop-blur">
+              <div className="rounded-[1.75rem] border border-stone-900/8 bg-[linear-gradient(180deg,#fffaf0_0%,#fff2d2_100%)] p-4 shadow-[inset_0_0_0_2px_rgba(255,255,255,0.3)]">
                 <div className="mb-4 flex items-center justify-between gap-3">
                   <div>
-                    <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-muted">Pocket shell</p>
+                    <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-muted">Pixel shell</p>
                     <h3 className="font-display text-lg font-bold text-text-primary">Vitals and controls</h3>
                   </div>
                   <div className="text-right">
@@ -404,7 +410,8 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
                     <div className="rounded-[1.6rem] border border-border-default bg-[#fbfcff] p-5">
                       <EggCountdown
                         dinoName={currentDino.name}
-                        progress={getHatchProgress(state)}
+                        eggVariantSeed={state.eggVariantSeed}
+                        progress={eggProgress}
                         timeRemainingMs={getHatchTimeRemaining(state)}
                       />
                     </div>

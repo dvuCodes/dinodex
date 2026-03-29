@@ -1,17 +1,26 @@
 "use client";
 
-import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { useArtSource } from "@/hooks/useArtSource";
 import { ERA_COLORS, TAMAGOTCHI_STAGE_COLORS } from "@/lib/constants";
-import { getMoodEmoji, type AttentionReason, type Mood, type TamagotchiAction, type TamagotchiStage } from "@/lib/tamagotchi";
-import type { Era, Stage } from "@/lib/types";
-import { getArtPath, getPlaceholderArtPath } from "@/lib/utils";
+import type {
+  AttentionReason,
+  Mood,
+  TamagotchiAction,
+  TamagotchiAnimationState,
+  TamagotchiStage,
+} from "@/lib/tamagotchi";
+import { getMoodEmoji } from "@/lib/tamagotchi";
+import type { Era } from "@/lib/types";
+import { getEggVariantLabel, getTamagotchiEggSheet, getTamagotchiSpriteSheet } from "@/lib/tamagotchi-sprites";
 
 interface DinoAvatarProps {
   attentionReason: AttentionReason | null;
+  animationState: TamagotchiAnimationState;
   dinoId: number;
   dinoName: string;
+  eggProgress: number;
+  eggVariantSeed: number;
   era: Era;
   lastAction: TamagotchiAction | null;
   mood: Mood;
@@ -32,18 +41,53 @@ const ACTION_BADGES: Partial<Record<TamagotchiAction, string>> = {
   status: "Vitals check",
 };
 
-function toArtStage(stage: TamagotchiStage): Stage {
-  if (stage === "egg") {
-    return "hatchling";
-  }
+type PixelSpriteProps = {
+  ariaLabel: string;
+  artSrc: string;
+  displaySizePx: number;
+  frameCount: number;
+  frameDurationMs: number;
+  reduceMotion: boolean | null;
+};
 
-  return stage;
+function PixelSprite({
+  ariaLabel,
+  artSrc,
+  displaySizePx,
+  frameCount,
+  frameDurationMs,
+  reduceMotion,
+}: PixelSpriteProps) {
+  return (
+    <div
+      role="img"
+      aria-label={ariaLabel}
+      data-testid="tamagotchi-pixel-screen"
+      className="pixel-screen"
+      style={{ width: displaySizePx, height: displaySizePx }}
+    >
+      <div
+        data-testid="tamagotchi-pixel-sprite"
+        className="pixel-sprite"
+        style={{
+          backgroundImage: `url("${artSrc}")`,
+          backgroundSize: `${frameCount * displaySizePx}px ${displaySizePx}px`,
+          animation: reduceMotion ? "none" : `tamagotchi-sprite ${frameCount * frameDurationMs}ms steps(${frameCount}) infinite`,
+          width: displaySizePx,
+          height: displaySizePx,
+        }}
+      />
+    </div>
+  );
 }
 
 export function DinoAvatar({
   attentionReason,
+  animationState,
   dinoId,
   dinoName,
+  eggProgress,
+  eggVariantSeed,
   era,
   lastAction,
   mood,
@@ -55,10 +99,12 @@ export function DinoAvatar({
   const reduceMotion = useReducedMotion();
   const stageColor = TAMAGOTCHI_STAGE_COLORS[stage];
   const eraColor = ERA_COLORS[era];
-  const artStage = toArtStage(stage);
-  const expectedArtSrc = getArtPath(dinoId, artStage);
-  const fallbackArtSrc = getPlaceholderArtPath(artStage);
-  const { artSrc, handleArtError } = useArtSource(expectedArtSrc, fallbackArtSrc);
+  const spriteDescriptor =
+    stage === "egg"
+      ? getTamagotchiEggSheet(eggVariantSeed)
+      : getTamagotchiSpriteSheet(dinoId, stage, animationState);
+  const { artSrc } = useArtSource(spriteDescriptor.expectedSrc, spriteDescriptor.fallbackSrc);
+  const crackCount = eggProgress > 90 ? 3 : eggProgress > 72 ? 2 : eggProgress > 48 ? 1 : 0;
 
   const statusChips = [
     { label: sleeping ? "Sleep: On" : "Sleep: Awake", active: sleeping },
@@ -80,10 +126,11 @@ export function DinoAvatar({
       <div className="relative rounded-[1.5rem] border border-white/60 bg-[#f6f8fb] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
         <div className="absolute inset-0 rounded-[1.5rem] dex-scanline opacity-60" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-20 rounded-t-[1.5rem] bg-gradient-to-b from-white/75 to-transparent" />
+        <div className="absolute inset-[14px] rounded-[1.2rem] border border-[#d7e2f3] bg-[linear-gradient(180deg,#f4ffea_0%,#d7f2c1_100%)] shadow-[inset_0_0_0_2px_rgba(255,255,255,0.55)]" />
 
         <div className="relative mb-3 flex items-center justify-between gap-3">
-          <span className="rounded-pill bg-black/85 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.24em] text-white">
-            {stage}
+          <span className="rounded-sm border border-black/20 bg-black/80 px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.24em] text-white shadow-[2px_2px_0_rgba(255,255,255,0.16)]">
+            {stage === "egg" ? `${getEggVariantLabel(eggVariantSeed)} egg` : `${stage} ${animationState}`}
           </span>
           <span className="text-2xl" aria-label={`Mood: ${mood}`}>
             {getMoodEmoji(mood)}
@@ -99,23 +146,51 @@ export function DinoAvatar({
                 }
           }
           transition={reduceMotion ? { duration: 0 } : { duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
-          className="relative mx-auto aspect-square max-w-[280px]"
+          className="relative mx-auto flex aspect-square max-w-[280px] items-center justify-center"
         >
+          <PixelSprite
+            ariaLabel={stage === "egg" ? `${dinoName} egg in tamagotchi mode` : `${dinoName} pixel sprite in tamagotchi mode`}
+            artSrc={artSrc}
+            displaySizePx={spriteDescriptor.displaySizePx}
+            frameCount={spriteDescriptor.frameCount}
+            frameDurationMs={spriteDescriptor.frameDurationMs}
+            reduceMotion={reduceMotion}
+          />
+
           {stage === "egg" ? (
-            <div className="flex h-full items-center justify-center text-[9rem] drop-shadow-[0_16px_36px_rgba(124,58,237,0.28)]">
-              🥚
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+              <div className="relative h-[160px] w-[160px]">
+                {Array.from({ length: crackCount }, (_, index) => (
+                  <span
+                    key={index}
+                    className="absolute block h-7 w-[3px] rounded-full bg-violet-700/70"
+                    style={{
+                      left: `${72 + index * 8}px`,
+                      top: `${42 + index * 10}px`,
+                      rotate: `${index % 2 === 0 ? -28 : 18}deg`,
+                    }}
+                  />
+                ))}
+              </div>
             </div>
-          ) : (
-            <Image
-              src={artSrc}
-              alt={`${dinoName} in tamagotchi mode`}
-              fill
-              unoptimized
-              sizes="(max-width: 640px) 70vw, 280px"
-              className="object-contain drop-shadow-[0_18px_30px_rgba(15,23,42,0.26)]"
-              onError={handleArtError}
-            />
-          )}
+          ) : null}
+
+          {poopCount > 0 ? (
+            <div className="pointer-events-none absolute bottom-8 left-1/2 flex -translate-x-1/2 gap-2">
+              {Array.from({ length: Math.min(poopCount, 3) }, (_, index) => (
+                <span
+                  key={index}
+                  className="block h-4 w-4 rounded-sm border border-stone-900/20 bg-stone-700 shadow-[2px_2px_0_rgba(255,255,255,0.18)]"
+                />
+              ))}
+            </div>
+          ) : null}
+
+          {attentionReason ? (
+            <span className="absolute right-6 top-4 rounded-sm border border-[#7f1d1d] bg-[#fee2e2] px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-[#7f1d1d]">
+              {attentionReason}
+            </span>
+          ) : null}
         </motion.div>
 
         <div className="relative mt-4 flex flex-wrap gap-2">

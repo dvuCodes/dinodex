@@ -1,114 +1,142 @@
 "use client";
 
-import { useId } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import type { TamagotchiStage, Mood } from "@/lib/tamagotchi";
-import { getMoodEmoji } from "@/lib/tamagotchi";
-import { TAMAGOTCHI_STAGE_COLORS, ERA_COLORS } from "@/lib/constants";
-import type { Era } from "@/lib/types";
+import Image from "next/image";
+import { motion, useReducedMotion } from "framer-motion";
+import { useArtSource } from "@/hooks/useArtSource";
+import { ERA_COLORS, TAMAGOTCHI_STAGE_COLORS } from "@/lib/constants";
+import { getMoodEmoji, type AttentionReason, type Mood, type TamagotchiAction, type TamagotchiStage } from "@/lib/tamagotchi";
+import type { Era, Stage } from "@/lib/types";
+import { getArtPath, getPlaceholderArtPath } from "@/lib/utils";
 
 interface DinoAvatarProps {
+  attentionReason: AttentionReason | null;
+  dinoId: number;
   dinoName: string;
-  stage: TamagotchiStage;
-  mood: Mood;
   era: Era;
-  lastAction: string | null;
+  lastAction: TamagotchiAction | null;
+  mood: Mood;
+  poopCount: number;
+  sick: boolean;
+  sleeping: boolean;
+  stage: TamagotchiStage;
 }
 
-const STAGE_EMOJI: Record<TamagotchiStage, string> = {
-  egg: "🥚",
-  hatchling: "🐣",
-  juvenile: "🦕",
-  adult: "🦖",
+const ACTION_BADGES: Partial<Record<TamagotchiAction, string>> = {
+  feed: "Meal served",
+  snack: "Treat time",
+  play: "Play burst",
+  clean: "Freshened up",
+  medicine: "Medicine given",
+  lights: "Lights toggled",
+  discipline: "Discipline",
+  status: "Vitals check",
 };
 
-export function DinoAvatar({ dinoName, stage, mood, era, lastAction }: DinoAvatarProps) {
-  const feedbackId = useId();
+function toArtStage(stage: TamagotchiStage): Stage {
+  if (stage === "egg") {
+    return "hatchling";
+  }
+
+  return stage;
+}
+
+export function DinoAvatar({
+  attentionReason,
+  dinoId,
+  dinoName,
+  era,
+  lastAction,
+  mood,
+  poopCount,
+  sick,
+  sleeping,
+  stage,
+}: DinoAvatarProps) {
   const reduceMotion = useReducedMotion();
   const stageColor = TAMAGOTCHI_STAGE_COLORS[stage];
   const eraColor = ERA_COLORS[era];
-  const isEgg = stage === "egg";
+  const artStage = toArtStage(stage);
+  const expectedArtSrc = getArtPath(dinoId, artStage);
+  const fallbackArtSrc = getPlaceholderArtPath(artStage);
+  const { artSrc, handleArtError } = useArtSource(expectedArtSrc, fallbackArtSrc);
+
+  const statusChips = [
+    { label: sleeping ? "Sleep: On" : "Sleep: Awake", active: sleeping },
+    { label: sick ? "Sick: Yes" : "Sick: No", active: sick },
+    { label: poopCount > 0 ? `Mess: ${poopCount}` : "Mess: Clear", active: poopCount > 0 },
+    { label: attentionReason ? `Attention: ${attentionReason}` : "Attention: Calm", active: Boolean(attentionReason) },
+  ];
 
   return (
     <div
-      className="relative aspect-square max-w-[320px] mx-auto rounded-3xl overflow-hidden"
+      className="relative overflow-hidden rounded-[2rem] border border-white/60 p-4 shadow-[0_30px_70px_rgba(28,25,23,0.16)]"
       style={{
-        background: `linear-gradient(135deg, ${eraColor.light}, ${stageColor.bg})`,
+        background: `linear-gradient(155deg, ${eraColor.dark} 0%, ${eraColor.primary} 28%, ${stageColor.bg} 100%)`,
       }}
     >
-      {/* Scanline overlay */}
-      <div className="absolute inset-0 dex-scanline pointer-events-none" />
+      <div className="absolute inset-x-6 top-4 h-1 rounded-full bg-white/25" />
+      <div className="absolute inset-4 rounded-[1.5rem] border border-white/20 bg-black/12" />
 
-      {/* Dino silhouette */}
-      <AnimatePresence mode="wait">
+      <div className="relative rounded-[1.5rem] border border-white/60 bg-[#f6f8fb] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+        <div className="absolute inset-0 rounded-[1.5rem] dex-scanline opacity-60" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-20 rounded-t-[1.5rem] bg-gradient-to-b from-white/75 to-transparent" />
+
+        <div className="relative mb-3 flex items-center justify-between gap-3">
+          <span className="rounded-pill bg-black/85 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.24em] text-white">
+            {stage}
+          </span>
+          <span className="text-2xl" aria-label={`Mood: ${mood}`}>
+            {getMoodEmoji(mood)}
+          </span>
+        </div>
+
         <motion.div
-          key={`${stage}-${mood}`}
-          initial={reduceMotion ? false : { opacity: 0, scale: 0.5 }}
           animate={
             reduceMotion
-              ? { opacity: 1, scale: 1 }
+              ? { y: 0 }
               : {
-                  opacity: 1,
-                  scale: 1,
-                  y: isEgg ? [0, -4, 0] : mood === "ecstatic" ? [0, -10, 0] : mood === "happy" ? [0, -5, 0] : 0,
-                  rotate: isEgg ? [-3, 3, -2, 2, -3] : 0,
+                  y: sleeping ? [0, 2, 0] : mood === "ecstatic" ? [0, -8, 0] : mood === "happy" ? [0, -4, 0] : [0, 0, 0],
                 }
           }
-          exit={{ opacity: 0, scale: 0.8 }}
-          transition={{
-            opacity: { duration: 0.3 },
-            scale: { duration: 0.4, type: "spring" },
-            y: reduceMotion ? { duration: 0 } : { duration: isEgg ? 3 : 2, repeat: Infinity, ease: "easeInOut" },
-            rotate: reduceMotion || !isEgg ? undefined : { duration: 2.5, repeat: Infinity, ease: "easeInOut" },
-          }}
-          className="absolute inset-0 flex items-center justify-center"
+          transition={reduceMotion ? { duration: 0 } : { duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+          className="relative mx-auto aspect-square max-w-[280px]"
         >
-          <span
-            className="text-[120px] sm:text-[150px] select-none"
-            style={{ filter: !isEgg && mood === "critical" ? "grayscale(0.5)" : "none" }}
-          >
-            {STAGE_EMOJI[stage]}
-          </span>
+          {stage === "egg" ? (
+            <div className="flex h-full items-center justify-center text-[9rem] drop-shadow-[0_16px_36px_rgba(124,58,237,0.28)]">
+              🥚
+            </div>
+          ) : (
+            <Image
+              src={artSrc}
+              alt={`${dinoName} in tamagotchi mode`}
+              fill
+              unoptimized
+              sizes="(max-width: 640px) 70vw, 280px"
+              className="object-contain drop-shadow-[0_18px_30px_rgba(15,23,42,0.26)]"
+              onError={handleArtError}
+            />
+          )}
         </motion.div>
-      </AnimatePresence>
 
-      {/* Mood indicator (hidden for eggs) */}
-      {!isEgg && (
-        <motion.div
-          key={mood}
-          initial={reduceMotion ? false : { scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={reduceMotion ? { duration: 0 } : undefined}
-          className="absolute top-4 right-4 text-3xl"
-          aria-label={`Mood: ${mood}`}
-        >
-          {getMoodEmoji(mood)}
-        </motion.div>
-      )}
+        <div className="relative mt-4 flex flex-wrap gap-2">
+          {statusChips.map((chip) => (
+            <span
+              key={chip.label}
+              className={`rounded-pill px-2.5 py-1 font-body text-[11px] ${
+                chip.active ? "bg-accent text-white" : "bg-stone-900/8 text-text-secondary"
+              }`}
+            >
+              {chip.label}
+            </span>
+          ))}
+        </div>
 
-      {/* Stage badge */}
-      <div
-        className="absolute bottom-4 left-4 px-3 py-1 rounded-pill font-mono text-xs uppercase tracking-wider text-white"
-        style={{ backgroundColor: stageColor.primary }}
-      >
-        {stageColor.emoji} {stage}
+        {lastAction ? (
+          <div className="relative mt-3 rounded-2xl bg-stone-950/90 px-3 py-2 font-body text-xs text-white">
+            {ACTION_BADGES[lastAction] ?? "Action taken"}
+          </div>
+        ) : null}
       </div>
-
-      {/* Action feedback */}
-      <AnimatePresence>
-        {lastAction && (
-          <motion.div
-            key={lastAction + feedbackId}
-            initial={reduceMotion ? false : { opacity: 1, y: 0, scale: 1 }}
-            animate={reduceMotion ? { opacity: 1 } : { opacity: 0, y: -40, scale: 1.3 }}
-            exit={{ opacity: 0 }}
-            transition={reduceMotion ? { duration: 0 } : { duration: 1.2 }}
-            className="absolute top-1/3 left-1/2 -translate-x-1/2 font-display font-bold text-lg text-white drop-shadow-lg pointer-events-none"
-          >
-            {lastAction === "feed" ? "🍖" : lastAction === "play" ? "🎮" : "💤"}
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

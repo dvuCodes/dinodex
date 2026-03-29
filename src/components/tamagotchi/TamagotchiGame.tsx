@@ -1,492 +1,492 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import type { DinoEntry } from "@/lib/types";
-import { TAMAGOTCHI_STAGE_COLORS } from "@/lib/constants";
-import type { TamagotchiState, TamagotchiAction, TamagotchiStage } from "@/lib/tamagotchi";
+import { ERA_COLORS, TAMAGOTCHI_STAGE_COLORS } from "@/lib/constants";
+import type { AttentionReason, TamagotchiAction, TamagotchiMetaProgression, TamagotchiState } from "@/lib/tamagotchi";
 import {
+  applyPlayerAction,
+  clearAllProgress,
   createInitialState,
-  applyAction,
-  checkHatch,
+  getActionFeedback,
   getHatchProgress,
   getHatchTimeRemaining,
   getMood,
   getMoodMessage,
   getNextEvolutionProgress,
-  getActionFeedback,
+  loadAndReconcileState,
+  loadMetaProgression,
+  resetCurrentRun,
+  saveMetaProgression,
   saveState,
-  loadState,
-  clearState,
+  simulateElapsedTime,
 } from "@/lib/tamagotchi";
-import { DinoAvatar } from "./DinoAvatar";
-import { StatBars } from "./StatBars";
+import { formatDexNumber } from "@/lib/utils";
 import { ActionButtons } from "./ActionButtons";
+import { DinoAvatar } from "./DinoAvatar";
 import { DinoSelector } from "./DinoSelector";
 import { EggCountdown } from "./EggCountdown";
+import { StatBars } from "./StatBars";
 
 interface TamagotchiGameProps {
   dinos: DinoEntry[];
 }
 
-const TAMA_STAGES: TamagotchiStage[] = ["egg", "hatchling", "juvenile", "adult"];
+function getStatusHeadline(attentionReason: AttentionReason | null, dinoName: string) {
+  switch (attentionReason) {
+    case "hunger":
+      return `${dinoName} is crying for a meal.`;
+    case "happiness":
+      return `${dinoName} is restless and wants attention.`;
+    case "energy":
+      return `${dinoName} is fading and needs rest.`;
+    case "mess":
+      return `${dinoName}'s room needs cleaning.`;
+    case "health":
+      return `${dinoName} needs care immediately.`;
+    case "sleep":
+      return `${dinoName} should be asleep right now.`;
+    case "discipline":
+      return `${dinoName} is testing your patience.`;
+    default:
+      return `${dinoName} is waiting for your next move.`;
+  }
+}
+
+function ensureUnlocked(meta: TamagotchiMetaProgression, speciesId: number): TamagotchiMetaProgression {
+  if (meta.unlockedSpeciesIds.includes(speciesId)) {
+    return meta;
+  }
+
+  return {
+    ...meta,
+    unlockedSpeciesIds: [...meta.unlockedSpeciesIds, speciesId].sort((left, right) => left - right),
+  };
+}
 
 export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
   const reduceMotion = useReducedMotion();
-  const [state, setState] = useState<TamagotchiState | null>(null);
+  const [state, setState] = useState<TamagotchiState | null>(() => loadAndReconcileState());
+  const [meta, setMeta] = useState<TamagotchiMetaProgression>(() => loadMetaProgression());
   const [showSelector, setShowSelector] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [isActing, setIsActing] = useState(false);
-  const [evolved, setEvolved] = useState(false);
-  const [hatchAlert, setHatchAlert] = useState(false);
+  const [justChangedStage, setJustChangedStage] = useState(false);
+  const [justHatched, setJustHatched] = useState(false);
   const stateRef = useRef<TamagotchiState | null>(null);
-  const openSelector = useCallback(() => setShowSelector(true), []);
-  const closeSelector = useCallback(() => setShowSelector(false), []);
 
-  const introMotion = useCallback(
-    (delay = 0, y = 10) =>
-      reduceMotion
-        ? { initial: false, animate: { opacity: 1 }, transition: { duration: 0 } }
-        : { initial: { opacity: 0, y }, animate: { opacity: 1, y: 0 }, transition: { delay } },
-    [reduceMotion]
-  );
-
-  // Keep ref in sync
   useEffect(() => {
     stateRef.current = state;
   }, [state]);
 
-  // Load saved state on mount (with hatch check for time-away hatching)
   useEffect(() => {
-    const saved = loadState();
-    if (!saved) return;
-    const checked = checkHatch(saved);
-    const justHatched = checked.stage !== saved.stage;
-    if (justHatched) saveState(checked);
-    stateRef.current = checked;
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- client-only localStorage init on mount
-    setState(checked);
-    if (justHatched) setHatchAlert(true);
-  }, []);
+    if (!state) {
+      return;
+    }
 
-  // Clear hatch alert after delay
-  useEffect(() => {
-    if (!hatchAlert) return;
-    const timeout = setTimeout(() => setHatchAlert(false), 4000);
-    return () => clearTimeout(timeout);
-  }, [hatchAlert]);
-
-  // Egg timer: poll every second to update countdown and detect hatch
-  const isEggStage = state?.stage === "egg";
-  useEffect(() => {
-    if (!isEggStage) return;
-
-    const interval = setInterval(() => {
+    const intervalMs = state.stage === "egg" ? 1_000 : 60_000;
+    const interval = window.setInterval(() => {
       const current = stateRef.current;
-      if (!current || current.stage !== "egg") return;
+      if (!current) {
+        return;
+      }
 
-      const hatched = checkHatch(current);
-      if (hatched.stage !== "egg") {
-        stateRef.current = hatched;
-        setState(hatched);
-        saveState(hatched);
-        setHatchAlert(true);
-        setTimeout(() => setHatchAlert(false), 4000);
-      } else {
-        // Force re-render for countdown update
+      const reconciled = simulateElapsedTime(current, Date.now());
+      if (JSON.stringify(reconciled) !== JSON.stringify(current)) {
+        saveState(reconciled);
+        setState(reconciled);
+      } else if (current.stage === "egg") {
         setState({ ...current });
       }
-    }, 1000);
+    }, intervalMs);
 
-    return () => clearInterval(interval);
-  }, [isEggStage]);
+    return () => window.clearInterval(interval);
+  }, [state]);
 
-  const currentDino = state ? dinos.find((d) => d.id === state.dinoId) : null;
+  const currentDino = state ? dinos.find((dino) => dino.id === state.speciesId) ?? null : null;
+  const mood = state ? getMood(state.stats) : "neutral";
+  const stageColor = state ? TAMAGOTCHI_STAGE_COLORS[state.stage] : TAMAGOTCHI_STAGE_COLORS.egg;
+  const shellAccent = currentDino ? ERA_COLORS[currentDino.era] : ERA_COLORS.jurassic;
 
-  const handleSelectDino = useCallback((dinoId: number) => {
-    const newState = createInitialState(dinoId);
-    setState(newState);
-    saveState(newState);
+  const openSelector = useCallback(() => setShowSelector(true), []);
+  const closeSelector = useCallback(() => setShowSelector(false), []);
+
+  const handleSelectDino = useCallback((speciesId: number) => {
+    const nextState = createInitialState(speciesId);
+    const currentMeta = loadMetaProgression();
+    const nextMeta = ensureUnlocked(currentMeta, speciesId);
+
+    saveState(nextState);
+    saveMetaProgression(nextMeta);
+    setMeta(nextMeta);
+    setState(nextState);
     setShowSelector(false);
-    setFeedback(null);
-    setEvolved(false);
-    setHatchAlert(false);
+    setFeedback("Egg secured. Keep watch.");
+    setJustChangedStage(false);
+    setJustHatched(false);
   }, []);
 
   const handleAction = useCallback((action: TamagotchiAction) => {
-    if (!state || isActing || state.stage === "egg") return;
-
-    setIsActing(true);
-    const prevStage = state.stage;
-    const newState = applyAction(state, action);
-    setState(newState);
-    saveState(newState);
-
-    // Show feedback
-    setFeedback(getActionFeedback(action));
-    setTimeout(() => setFeedback(null), 1500);
-
-    // Check for evolution
-    if (newState.stage !== prevStage) {
-      setEvolved(true);
-      setTimeout(() => setEvolved(false), 3000);
+    const current = stateRef.current;
+    if (!current || isActing) {
+      return;
     }
 
-    setTimeout(() => setIsActing(false), 400);
-  }, [state, isActing]);
+    setIsActing(true);
+    const nextState = applyPlayerAction(current, action, Date.now());
+    const discoveredBranches = nextState.branchKey
+      ? Array.from(new Set([...meta.discoveredBranches, nextState.branchKey]))
+      : meta.discoveredBranches;
+    const nextMeta = nextState.stage === "adult" && meta
+      ? {
+          ...ensureUnlocked(meta, nextState.speciesId),
+          discoveredBranches,
+          bestCareQualityBySpecies: {
+            ...meta.bestCareQualityBySpecies,
+            [nextState.speciesId]: Math.max(meta.bestCareQualityBySpecies[nextState.speciesId] ?? 0, nextState.careQuality),
+          },
+        }
+      : meta;
 
-  const handleReset = useCallback(() => {
-    clearState();
+    saveState(nextState);
+    if (nextMeta) {
+      saveMetaProgression(nextMeta);
+      setMeta(nextMeta);
+    }
+
+    setJustHatched(current.stage === "egg" && nextState.stage !== "egg");
+    setJustChangedStage(current.stage !== nextState.stage && current.stage !== "egg");
+    setState(nextState);
+    setFeedback(getActionFeedback(action));
+
+    window.setTimeout(() => setFeedback(null), 2200);
+    window.setTimeout(() => {
+      setJustHatched(false);
+      setJustChangedStage(false);
+      setIsActing(false);
+    }, 500);
+  }, [isActing, meta]);
+
+  const handleResetRun = useCallback(() => {
+    resetCurrentRun();
     setState(null);
     setFeedback(null);
-    setEvolved(false);
-    setHatchAlert(false);
+    setShowSelector(false);
   }, []);
 
-  // No dino selected — show selector prompt
+  const handleClearProgress = useCallback(() => {
+    clearAllProgress();
+    setMeta(loadMetaProgression());
+    setState(null);
+    setFeedback(null);
+    setShowSelector(false);
+  }, []);
+
   if (!state || !currentDino) {
     return (
-      <div className="min-h-screen flex flex-col">
-        {/* Header */}
-        <header className="sticky top-0 z-40 bg-cream/90 backdrop-blur-md border-b border-border-default">
-          <div className="max-w-[600px] mx-auto px-4 h-14 flex items-center justify-between">
-            <Link
-              href="/"
-              className="font-body text-sm text-text-secondary hover:text-accent transition-colors flex items-center gap-1.5"
-            >
-              <span>←</span> Home
+      <div className="min-h-screen bg-[radial-gradient(circle_at_top,#fff2d6,transparent_35%),linear-gradient(180deg,#fff9ee_0%,#fff3dc_100%)]">
+        <header className="border-b border-border-default/80 bg-cream/90 backdrop-blur-md">
+          <div className="mx-auto flex h-16 max-w-[860px] items-center justify-between px-4">
+            <Link href="/" className="font-body text-sm text-text-secondary transition-colors hover:text-accent">
+              ← Home
             </Link>
-            <h1 className="font-display font-bold text-lg text-text-primary flex items-center gap-2">
-              <span>🥚</span> Dino Care
-            </h1>
-            <div className="w-14" />
+            <h1 className="font-display text-lg font-bold text-text-primary">Dino Care</h1>
+            <span className="font-mono text-xs uppercase tracking-[0.24em] text-text-muted">Pocket Pet</span>
           </div>
         </header>
 
-        {/* Empty state */}
-        <main id="main-content" className="flex-1 flex items-center justify-center px-4">
-          <motion.div
-            {...introMotion(0, 20)}
-            className="text-center max-w-sm"
-          >
-            <motion.span
-              animate={reduceMotion ? { rotate: 0, y: 0 } : { rotate: [-5, 5, -5], y: [0, -8, 0] }}
-              transition={reduceMotion ? { duration: 0 } : { duration: 3, repeat: Infinity }}
-              className="text-8xl inline-block mb-6"
+        <main id="main-content" className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-[860px] flex-col justify-center px-4 py-8">
+          <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+            <motion.section
+              initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="rounded-[2.25rem] border border-white/65 bg-white/70 p-6 shadow-[0_30px_80px_rgba(28,25,23,0.12)] backdrop-blur"
             >
-              🥚
-            </motion.span>
-            <h2 className="font-display font-bold text-2xl text-text-primary mb-2">
-              Adopt a Dinosaur
-            </h2>
-            <p className="font-body text-sm text-text-secondary mb-8 leading-relaxed">
-              Choose your very own prehistoric companion. Feed them, play with them, and watch them evolve!
-            </p>
-            <motion.button
-              whileHover={reduceMotion ? undefined : { scale: 1.05 }}
-              whileTap={reduceMotion ? undefined : { scale: 0.95 }}
-              onClick={openSelector}
-              className="px-8 py-4 rounded-2xl bg-gradient-to-r from-era-jurassic to-stage-hatchling text-white font-display font-bold text-lg shadow-lg shadow-era-jurassic/25 cursor-pointer"
+              <p className="font-mono text-xs uppercase tracking-[0.24em] text-text-muted">Device boot</p>
+              <h2 className="mt-3 font-display text-4xl font-black text-text-primary">Adopt a dinosaur egg</h2>
+              <p className="mt-4 max-w-lg font-body text-sm leading-7 text-text-secondary">
+                This is the stricter care mode. Your dino tracks sleep, sickness, mess, discipline, and attention debt
+                even while you are away. Raise one companion well and unlock stronger branches for future runs.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={openSelector}
+                  className="rounded-pill bg-text-primary px-6 py-3 font-display text-sm font-bold text-white shadow-[0_16px_30px_rgba(28,25,23,0.18)] transition-transform hover:-translate-y-0.5"
+                >
+                  Choose Your Dino
+                </button>
+                <button
+                  type="button"
+                  onClick={openSelector}
+                  className="rounded-pill border border-border-default bg-white px-6 py-3 font-body text-sm text-text-secondary"
+                >
+                  Browse Hatchery
+                </button>
+              </div>
+              <div className="mt-8 grid gap-3 sm:grid-cols-2">
+                {[
+                  "Real-time catch-up with softer web pacing",
+                  "Branching forms from good or rough care",
+                  "Sleep, sickness, mess, and discipline pressure",
+                  "Unlock history persists between runs",
+                ].map((item) => (
+                  <div key={item} className="rounded-2xl border border-border-default/70 bg-[#fff8ed] px-4 py-3 font-body text-sm text-text-secondary">
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </motion.section>
+
+            <motion.section
+              initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={reduceMotion ? { duration: 0 } : { delay: 0.05 }}
+              className="rounded-[2.5rem] border border-stone-900/10 bg-[linear-gradient(180deg,#ffd89c_0%,#f4b860_100%)] p-5 shadow-[0_30px_80px_rgba(217,119,6,0.2)]"
             >
-              Choose Your Dino →
-            </motion.button>
-          </motion.div>
+              <div className="rounded-[2rem] border border-white/45 bg-[#f7f4ee] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+                <div className="mb-3 flex items-center justify-between">
+                  <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-muted">Sleep</span>
+                  <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-muted">Sick</span>
+                  <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-muted">Mess</span>
+                  <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-muted">Attention</span>
+                </div>
+                <div className="flex items-center justify-center rounded-[1.75rem] border border-border-default bg-[linear-gradient(180deg,#f9fbff_0%,#e6edf8_100%)] p-6">
+                  <div className="text-[8rem]">🥚</div>
+                </div>
+                <div className="mt-4 grid grid-cols-3 gap-3">
+                  {["Feed", "Play", "Clean", "Medicine", "Lights", "Discipline"].map((item) => (
+                    <div key={item} className="rounded-2xl border border-stone-900/8 bg-white px-3 py-4 text-center font-display text-sm font-bold text-text-primary shadow-sm">
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.section>
+          </div>
         </main>
 
-        <DinoSelector
-          dinos={dinos}
-          isOpen={showSelector}
-          onSelect={handleSelectDino}
-          onClose={closeSelector}
-        />
+        <DinoSelector dinos={dinos} isOpen={showSelector} onSelect={handleSelectDino} onClose={closeSelector} />
       </div>
     );
   }
 
   const isEgg = state.stage === "egg";
-  const mood = getMood(state.stats);
-  const moodMessage = isEgg
-    ? `${currentDino.name}'s egg is incubating...`
-    : getMoodMessage(mood, currentDino.name);
-  const evoProgress = getNextEvolutionProgress(state);
-  const stageColor = TAMAGOTCHI_STAGE_COLORS[state.stage];
+  const moodMessage = isEgg ? `${currentDino.name}'s egg is incubating.` : getMoodMessage(mood, currentDino.name);
+  const statusHeadline = getStatusHeadline(state.attentionReason, currentDino.name);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-cream/90 backdrop-blur-md border-b border-border-default">
-        <div className="max-w-[600px] mx-auto px-4 h-14 flex items-center justify-between">
-          <Link
-            href="/"
-            className="font-body text-sm text-text-secondary hover:text-accent transition-colors flex items-center gap-1.5"
-          >
-            <span>←</span> Home
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top,#fff2d6,transparent_35%),linear-gradient(180deg,#fff9ee_0%,#fff3dc_100%)]">
+      <header className="border-b border-border-default/80 bg-cream/90 backdrop-blur-md">
+        <div className="mx-auto flex h-16 max-w-[960px] items-center justify-between px-4">
+          <Link href="/" className="font-body text-sm text-text-secondary transition-colors hover:text-accent">
+            ← Home
           </Link>
-          <h1 className="font-display font-bold text-lg text-text-primary flex items-center gap-2">
-            <span>🥚</span> Dino Care
-          </h1>
+          <h1 className="font-display text-lg font-bold text-text-primary">Dino Care</h1>
           <button
-            onClick={() => setShowSelector(true)}
-            className="font-body text-xs text-text-muted hover:text-accent transition-colors cursor-pointer"
+            type="button"
+            onClick={openSelector}
+            className="font-body text-xs uppercase tracking-[0.2em] text-text-muted transition-colors hover:text-accent"
           >
-            Switch
+            Hatchery
           </button>
         </div>
       </header>
 
-      <main id="main-content" className="flex-1 max-w-[480px] mx-auto w-full px-4 py-6">
-        {/* Hatch alert */}
-        <AnimatePresence>
-          {hatchAlert && (
-            <motion.div
-              {...(reduceMotion
-                ? { initial: false, animate: { opacity: 1 }, transition: { duration: 0 } }
-                : { initial: { opacity: 0, y: -20, scale: 0.9 }, animate: { opacity: 1, y: 0, scale: 1 }, transition: { duration: 0.3 } })}
-              exit={{ opacity: 0, y: -20 }}
-              className="mb-4 p-4 rounded-2xl bg-gradient-to-r from-stage-hatchling/15 via-accent/10 to-era-jurassic/15 border border-stage-hatchling/30 text-center"
-            >
-              <span className="text-3xl">🐣</span>
-              <p className="font-display font-bold text-lg text-text-primary mt-1">
-                {currentDino.name}&apos;s egg has hatched!
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Evolution alert */}
-        <AnimatePresence>
-          {evolved && (
-            <motion.div
-              {...(reduceMotion
-                ? { initial: false, animate: { opacity: 1 }, transition: { duration: 0 } }
-                : { initial: { opacity: 0, y: -20, scale: 0.9 }, animate: { opacity: 1, y: 0, scale: 1 }, transition: { duration: 0.3 } })}
-              exit={{ opacity: 0, y: -20 }}
-              className="mb-4 p-4 rounded-2xl bg-gradient-to-r from-era-triassic/10 via-accent/10 to-era-jurassic/10 border border-accent/20 text-center"
-            >
-              <span className="text-3xl">⚡</span>
-              <p className="font-display font-bold text-lg text-text-primary mt-1">
-                {currentDino.name} evolved to {state.stage}!
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Dino Avatar */}
-        <motion.div
-          {...introMotion(0.1, 0)}
-          className="mb-6"
+      <main id="main-content" className="mx-auto max-w-[960px] px-4 py-6">
+        <div
+          className="rounded-[2.75rem] border border-stone-900/12 p-5 shadow-[0_40px_90px_rgba(217,119,6,0.16)]"
+          style={{
+            background: `linear-gradient(160deg, ${shellAccent.light} 0%, #ffd58a 45%, ${stageColor.bg} 100%)`,
+          }}
         >
-          <DinoAvatar
-            dinoName={currentDino.name}
-            stage={state.stage}
-            mood={mood}
-            era={currentDino.era}
-            lastAction={state.lastAction}
-          />
-        </motion.div>
-
-        {/* Name & mood */}
-        <motion.div
-          {...introMotion(0.1, 10)}
-          className="text-center mb-6"
-        >
-          <h2 className="font-display font-bold text-2xl text-text-primary">
-            {currentDino.name}
-          </h2>
-          <p className="font-body text-sm text-text-secondary mt-1">
-            {moodMessage}
-          </p>
-
-          {/* Feedback */}
-          <AnimatePresence>
-            {feedback && !isEgg && (
-              <motion.p
-                initial={{ opacity: 0, y: 5 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className="font-display font-bold text-sm mt-2"
-                style={{ color: stageColor.primary }}
-              >
-                {feedback}
-              </motion.p>
-            )}
-          </AnimatePresence>
-        </motion.div>
-
-        {/* Egg countdown OR Stats + Actions */}
-        {isEgg ? (
-          <motion.div
-            {...introMotion(0.2, 10)}
-            className="bg-white rounded-2xl border border-border-default p-6 mb-6 shadow-sm"
-          >
-            <div className="flex items-center gap-2 mb-5">
-              <h3 className="font-display text-sm font-bold text-text-primary">Incubation</h3>
-              <div className="flex-1 h-px bg-border-default" />
-              <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
-                egg
-              </span>
+          <div className="mb-4 flex items-center justify-between gap-3 rounded-[1.5rem] border border-white/40 bg-black/10 px-4 py-3">
+            <div>
+              <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-muted">Run active</p>
+              <h2 className="font-display text-xl font-black text-text-primary">
+                {currentDino.name} {formatDexNumber(currentDino.id)}
+              </h2>
             </div>
-            <EggCountdown
-              timeRemainingMs={getHatchTimeRemaining(state)}
-              progress={getHatchProgress(state)}
-              dinoName={currentDino.name}
-            />
-          </motion.div>
-        ) : (
-          <>
-            {/* Stats */}
-            <motion.div
-              {...introMotion(0.2, 10)}
-              className="bg-white rounded-2xl border border-border-default p-5 mb-6 shadow-sm"
-            >
-              <div className="flex items-center gap-2 mb-4">
-                <h3 className="font-display text-sm font-bold text-text-primary">Vitals</h3>
-                <div className="flex-1 h-px bg-border-default" />
-                <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
-                  {state.stage}
-                </span>
-              </div>
-              <StatBars stats={state.stats} />
-            </motion.div>
+            <div className="text-right">
+              <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-muted">Branch</p>
+              <p className="font-display text-sm font-bold capitalize text-text-primary">{state.branchKey}</p>
+            </div>
+          </div>
 
-            {/* Action buttons */}
-            <motion.div
-              {...introMotion(0.3, 10)}
-              className="mb-6"
-            >
-              <ActionButtons onAction={handleAction} disabled={isActing} />
-            </motion.div>
-          </>
-        )}
+          <div className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
+            <section className="rounded-[2.2rem] border border-white/55 bg-white/55 p-4 backdrop-blur">
+              <DinoAvatar
+                attentionReason={state.attentionReason}
+                dinoId={currentDino.id}
+                dinoName={currentDino.name}
+                era={currentDino.era}
+                lastAction={state.lastAction}
+                mood={mood}
+                poopCount={state.poopCount}
+                sick={state.sick}
+                sleeping={state.sleeping}
+                stage={state.stage}
+              />
 
-        {/* Incubation message when egg (replaces action buttons area) */}
-        {isEgg && (
-          <motion.div
-            {...introMotion(0.3, 10)}
-            className="mb-6"
-          >
-            <div className="grid grid-cols-3 gap-3">
-              {[
-                { emoji: "🍖", label: "Feed", color: "#F97316" },
-                { emoji: "🎮", label: "Play", color: "#8B5CF6" },
-                { emoji: "😴", label: "Sleep", color: "#3B82F6" },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  className="flex flex-col items-center gap-1.5 py-4 px-3 rounded-2xl bg-white border-2 shadow-sm opacity-35 cursor-not-allowed"
-                  style={{ borderColor: `${item.color}15` }}
-                >
-                  <span className="text-3xl grayscale">{item.emoji}</span>
-                  <span className="font-display font-bold text-sm text-text-muted">
-                    {item.label}
+              <div className="mt-4 rounded-[1.6rem] border border-border-default bg-white/80 p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="font-display text-lg font-bold text-text-primary">{statusHeadline}</p>
+                    <p className="mt-1 font-body text-sm text-text-secondary">{moodMessage}</p>
+                  </div>
+                  <span
+                    className="rounded-pill px-3 py-1 font-mono text-[11px] uppercase tracking-[0.2em] text-white"
+                    style={{ backgroundColor: stageColor.primary }}
+                  >
+                    {state.stage}
                   </span>
                 </div>
-              ))}
-            </div>
-            <p className="text-center font-body text-xs text-text-muted mt-3">
-              Wait for the egg to hatch before interacting
-            </p>
-          </motion.div>
-        )}
 
-        {/* Evolution progress */}
-        <motion.div
-          {...introMotion(0.4, 10)}
-          className="bg-white rounded-2xl border border-border-default p-5 mb-6 shadow-sm"
-        >
-          <div className="flex items-center gap-2 mb-3">
-            <h3 className="font-display text-sm font-bold text-text-primary">Evolution</h3>
-            <div className="flex-1 h-px bg-border-default" />
-          </div>
+                <AnimatePresence mode="wait">
+                  {feedback ? (
+                    <motion.p
+                      key={feedback}
+                      initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      className="mt-3 rounded-2xl bg-stone-950 px-3 py-2 font-body text-sm text-white"
+                    >
+                      {feedback}
+                    </motion.p>
+                  ) : null}
+                </AnimatePresence>
 
-          {/* Stage indicators (now 4 stages) */}
-          <div className="flex items-center justify-center gap-1.5 mb-3">
-            {TAMA_STAGES.map((stage, i) => {
-              const sc = TAMAGOTCHI_STAGE_COLORS[stage];
-              const stageIdx = TAMA_STAGES.indexOf(state.stage);
-              const isActive = state.stage === stage;
-              const isPast = TAMA_STAGES.indexOf(stage) < stageIdx;
-              const isFuture = TAMA_STAGES.indexOf(stage) > stageIdx;
+                <AnimatePresence>
+                  {justHatched ? (
+                    <motion.p
+                      initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="mt-3 rounded-2xl bg-stage-hatchling/15 px-3 py-2 font-body text-sm text-text-primary"
+                    >
+                      The egg cracked open. Your hatchling is alive.
+                    </motion.p>
+                  ) : null}
+                </AnimatePresence>
 
-              return (
-                <div key={stage} className="flex items-center gap-1.5">
-                  <div
-                    className={`w-7 h-7 rounded-full flex items-center justify-center text-xs transition-all ${
-                      isActive
-                        ? "ring-2 ring-offset-1 scale-110"
-                        : isFuture
-                          ? "opacity-35"
-                          : isPast
-                            ? "opacity-70"
-                            : ""
-                    }`}
-                    style={{
-                      backgroundColor: sc.bg,
-                      ...(isActive ? { "--tw-ring-color": sc.primary } as React.CSSProperties : {}),
-                    }}
-                  >
-                    {sc.emoji}
+                <AnimatePresence>
+                  {justChangedStage ? (
+                    <motion.p
+                      initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="mt-3 rounded-2xl bg-accent/10 px-3 py-2 font-body text-sm text-text-primary"
+                    >
+                      Growth branch advanced. Care quality is shaping the next form.
+                    </motion.p>
+                  ) : null}
+                </AnimatePresence>
+              </div>
+            </section>
+
+            <section className="rounded-[2.2rem] border border-white/55 bg-white/55 p-4 backdrop-blur">
+              <div className="rounded-[1.75rem] border border-border-default bg-white/85 p-4">
+                <div className="mb-4 flex items-center justify-between gap-3">
+                  <div>
+                    <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-muted">Pocket shell</p>
+                    <h3 className="font-display text-lg font-bold text-text-primary">Vitals and controls</h3>
                   </div>
-                  {i < TAMA_STAGES.length - 1 && (
-                    <span className="text-text-muted/40 text-[10px]">→</span>
-                  )}
+                  <div className="text-right">
+                    <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-muted">Care quality</p>
+                    <p className="font-display text-xl font-black text-text-primary">{state.careQuality}%</p>
+                  </div>
                 </div>
-              );
-            })}
+
+                {isEgg ? (
+                  <div className="space-y-4">
+                    <div className="rounded-[1.6rem] border border-border-default bg-[#fbfcff] p-5">
+                      <EggCountdown
+                        dinoName={currentDino.name}
+                        progress={getHatchProgress(state)}
+                        timeRemainingMs={getHatchTimeRemaining(state)}
+                      />
+                    </div>
+                    <ActionButtons disabled={isActing} isEgg={isEgg} onAction={handleAction} />
+                  </div>
+                ) : (
+                  <>
+                    <StatBars stats={state.stats} />
+                    <div className="mt-4">
+                      <ActionButtons disabled={isActing} isEgg={isEgg} onAction={handleAction} />
+                    </div>
+                  </>
+                )}
+
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-2xl border border-border-default/80 bg-[#fff8ed] p-3">
+                    <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-muted">Status board</p>
+                    <div className="mt-2 space-y-1.5 font-body text-sm text-text-secondary">
+                      <p>Sleep: {state.sleeping ? "On" : "Awake"}</p>
+                      <p>Sick: {state.sick ? "Yes" : "No"}</p>
+                      <p>Mess: {state.poopCount > 0 ? `${state.poopCount} pile(s)` : "Clear"}</p>
+                      <p>Attention: {state.attentionReason ?? "Calm"}</p>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-border-default/80 bg-[#fff8ed] p-3">
+                    <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-muted">Run metrics</p>
+                    <div className="mt-2 space-y-1.5 font-body text-sm text-text-secondary">
+                      <p>Mistakes: {state.careMistakes}</p>
+                      <p>Growth: {getNextEvolutionProgress(state)}%</p>
+                      <p>Unlocks: {meta?.unlockedSpeciesIds.length ?? 0}</p>
+                      <p>Branch: {state.branchKey}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {state.runStatus !== "active" ? (
+                  <div className="mt-4 rounded-[1.6rem] border border-rose-200 bg-rose-50 p-4">
+                    <p className="font-display text-lg font-bold text-rose-900">This run has collapsed.</p>
+                    <p className="mt-1 font-body text-sm text-rose-800">
+                      Your unlock history stays, but this pet needs to be reset into a fresh egg.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={handleResetRun}
+                      className="mt-3 rounded-pill bg-rose-600 px-5 py-2.5 font-display text-sm font-bold text-white"
+                    >
+                      Reset current run
+                    </button>
+                  </div>
+                ) : null}
+              </div>
+            </section>
           </div>
 
-          {/* Progress bar (for non-egg, non-adult) */}
-          {!isEgg && state.stage !== "adult" && (
-            <div className="h-2 rounded-pill bg-gray-100 overflow-hidden">
-              <motion.div
-                className="h-full rounded-pill bg-gradient-to-r from-stage-hatchling to-stage-juvenile"
-                animate={{ width: `${evoProgress}%` }}
-                transition={{ duration: 0.5, type: "spring" }}
-              />
-            </div>
-          )}
-
-          {isEgg ? (
-            <p className="font-mono text-[10px] text-text-muted mt-2 text-center">
-              Egg must hatch before evolution begins
-            </p>
-          ) : (
-            <div className="flex items-center justify-between mt-2">
-              <span className="font-mono text-[10px] text-text-muted">
-                Care score: {state.careScore}
-              </span>
-              <span className="font-mono text-[10px] text-text-muted">
-                {state.totalInteractions} interactions
-              </span>
-            </div>
-          )}
-        </motion.div>
-
-        {/* Bottom actions */}
-        <div className="flex items-center justify-center gap-4 pb-8">
-          <button
-            onClick={openSelector}
-            className="font-body text-xs text-text-muted hover:text-accent transition-colors cursor-pointer"
-          >
-            Change Dino
-          </button>
-          <span className="text-text-muted/30">·</span>
-          <button
-            onClick={handleReset}
-            className="font-body text-xs text-text-muted hover:text-era-cretaceous transition-colors cursor-pointer"
-          >
-            Reset
-          </button>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={openSelector}
+              className="rounded-pill border border-border-default bg-white px-5 py-2.5 font-body text-sm text-text-secondary"
+            >
+              Open Hatchery
+            </button>
+            <button
+              type="button"
+              onClick={handleResetRun}
+              className="rounded-pill border border-border-default bg-white px-5 py-2.5 font-body text-sm text-text-secondary"
+            >
+              Reset Run
+            </button>
+            <button
+              type="button"
+              onClick={handleClearProgress}
+              className="rounded-pill border border-rose-200 bg-rose-50 px-5 py-2.5 font-body text-sm text-rose-700"
+            >
+              Clear All Progress
+            </button>
+          </div>
         </div>
       </main>
 
-      <DinoSelector
-        dinos={dinos}
-        isOpen={showSelector}
-        onSelect={handleSelectDino}
-        onClose={closeSelector}
-      />
+      <DinoSelector dinos={dinos} isOpen={showSelector} onSelect={handleSelectDino} onClose={closeSelector} />
     </div>
   );
 }

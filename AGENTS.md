@@ -15,6 +15,8 @@
 - Do not propose follow-up tasks or enhancements at the end of your final answer.
 - When working on frontend design, use playwright to test and confirm desired feature implemention.
 - When validating a dev server, confirm the listening port belongs to the current worktree before debugging UI behavior.
+- `bun` is the default package manager for this repo. Prefer `bun install`, `bun run`, and `bunx` for installs, scripts, tests, and Playwright unless a documented exception exists.
+- Use `bun run <script>` for package scripts such as `dev`; do not use `bunx run <script>`, because `bunx` executes package CLIs and will invoke the external `run` binary instead of this repo's `package.json` scripts.
 - Generated raster art under `public/dinos` can fail direct dev serving in this environment; use the custom dev server to intercept `/dinos/...` raster requests when validating rendered art.
 - WebP conversion alone does not create transparency; for the current dinosaur art set, exact-preservation transparency should default to deterministic edge-connected background removal, `scripts/process-images.ts` should prefer `scripts/transparent-output` over `scripts/raw-output`, and generative image editing should be opt-in only when a real redraw is acceptable.
 - Dinosaur art served from `/dinos/...` must bypass `next/image` optimization when validating or shipping transparency-sensitive renders, because the optimized path can flatten alpha in this environment.

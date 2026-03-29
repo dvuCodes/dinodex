@@ -2,6 +2,8 @@ import { describe, expect, test } from "bun:test";
 import {
   getEggVariantKey,
   getTamagotchiManifestPath,
+  getTamagotchiMoodSpriteOutputPath,
+  getTamagotchiMoodSpriteUrl,
   getTamagotchiSpriteOutputPath,
   getTamagotchiSpriteUrl,
   getTamagotchiStageList,
@@ -22,6 +24,7 @@ describe("tamagotchi art pipeline helpers", () => {
 
   test("emits stable public urls and stage ordering", () => {
     expect(getTamagotchiSpriteUrl(18, "egg")).toBe("/tamagotchi/018/egg.png");
+    expect(getTamagotchiMoodSpriteUrl(1, "adult", "happy")).toBe("/tamagotchi/001/adult-happy.png");
     expect(getTamagotchiStageList()).toEqual(["egg", "hatchling", "juvenile", "adult"]);
   });
 
@@ -29,5 +32,14 @@ describe("tamagotchi art pipeline helpers", () => {
     expect(getEggVariantKey(1)).toBe("banded");
     expect(getEggVariantKey(2)).toBe("speckled");
     expect(getEggVariantKey(6)).toBe("banded");
+  });
+
+  test("builds mood-sheet output paths for prototype strips", () => {
+    expect(getTamagotchiMoodSpriteOutputPath("C:/repo", 1, "adult", "happy")).toBe(
+      "C:/repo/public/tamagotchi/001/adult-happy.png"
+    );
+    expect(getTamagotchiMoodSpriteOutputPath("C:/repo", 1, "juvenile", "sleepy")).toBe(
+      "C:/repo/public/tamagotchi/001/juvenile-sleepy.png"
+    );
   });
 });

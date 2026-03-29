@@ -2,6 +2,15 @@ import { describe, expect, test } from "bun:test";
 import { getTamagotchiEggSheet, getTamagotchiSpriteSheet } from "./tamagotchi-sprites";
 
 describe("tamagotchi sprite descriptors", () => {
+  test("uses mood-aware multi-frame sheets for Eoraptor prototype stages", () => {
+    const sprite = getTamagotchiSpriteSheet(1, "adult", "happy");
+
+    expect(sprite.expectedSrc).toBe("/tamagotchi/001/adult-happy.png");
+    expect(sprite.expectedFrameCount).toBe(4);
+    expect(sprite.fallbackFrameCount).toBe(4);
+    expect(sprite.frameDurationMs).toBe(170);
+  });
+
   test("treats shipped stage art as a single-frame PNG with animated fallback frames", () => {
     const sprite = getTamagotchiSpriteSheet(18, "adult", "idle");
 

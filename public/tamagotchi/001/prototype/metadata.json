@@ -1,0 +1,19 @@
+{
+    "speciesId":  1,
+    "generatedAt":  "2026-03-29T23:21:03.1107243+11:00",
+    "sourceMode":  "direct-gemini-api",
+    "model":  "gemini-3.1-flash-image-preview",
+    "helper":  "C:/Users/datvu/.agents/skills/nano-banana-2/gemini_image.py",
+    "postprocess":  "scripts/remove-near-white-background.ts",
+    "stages":  [
+                   "hatchling",
+                   "juvenile",
+                   "adult"
+               ],
+    "animationStates":  [
+                            "idle",
+                            "happy",
+                            "sleepy",
+                            "sick"
+                        ]
+}

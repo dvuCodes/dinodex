@@ -12,7 +12,7 @@ const FRAME_DURATIONS: Record<TamagotchiAnimationState, number> = {
   sleepy: 320,
   sick: 280,
 };
-
+const EORAPTOR_PROTOTYPE_ID = 1;
 const STAGE_SCALE: Record<Stage, number> = {
   hatchling: 0.85,
   juvenile: 1,
@@ -259,10 +259,13 @@ export function getTamagotchiSpriteSheet(
   stage: Stage,
   animationState: TamagotchiAnimationState
 ): SpriteDescriptor {
+  const isEoraptorPrototype = speciesId === EORAPTOR_PROTOTYPE_ID;
   return {
-    expectedSrc: `/tamagotchi/${padId(speciesId)}/${stage}.png`,
+    expectedSrc: isEoraptorPrototype
+      ? `/tamagotchi/${padId(speciesId)}/${stage}-${animationState}.png`
+      : `/tamagotchi/${padId(speciesId)}/${stage}.png`,
     fallbackSrc: createFallbackSpriteSheet(speciesId, stage, animationState),
-    expectedFrameCount: 1,
+    expectedFrameCount: isEoraptorPrototype ? FRAME_COUNT : 1,
     fallbackFrameCount: FRAME_COUNT,
     frameDurationMs: FRAME_DURATIONS[animationState],
     frameSizePx: GRID_SIZE,

@@ -1,11 +1,15 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { useArtSource } from "@/hooks/useArtSource";
+import { getEggVariantLabel, getTamagotchiEggSheet } from "@/lib/tamagotchi-sprites";
 
 interface EggCountdownProps {
+  dinoName: string;
+  speciesId: number;
+  eggVariantSeed: number;
   timeRemainingMs: number;
   progress: number;
-  dinoName: string;
 }
 
 function formatTime(ms: number): string {
@@ -28,11 +32,14 @@ const STROKE_WIDTH = 6;
 const RADIUS = (RING_SIZE - STROKE_WIDTH) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
-export function EggCountdown({ timeRemainingMs, progress, dinoName }: EggCountdownProps) {
+export function EggCountdown({ dinoName, speciesId, eggVariantSeed, timeRemainingMs, progress }: EggCountdownProps) {
   const reduceMotion = useReducedMotion();
   const dashOffset = CIRCUMFERENCE - (progress / 100) * CIRCUMFERENCE;
   const isAlmostReady = progress > 80;
   const isVeryClose = progress > 95;
+  const eggSheet = getTamagotchiEggSheet(speciesId, eggVariantSeed);
+  const { artSrc, usingFallback } = useArtSource(eggSheet.expectedSrc, eggSheet.fallbackSrc);
+  const frameCount = usingFallback ? eggSheet.fallbackFrameCount : eggSheet.expectedFrameCount;
 
   return (
     <div className="flex flex-col items-center gap-4">
@@ -88,29 +95,39 @@ export function EggCountdown({ timeRemainingMs, progress, dinoName }: EggCountdo
           </defs>
         </svg>
 
-        {reduceMotion ? (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-6xl select-none">🥚</span>
+        <motion.div
+          className="absolute inset-0 flex items-center justify-center"
+          animate={
+            reduceMotion
+              ? { rotate: 0 }
+              : {
+                  rotate: isVeryClose ? [-6, 6, -4, 4, -6] : isAlmostReady ? [-3, 3, -2, 2, -3] : [0, 2, 0, -2, 0],
+                }
+          }
+          transition={{
+            duration: isVeryClose ? 0.6 : isAlmostReady ? 1.2 : 2.5,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
+          <div className="pixel-screen h-[88px] w-[88px] rounded-[1.25rem] border-violet-200/60 bg-[linear-gradient(180deg,#f7f2ff_0%,#efe7ff_100%)]">
+            <div
+              role="img"
+              aria-label={`${dinoName} egg countdown`}
+              className="pixel-sprite"
+              style={{
+                backgroundImage: `url("${artSrc}")`,
+                backgroundSize: `${frameCount * 88}px 88px`,
+                animation:
+                  reduceMotion || frameCount <= 1
+                    ? "none"
+                    : `tamagotchi-sprite ${frameCount * eggSheet.frameDurationMs}ms steps(${frameCount}) infinite`,
+                width: 88,
+                height: 88,
+              }}
+            />
           </div>
-        ) : (
-          <motion.div
-            className="absolute inset-0 flex items-center justify-center"
-            animate={{
-              rotate: isVeryClose
-                ? [-8, 8, -6, 6, -8]
-                : isAlmostReady
-                  ? [-4, 4, -3, 3, -4]
-                  : [-2, 2, -1, 1, -2],
-            }}
-            transition={{
-              duration: isVeryClose ? 0.6 : isAlmostReady ? 1.2 : 2.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          >
-            <span className="text-6xl select-none">🥚</span>
-          </motion.div>
-        )}
+        </motion.div>
 
         {!reduceMotion && isAlmostReady && (
           <>
@@ -145,25 +162,25 @@ export function EggCountdown({ timeRemainingMs, progress, dinoName }: EggCountdo
         <p className="font-mono text-2xl font-bold tracking-wider" style={{ color: "#7C3AED" }}>
           {timeRemainingMs <= 0 ? "Hatching!" : formatTime(timeRemainingMs)}
         </p>
-        <p className="font-body text-xs text-text-muted mt-1.5">
+        <p className="mt-1.5 font-body text-xs text-text-muted">
           {isVeryClose
             ? "Almost there... cracks appearing!"
             : isAlmostReady
               ? `${dinoName} is stirring inside...`
-              : `Incubating ${dinoName}'s egg...`}
+              : `Incubating ${dinoName}'s ${getEggVariantLabel(eggVariantSeed)} egg...`}
         </p>
       </div>
 
       <div className="w-full max-w-[200px]">
-        <div className="flex items-center justify-between mb-1">
-          <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
+        <div className="mb-1 flex items-center justify-between">
+          <span className="font-mono text-[10px] uppercase tracking-widest text-text-muted">
             Incubation
           </span>
           <span className="font-mono text-[10px] font-bold" style={{ color: "#A78BFA" }}>
             {Math.round(progress)}%
           </span>
         </div>
-        <div className="h-1.5 rounded-full bg-gray-100 overflow-hidden">
+        <div className="h-1.5 overflow-hidden rounded-full bg-gray-100">
           {reduceMotion ? (
             <div
               className="h-full rounded-full"

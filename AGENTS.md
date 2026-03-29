@@ -11,15 +11,25 @@
 - Always check for relevant skills before building.
 - Always mark tasks off when complete.
 - After every correction to assumptions/process, update this `AGENTS.md`.
+- Use the existing Linear team `Rio31` for non-trivial work. Start from a Linear issue whenever practical instead of treating chat as the task tracker.
+- Linear is the source of truth for backlog, priority, assignment, project membership, and status. Repo files remain the source of truth for implementation detail and evidence.
+- Model time-bound initiatives as Linear projects and keep implementation work as atomic Linear issues. Use parent/sub-issues only when a task is too large for one reviewable change.
+- Standardize non-trivial issue descriptions around `Context`, `Acceptance Criteria`, and `Verification`.
+- Post meaningful status back to Linear as work progresses: move issues to `In Progress` when starting, `In Review` when verification is ready, and `Done` only after final validation is complete.
+- Reference the related Linear issue ID in repo artifacts when relevant, especially `.logs/` entries and any prompts or verification artifacts created during the task.
+- Use the active `Rio31` cycle when cycles are configured. If cycles are unavailable through the current tool path, record the blocker in `.logs/` and continue tracking work by project + backlog state.
 - When making file edits, use the Codex `apply_patch` tool (do not embed `apply_patch` inside shell commands).
 - Do not propose follow-up tasks or enhancements at the end of your final answer.
 - When working on frontend design, use playwright to test and confirm desired feature implemention.
 - When validating a dev server, confirm the listening port belongs to the current worktree before debugging UI behavior.
+- `bun` is the default package manager for this repo. Prefer `bun install`, `bun run`, and `bunx` for installs, scripts, tests, and Playwright unless a documented exception exists.
+- Use `bun run <script>` for package scripts such as `dev`; do not use `bunx run <script>`, because `bunx` executes package CLIs and will invoke the external `run` binary instead of this repo's `package.json` scripts.
 - Generated raster art under `public/dinos` can fail direct dev serving in this environment; use the custom dev server to intercept `/dinos/...` raster requests when validating rendered art.
 - WebP conversion alone does not create transparency; for the current dinosaur art set, exact-preservation transparency should default to deterministic edge-connected background removal, `scripts/process-images.ts` should prefer `scripts/transparent-output` over `scripts/raw-output`, and generative image editing should be opt-in only when a real redraw is acceptable.
 - Dinosaur art served from `/dinos/...` must bypass `next/image` optimization when validating or shipping transparency-sensitive renders, because the optimized path can flatten alpha in this environment.
 - When the main dex is species-first, card numbering and watermarks must use the species ID (`#001`, `#002`, ...) rather than stage-specific dex IDs.
 - Use the nano banana 2 skill to generate visual assets for your work, and every time you generate a collection of assets, save the prompts you used to be able to continue generating more of the same assets later (create files in .prompts)
+- On Windows, do not assume the PyPI `inferencesh` install provides a working `infsh` CLI: the upstream wheels can ship `infsh.exe` with an `infsh.__main__` entrypoint but no matching module, and the official `cli.inference.sh` manifest currently has no Windows build. Verify `infsh version` and `infsh me` before relying on Nano Banana, and if the packaged CLI is broken either repair the local compatibility shim or fall back to a deterministic local asset pipeline with the blocker recorded in `.logs/`.
 - Log your work under .logs (create new log files as you see fit) to record your thought process and decisions, and reference them when iterating on features
 - Use playwright to test the visual output of your work, and iterate if it doesn't look right or fit the vibe
 

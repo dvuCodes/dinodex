@@ -20,6 +20,12 @@ describe("getArtPath", () => {
 });
 
 describe("art recovery helpers", () => {
+  test("points each stage at its matching placeholder sprite", () => {
+    expect(getPlaceholderArtPath("hatchling")).toBe("/dinos/placeholder-hatchling.svg");
+    expect(getPlaceholderArtPath("juvenile")).toBe("/dinos/placeholder-juvenile.svg");
+    expect(getPlaceholderArtPath("adult")).toBe("/dinos/placeholder-adult.svg");
+  });
+
   test("only retries while a placeholder fallback is active", () => {
     const fallbackArtSrc = getPlaceholderArtPath("adult");
 

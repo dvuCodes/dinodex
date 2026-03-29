@@ -37,7 +37,7 @@ export function SearchBar({ value, onChange }: SearchBarProps) {
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="Search dinosaurs…"
+        placeholder="Search dinosaurs..."
         className="w-full pl-11 pr-11 py-3 rounded-card bg-white font-body text-sm text-text-primary placeholder:text-text-muted/70 border border-border-default shadow-sm focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent/40 focus:shadow-md transition-[border-color,box-shadow] duration-200"
         aria-label="Search dinosaurs"
       />

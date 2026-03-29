@@ -1,113 +1,227 @@
 "use client";
 
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import type { TamagotchiStage, Mood, TamagotchiAction } from "@/lib/tamagotchi";
-import { getActionFeedbackKey, getMoodEmoji } from "@/lib/tamagotchi";
-import { TAMAGOTCHI_STAGE_COLORS, ERA_COLORS } from "@/lib/constants";
+import { motion, useReducedMotion } from "framer-motion";
+import { useArtSource } from "@/hooks/useArtSource";
+import { ERA_COLORS, TAMAGOTCHI_STAGE_COLORS } from "@/lib/constants";
+import type {
+  AttentionReason,
+  Mood,
+  TamagotchiAction,
+  TamagotchiAnimationState,
+  TamagotchiStage,
+} from "@/lib/tamagotchi";
+import { getMoodEmoji } from "@/lib/tamagotchi";
 import type { Era } from "@/lib/types";
+import { getEggVariantLabel, getTamagotchiEggSheet, getTamagotchiSpriteSheet } from "@/lib/tamagotchi-sprites";
 
 interface DinoAvatarProps {
+  attentionReason: AttentionReason | null;
+  animationState: TamagotchiAnimationState;
+  dinoId: number;
   dinoName: string;
-  stage: TamagotchiStage;
-  mood: Mood;
+  eggProgress: number;
+  eggVariantSeed: number;
   era: Era;
-  lastAction: string | null;
-  lastActionTime: number;
+  lastAction: TamagotchiAction | null;
+  mood: Mood;
+  poopCount: number;
+  sick: boolean;
+  sleeping: boolean;
+  stage: TamagotchiStage;
 }
 
-const STAGE_EMOJI: Record<TamagotchiStage, string> = {
-  egg: "🥚",
-  hatchling: "🐣",
-  juvenile: "🦕",
-  adult: "🦖",
+const ACTION_BADGES: Partial<Record<TamagotchiAction, string>> = {
+  feed: "Meal served",
+  snack: "Treat time",
+  play: "Play burst",
+  clean: "Freshened up",
+  medicine: "Medicine given",
+  lights: "Lights toggled",
+  discipline: "Discipline",
+  status: "Vitals check",
 };
 
-export function DinoAvatar({ dinoName, stage, mood, era, lastAction, lastActionTime }: DinoAvatarProps) {
+type PixelSpriteProps = {
+  ariaLabel: string;
+  artSrc: string;
+  displaySizePx: number;
+  expectedFrameCount: number;
+  fallbackFrameCount: number;
+  frameDurationMs: number;
+  reduceMotion: boolean | null;
+  usingFallback: boolean;
+};
+
+function PixelSprite({
+  ariaLabel,
+  artSrc,
+  displaySizePx,
+  expectedFrameCount,
+  fallbackFrameCount,
+  frameDurationMs,
+  reduceMotion,
+  usingFallback,
+}: PixelSpriteProps) {
+  const frameCount = usingFallback ? fallbackFrameCount : expectedFrameCount;
+  return (
+    <div
+      role="img"
+      aria-label={ariaLabel}
+      data-testid="tamagotchi-pixel-screen"
+      className="pixel-screen"
+      style={{ width: displaySizePx, height: displaySizePx }}
+    >
+      <div
+        data-testid="tamagotchi-pixel-sprite"
+        className="pixel-sprite"
+        style={{
+          backgroundImage: `url("${artSrc}")`,
+          backgroundSize: `${frameCount * displaySizePx}px ${displaySizePx}px`,
+          animation:
+            reduceMotion || frameCount <= 1
+              ? "none"
+              : `tamagotchi-sprite ${frameCount * frameDurationMs}ms steps(${frameCount}) infinite`,
+          width: displaySizePx,
+          height: displaySizePx,
+        }}
+      />
+    </div>
+  );
+}
+
+export function DinoAvatar({
+  attentionReason,
+  animationState,
+  dinoId,
+  dinoName,
+  eggProgress,
+  eggVariantSeed,
+  era,
+  lastAction,
+  mood,
+  poopCount,
+  sick,
+  sleeping,
+  stage,
+}: DinoAvatarProps) {
   const reduceMotion = useReducedMotion();
   const stageColor = TAMAGOTCHI_STAGE_COLORS[stage];
   const eraColor = ERA_COLORS[era];
-  const isEgg = stage === "egg";
+  const spriteDescriptor =
+    stage === "egg"
+      ? getTamagotchiEggSheet(dinoId, eggVariantSeed)
+      : getTamagotchiSpriteSheet(dinoId, stage, animationState);
+  const { artSrc, usingFallback } = useArtSource(spriteDescriptor.expectedSrc, spriteDescriptor.fallbackSrc);
+  const crackCount = eggProgress > 90 ? 3 : eggProgress > 72 ? 2 : eggProgress > 48 ? 1 : 0;
+
+  const statusChips = [
+    { label: sleeping ? "Sleep: On" : "Sleep: Awake", active: sleeping },
+    { label: sick ? "Sick: Yes" : "Sick: No", active: sick },
+    { label: poopCount > 0 ? `Mess: ${poopCount}` : "Mess: Clear", active: poopCount > 0 },
+    { label: attentionReason ? `Attention: ${attentionReason}` : "Attention: Calm", active: Boolean(attentionReason) },
+  ];
 
   return (
     <div
-      className="relative aspect-square max-w-[320px] mx-auto rounded-3xl overflow-hidden"
+      className="relative overflow-hidden rounded-[2rem] border border-white/60 p-4 shadow-[0_30px_70px_rgba(28,25,23,0.16)]"
       style={{
-        background: `linear-gradient(135deg, ${eraColor.light}, ${stageColor.bg})`,
+        background: `linear-gradient(155deg, ${eraColor.dark} 0%, ${eraColor.primary} 28%, ${stageColor.bg} 100%)`,
       }}
     >
-      {/* Scanline overlay */}
-      <div className="absolute inset-0 dex-scanline pointer-events-none" />
+      <div className="absolute inset-x-6 top-4 h-1 rounded-full bg-white/25" />
+      <div className="absolute inset-4 rounded-[1.5rem] border border-white/20 bg-black/12" />
 
-      {/* Dino silhouette */}
-      <AnimatePresence mode="wait">
+      <div className="relative rounded-[1.5rem] border border-white/60 bg-[#f6f8fb] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+        <div className="absolute inset-0 rounded-[1.5rem] dex-scanline opacity-60" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-20 rounded-t-[1.5rem] bg-gradient-to-b from-white/75 to-transparent" />
+        <div className="absolute inset-[14px] rounded-[1.2rem] border border-[#d7e2f3] bg-[linear-gradient(180deg,#f4ffea_0%,#d7f2c1_100%)] shadow-[inset_0_0_0_2px_rgba(255,255,255,0.55)]" />
+
+        <div className="relative mb-3 flex items-center justify-between gap-3">
+          <span className="rounded-sm border border-black/20 bg-black/80 px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.24em] text-white shadow-[2px_2px_0_rgba(255,255,255,0.16)]">
+            {stage === "egg" ? `${getEggVariantLabel(eggVariantSeed)} egg` : `${stage} ${animationState}`}
+          </span>
+          <span className="text-2xl" aria-label={`Mood: ${mood}`}>
+            {getMoodEmoji(mood)}
+          </span>
+        </div>
+
         <motion.div
-          key={`${stage}-${mood}`}
-          initial={reduceMotion ? false : { opacity: 0, scale: 0.5 }}
           animate={
             reduceMotion
-              ? { opacity: 1, scale: 1 }
+              ? { y: 0 }
               : {
-                  opacity: 1,
-                  scale: 1,
-                  y: isEgg ? [0, -4, 0] : mood === "ecstatic" ? [0, -10, 0] : mood === "happy" ? [0, -5, 0] : 0,
-                  rotate: isEgg ? [-3, 3, -2, 2, -3] : 0,
+                  y: sleeping ? [0, 2, 0] : mood === "ecstatic" ? [0, -8, 0] : mood === "happy" ? [0, -4, 0] : [0, 0, 0],
                 }
           }
-          exit={{ opacity: 0, scale: 0.8 }}
-          transition={{
-            opacity: { duration: 0.3 },
-            scale: { duration: 0.4, type: "spring" },
-            y: reduceMotion ? { duration: 0 } : { duration: isEgg ? 3 : 2, repeat: Infinity, ease: "easeInOut" },
-            rotate: reduceMotion || !isEgg ? undefined : { duration: 2.5, repeat: Infinity, ease: "easeInOut" },
-          }}
-          className="absolute inset-0 flex items-center justify-center"
+          transition={reduceMotion ? { duration: 0 } : { duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+          className="relative mx-auto flex aspect-square max-w-[280px] items-center justify-center"
         >
-          <span
-            className="text-[120px] sm:text-[150px] select-none"
-            style={{ filter: !isEgg && mood === "critical" ? "grayscale(0.5)" : "none" }}
-          >
-            {STAGE_EMOJI[stage]}
-          </span>
-        </motion.div>
-      </AnimatePresence>
+          <PixelSprite
+            ariaLabel={stage === "egg" ? `${dinoName} egg in tamagotchi mode` : `${dinoName} pixel sprite in tamagotchi mode`}
+            artSrc={artSrc}
+            displaySizePx={spriteDescriptor.displaySizePx}
+            expectedFrameCount={spriteDescriptor.expectedFrameCount}
+            fallbackFrameCount={spriteDescriptor.fallbackFrameCount}
+            frameDurationMs={spriteDescriptor.frameDurationMs}
+            reduceMotion={reduceMotion}
+            usingFallback={usingFallback}
+          />
 
-      {/* Mood indicator (hidden for eggs) */}
-      {!isEgg && (
-        <motion.div
-          key={mood}
-          initial={reduceMotion ? false : { scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={reduceMotion ? { duration: 0 } : undefined}
-          className="absolute top-4 right-4 text-3xl"
-          aria-label={`Mood: ${mood}`}
-        >
-          {getMoodEmoji(mood)}
-        </motion.div>
-      )}
+          {stage === "egg" ? (
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+              <div className="relative h-[160px] w-[160px]">
+                {Array.from({ length: crackCount }, (_, index) => (
+                  <span
+                    key={index}
+                    className="absolute block h-7 w-[3px] rounded-full bg-violet-700/70"
+                    style={{
+                      left: `${72 + index * 8}px`,
+                      top: `${42 + index * 10}px`,
+                      rotate: `${index % 2 === 0 ? -28 : 18}deg`,
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          ) : null}
 
-      {/* Stage badge */}
-      <div
-        className="absolute bottom-4 left-4 px-3 py-1 rounded-pill font-mono text-xs uppercase tracking-wider text-white"
-        style={{ backgroundColor: stageColor.primary }}
-      >
-        {stageColor.emoji} {stage}
+          {poopCount > 0 ? (
+            <div className="pointer-events-none absolute bottom-8 left-1/2 flex -translate-x-1/2 gap-2">
+              {Array.from({ length: Math.min(poopCount, 3) }, (_, index) => (
+                <span
+                  key={index}
+                  className="block h-4 w-4 rounded-sm border border-stone-900/20 bg-stone-700 shadow-[2px_2px_0_rgba(255,255,255,0.18)]"
+                />
+              ))}
+            </div>
+          ) : null}
+
+          {attentionReason ? (
+            <span className="absolute right-6 top-4 rounded-sm border border-[#7f1d1d] bg-[#fee2e2] px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-[#7f1d1d]">
+              {attentionReason}
+            </span>
+          ) : null}
+        </motion.div>
+
+        <div className="relative mt-4 flex flex-wrap gap-2">
+          {statusChips.map((chip) => (
+            <span
+              key={chip.label}
+              className={`rounded-pill px-2.5 py-1 font-body text-[11px] ${
+                chip.active ? "bg-accent text-white" : "bg-stone-900/8 text-text-secondary"
+              }`}
+            >
+              {chip.label}
+            </span>
+          ))}
+        </div>
+
+        {lastAction ? (
+          <div className="relative mt-3 rounded-2xl bg-stone-950/90 px-3 py-2 font-body text-xs text-white">
+            {ACTION_BADGES[lastAction] ?? "Action taken"}
+          </div>
+        ) : null}
       </div>
-
-      {/* Action feedback */}
-      <AnimatePresence>
-        {lastAction && (
-          <motion.div
-            key={getActionFeedbackKey(lastAction as TamagotchiAction, lastActionTime)}
-            initial={reduceMotion ? false : { opacity: 1, y: 0, scale: 1 }}
-            animate={reduceMotion ? { opacity: 1 } : { opacity: 0, y: -40, scale: 1.3 }}
-            exit={{ opacity: 0 }}
-            transition={reduceMotion ? { duration: 0 } : { duration: 1.2 }}
-            className="absolute top-1/3 left-1/2 -translate-x-1/2 font-display font-bold text-lg text-white drop-shadow-lg pointer-events-none"
-          >
-            {lastAction === "feed" ? "🍖" : lastAction === "play" ? "🎮" : "💤"}
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

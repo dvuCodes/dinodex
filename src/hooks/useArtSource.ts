@@ -9,8 +9,31 @@ export function useArtSource(expectedArtSrc: string, fallbackArtSrc: string) {
   const [artSrc, setArtSrc] = useState(expectedArtSrc);
 
   useEffect(() => {
-    setArtSrc(expectedArtSrc);
-  }, [expectedArtSrc]);
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    let disposed = false;
+    const probe = new window.Image();
+
+    probe.onload = () => {
+      if (!disposed) {
+        setArtSrc(expectedArtSrc);
+      }
+    };
+
+    probe.onerror = () => {
+      if (!disposed) {
+        setArtSrc(fallbackArtSrc);
+      }
+    };
+
+    probe.src = expectedArtSrc;
+
+    return () => {
+      disposed = true;
+    };
+  }, [expectedArtSrc, fallbackArtSrc]);
 
   useEffect(() => {
     if (!shouldAttemptArtRecovery(artSrc, fallbackArtSrc) || typeof window === "undefined") {
@@ -57,5 +80,5 @@ export function useArtSource(expectedArtSrc: string, fallbackArtSrc: string) {
     setArtSrc(fallbackArtSrc);
   }, [fallbackArtSrc]);
 
-  return { artSrc, handleArtError };
+  return { artSrc, handleArtError, usingFallback: artSrc === fallbackArtSrc };
 }

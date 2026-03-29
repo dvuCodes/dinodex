@@ -259,4 +259,70 @@ describe("tamagotchi simulation", () => {
     expect(roughOutcome.stage).toBe("juvenile");
     expect(roughOutcome.branchKey).toBe("rough");
   });
+
+  test("offline reconciliation applies every crossed growth gate in one pass", () => {
+    const base = createInitialState()(18);
+    const hatched = simulateElapsedTime()(base, base.eggStartTime + base.hatchDurationMs + 1_000);
+    const overAged = {
+      ...hatched,
+      stage: "hatchling",
+      ageMs: 30 * 60 * 60 * 1_000,
+      lastSimulatedAt: hatched.lastSimulatedAt,
+    };
+
+    const reconciled = simulateElapsedTime()(overAged, overAged.lastSimulatedAt + 60_000);
+
+    expect(reconciled.stage).toBe("adult");
+  });
+
+  test("overnight reconciliation triggers sleep attention even after the sleep window ends", () => {
+    const start = new Date(2026, 2, 30, 0, 30, 0, 0).getTime();
+    const end = new Date(2026, 2, 30, 7, 30, 0, 0).getTime();
+    const base = createInitialState()(18, start);
+    const hatched = simulateElapsedTime()(base, base.eggStartTime + base.hatchDurationMs + 1_000);
+    const awake = {
+      ...hatched,
+      stage: "hatchling",
+      sleeping: false,
+      poopCount: 0,
+      attention: false,
+      attentionReason: null,
+      stats: {
+        hunger: 95,
+        happiness: 95,
+        energy: 95,
+        cleanliness: 95,
+        health: 95,
+        discipline: 95,
+      },
+      lastSimulatedAt: start,
+    };
+
+    const reconciled = simulateElapsedTime()(awake, end);
+
+    expect(reconciled.attentionReason).toBe("sleep");
+  });
+
+  test("soft-failed runs stay terminal until the player resets", () => {
+    const state = {
+      ...createInitialState()(18, 100_000),
+      stage: "juvenile",
+      runStatus: "soft-failed",
+      sick: true,
+      stats: {
+        hunger: 80,
+        happiness: 80,
+        energy: 80,
+        cleanliness: 80,
+        health: 5,
+        discipline: 80,
+      },
+      lastSimulatedAt: 100_000,
+    };
+
+    const healed = applyPlayerAction()(state, "medicine", 101_000);
+
+    expect(healed.runStatus).toBe("soft-failed");
+    expect(healed.stats.health).toBeLessThanOrEqual(state.stats.health);
+  });
 });

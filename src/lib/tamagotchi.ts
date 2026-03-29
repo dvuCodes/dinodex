@@ -321,12 +321,46 @@ function inSleepWindow(timestamp: number): boolean {
   return hour >= SLEEP_START_HOUR || hour < SLEEP_END_HOUR;
 }
 
-function applySleepConsequences(state: TamagotchiState, now: number, elapsed: number): TamagotchiState {
-  if (!inSleepWindow(now) || state.sleeping || elapsed < HOUR_MS) {
+function countMissedSleepWindows(start: number, end: number): number {
+  if (end <= start) {
+    return 0;
+  }
+
+  const cursor = new Date(start);
+  cursor.setHours(SLEEP_START_HOUR, 0, 0, 0);
+  if (cursor.getTime() > start) {
+    cursor.setDate(cursor.getDate() - 1);
+  }
+
+  let count = 0;
+  while (cursor.getTime() < end) {
+    const windowStart = cursor.getTime();
+    const windowEnd = windowStart + 9 * HOUR_MS;
+
+    if (windowEnd > start && windowStart < end) {
+      count += 1;
+    }
+
+    cursor.setDate(cursor.getDate() + 1);
+  }
+
+  return count;
+}
+
+function applySleepConsequences(
+  state: TamagotchiState,
+  intervalStart: number,
+  now: number,
+  elapsed: number
+): TamagotchiState {
+  if (state.sleeping || elapsed < HOUR_MS) {
     return state;
   }
 
-  const violations = Math.max(1, Math.floor(elapsed / (8 * HOUR_MS)));
+  const violations = countMissedSleepWindows(intervalStart, now);
+  if (violations === 0) {
+    return state;
+  }
 
   return {
     ...state,
@@ -363,19 +397,41 @@ function applyHealthConsequences(state: TamagotchiState): TamagotchiState {
 
 function recalculateDerivedState(state: TamagotchiState): TamagotchiState {
   const derivedAttentionReason = resolveAttentionReason(state);
+  const stickyAttentionReason =
+    state.attention && (state.attentionReason === "discipline" || state.attentionReason === "sleep")
+      ? state.attentionReason
+      : null;
   const attentionReason =
+    stickyAttentionReason ??
     derivedAttentionReason ??
-    (state.attention && state.attentionReason === "discipline" ? "discipline" : state.attentionReason);
+    state.attentionReason;
   const attention = state.attention || attentionReason !== null;
   const careQuality = deriveCareQuality(state.stats, state.careMistakes, state.sick, state.poopCount);
+  const runStatus =
+    state.runStatus === "soft-failed" || careQuality <= 20 || state.stats.health <= 10
+      ? "soft-failed"
+      : "active";
 
   return {
     ...state,
     attention,
     attentionReason,
     careQuality,
-    runStatus: careQuality <= 20 || state.stats.health <= 10 ? "soft-failed" : "active",
+    runStatus,
   };
+}
+
+function advanceStageGates(state: TamagotchiState, now: number): TamagotchiState {
+  let current = state;
+
+  while (true) {
+    const next = evaluateStageGate(current, now);
+    if (next.stage === current.stage) {
+      return current;
+    }
+
+    current = recalculateDerivedState(next);
+  }
 }
 
 export function evaluateStageGate(state: TamagotchiState, now = Date.now()): TamagotchiState {
@@ -424,7 +480,7 @@ function hatchEgg(state: TamagotchiState, hatchTime: number): TamagotchiState {
 
 export function simulateElapsedTime(state: TamagotchiState, now = Date.now()): TamagotchiState {
   if (now <= state.lastSimulatedAt) {
-    return recalculateDerivedState(state);
+    return advanceStageGates(recalculateDerivedState(state), state.lastSimulatedAt);
   }
 
   let current = { ...state };
@@ -443,6 +499,7 @@ export function simulateElapsedTime(state: TamagotchiState, now = Date.now()): T
   }
 
   const elapsed = now - current.lastSimulatedAt;
+  const intervalStart = current.lastSimulatedAt;
   const decaySteps = Math.floor(elapsed / DECAY_WINDOW_MS);
   const poopEvents = Math.floor(elapsed / POOP_WINDOW_MS);
 
@@ -458,17 +515,20 @@ export function simulateElapsedTime(state: TamagotchiState, now = Date.now()): T
   }
 
   current = applyPoop(current, poopEvents);
-  current = applySleepConsequences(current, now, elapsed);
+  current = applySleepConsequences(current, intervalStart, now, elapsed);
   current = applyHealthConsequences(current);
   current = recalculateDerivedState(current);
-  current = evaluateStageGate(current, now);
-  current = recalculateDerivedState(current);
+  current = advanceStageGates(current, now);
 
   return current;
 }
 
 export function applyPlayerAction(state: TamagotchiState, action: TamagotchiAction, now = Date.now()): TamagotchiState {
   let current = simulateElapsedTime(state, now);
+
+  if (current.runStatus !== "active" && action !== "status") {
+    return current;
+  }
 
   if (current.stage === "egg" && action !== "status") {
     return current;
@@ -559,7 +619,7 @@ export function applyPlayerAction(state: TamagotchiState, action: TamagotchiActi
   next.lastActionTime = now;
 
   const resolved = recalculateDerivedState(next);
-  return evaluateStageGate(resolved, now);
+  return advanceStageGates(resolved, now);
 }
 
 export function applyAction(state: TamagotchiState, action: TamagotchiAction): TamagotchiState {

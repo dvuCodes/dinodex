@@ -11,6 +11,13 @@
 - Always check for relevant skills before building.
 - Always mark tasks off when complete.
 - After every correction to assumptions/process, update this `AGENTS.md`.
+- Use the existing Linear team `Rio31` for non-trivial work. Start from a Linear issue whenever practical instead of treating chat as the task tracker.
+- Linear is the source of truth for backlog, priority, assignment, project membership, and status. Repo files remain the source of truth for implementation detail and evidence.
+- Model time-bound initiatives as Linear projects and keep implementation work as atomic Linear issues. Use parent/sub-issues only when a task is too large for one reviewable change.
+- Standardize non-trivial issue descriptions around `Context`, `Acceptance Criteria`, and `Verification`.
+- Post meaningful status back to Linear as work progresses: move issues to `In Progress` when starting, `In Review` when verification is ready, and `Done` only after final validation is complete.
+- Reference the related Linear issue ID in repo artifacts when relevant, especially `.logs/` entries and any prompts or verification artifacts created during the task.
+- Use the active `Rio31` cycle when cycles are configured. If cycles are unavailable through the current tool path, record the blocker in `.logs/` and continue tracking work by project + backlog state.
 - When making file edits, use the Codex `apply_patch` tool (do not embed `apply_patch` inside shell commands).
 - Do not propose follow-up tasks or enhancements at the end of your final answer.
 - When working on frontend design, use playwright to test and confirm desired feature implemention.

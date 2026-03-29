@@ -5,7 +5,7 @@ import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import type { DinoEntry } from "@/lib/types";
 import { ERA_COLORS, TAMAGOTCHI_STAGE_COLORS } from "@/lib/constants";
-import type { AttentionReason, TamagotchiAction, TamagotchiMetaProgression, TamagotchiState } from "@/lib/tamagotchi";
+import { CURRENT_VERSION, type AttentionReason, type TamagotchiAction, type TamagotchiMetaProgression, type TamagotchiState } from "@/lib/tamagotchi";
 import {
   applyPlayerAction,
   clearAllProgress,
@@ -60,33 +60,43 @@ function getStatusHeadline(attentionReason: AttentionReason | null, dinoName: st
   }
 }
 
-function loadInitialRunData(): { state: TamagotchiState | null; meta: TamagotchiMetaProgression } {
-  const state = loadAndReconcileState();
-  const storedMeta = loadMetaProgression();
-  const meta = reconcileMetaProgression(storedMeta, state);
-
-  if (meta !== storedMeta) {
-    saveMetaProgression(meta);
-  }
-
-  return { state, meta };
-}
+const EMPTY_META: TamagotchiMetaProgression = {
+  version: CURRENT_VERSION,
+  unlockedSpeciesIds: [],
+  discoveredBranches: [],
+  bestCareQualityBySpecies: {},
+};
 
 export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
   const reduceMotion = useReducedMotion();
-  const initialDataRef = useRef<{ state: TamagotchiState | null; meta: TamagotchiMetaProgression } | null>(null);
-  if (initialDataRef.current === null) {
-    initialDataRef.current = loadInitialRunData();
-  }
-  const [state, setState] = useState<TamagotchiState | null>(initialDataRef.current.state);
-  const [meta, setMeta] = useState<TamagotchiMetaProgression>(initialDataRef.current.meta);
+  const [state, setState] = useState<TamagotchiState | null>(null);
+  const [meta, setMeta] = useState<TamagotchiMetaProgression>(EMPTY_META);
   const [showSelector, setShowSelector] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [isActing, setIsActing] = useState(false);
   const [justChangedStage, setJustChangedStage] = useState(false);
   const [justHatched, setJustHatched] = useState(false);
-  const stateRef = useRef<TamagotchiState | null>(initialDataRef.current.state);
-  const metaRef = useRef<TamagotchiMetaProgression>(initialDataRef.current.meta);
+  const stateRef = useRef<TamagotchiState | null>(null);
+  const metaRef = useRef<TamagotchiMetaProgression>(EMPTY_META);
+
+  useEffect(() => {
+    const hydrationTimer = window.setTimeout(() => {
+      const storedState = loadAndReconcileState();
+      const storedMeta = loadMetaProgression();
+      const reconciledMeta = reconcileMetaProgression(storedMeta, storedState);
+
+      if (reconciledMeta !== storedMeta) {
+        saveMetaProgression(reconciledMeta);
+      }
+
+      stateRef.current = storedState;
+      metaRef.current = reconciledMeta;
+      setState(storedState);
+      setMeta(reconciledMeta);
+    }, 0);
+
+    return () => window.clearTimeout(hydrationTimer);
+  }, []);
 
   useEffect(() => {
     stateRef.current = state;

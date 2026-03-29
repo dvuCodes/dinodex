@@ -75,6 +75,9 @@ export interface TamagotchiState {
   eggStartTime: number | null;
   hatchDurationMs: number | null;
   eggVariantSeed: number;
+  decayCarryMs: number;
+  poopCarryMs: number;
+  sleepDebtMs: number;
 }
 
 export interface TamagotchiMetaProgression {
@@ -184,6 +187,9 @@ export function createInitialState(speciesId: number, now = Date.now()): Tamagot
     eggStartTime: now,
     hatchDurationMs: hatchDuration,
     eggVariantSeed: createEggVariantSeed(speciesId, now),
+    decayCarryMs: 0,
+    poopCarryMs: 0,
+    sleepDebtMs: 0,
   };
 }
 
@@ -239,6 +245,9 @@ function migrateLegacyState(legacy: LegacyState): TamagotchiState {
     eggStartTime: legacy.eggStartTime,
     hatchDurationMs: legacy.hatchDurationMs,
     eggVariantSeed: createEggVariantSeed(legacy.dinoId, legacy.eggStartTime ?? legacy.lastActionTime),
+    decayCarryMs: 0,
+    poopCarryMs: 0,
+    sleepDebtMs: 0,
   };
 }
 
@@ -251,6 +260,9 @@ function normalizeStoredState(state: TamagotchiState): TamagotchiState {
       typeof state.eggVariantSeed === "number"
         ? state.eggVariantSeed
         : createEggVariantSeed(state.speciesId, state.eggStartTime ?? state.lastSimulatedAt),
+    decayCarryMs: typeof state.decayCarryMs === "number" ? state.decayCarryMs : 0,
+    poopCarryMs: typeof state.poopCarryMs === "number" ? state.poopCarryMs : 0,
+    sleepDebtMs: typeof state.sleepDebtMs === "number" ? state.sleepDebtMs : 0,
   };
 }
 
@@ -369,18 +381,36 @@ function countMissedSleepWindows(start: number, end: number): number {
   return count;
 }
 
-function applySleepConsequences(
-  state: TamagotchiState,
-  intervalStart: number,
-  now: number,
-  elapsed: number
-): TamagotchiState {
-  if (state.sleeping || elapsed < HOUR_MS) {
-    return state;
+function getSleepWindowOverlapMs(start: number, end: number): number {
+  if (end <= start) {
+    return 0;
   }
 
-  const violations = countMissedSleepWindows(intervalStart, now);
-  if (violations === 0) {
+  const cursor = new Date(start);
+  cursor.setHours(SLEEP_START_HOUR, 0, 0, 0);
+  if (cursor.getTime() > start) {
+    cursor.setDate(cursor.getDate() - 1);
+  }
+
+  let overlapMs = 0;
+  while (cursor.getTime() < end) {
+    const windowStart = cursor.getTime();
+    const windowEnd = windowStart + 9 * HOUR_MS;
+    const overlapStart = Math.max(start, windowStart);
+    const overlapEnd = Math.min(end, windowEnd);
+
+    if (overlapEnd > overlapStart) {
+      overlapMs += overlapEnd - overlapStart;
+    }
+
+    cursor.setDate(cursor.getDate() + 1);
+  }
+
+  return overlapMs;
+}
+
+function applySleepConsequences(state: TamagotchiState, violations: number): TamagotchiState {
+  if (state.sleeping || violations <= 0) {
     return state;
   }
 
@@ -497,6 +527,49 @@ function hatchEgg(state: TamagotchiState, hatchTime: number): TamagotchiState {
     attention: false,
     attentionReason: null,
     careQuality: 72,
+    decayCarryMs: 0,
+    poopCarryMs: 0,
+    sleepDebtMs: 0,
+  };
+}
+
+export function reconcileMetaProgression(
+  meta: TamagotchiMetaProgression,
+  state: Pick<TamagotchiState, "speciesId" | "stage" | "branchKey" | "careQuality"> | null
+): TamagotchiMetaProgression {
+  if (!state) {
+    return meta;
+  }
+
+  const unlockedMeta = meta.unlockedSpeciesIds.includes(state.speciesId)
+    ? meta
+    : {
+        ...meta,
+        unlockedSpeciesIds: [...meta.unlockedSpeciesIds, state.speciesId].sort((left, right) => left - right),
+      };
+
+  if (state.stage !== "adult" || !state.branchKey) {
+    return unlockedMeta;
+  }
+
+  const hasBranch = unlockedMeta.discoveredBranches.includes(state.branchKey);
+  const previousBest = unlockedMeta.bestCareQualityBySpecies[state.speciesId] ?? 0;
+  const nextBest = Math.max(previousBest, state.careQuality);
+
+  if (hasBranch && nextBest === previousBest) {
+    return unlockedMeta;
+  }
+
+  return {
+    ...unlockedMeta,
+    discoveredBranches: hasBranch ? unlockedMeta.discoveredBranches : [...unlockedMeta.discoveredBranches, state.branchKey],
+    bestCareQualityBySpecies:
+      nextBest === previousBest
+        ? unlockedMeta.bestCareQualityBySpecies
+        : {
+            ...unlockedMeta.bestCareQualityBySpecies,
+            [state.speciesId]: nextBest,
+          },
   };
 }
 
@@ -522,14 +595,22 @@ export function simulateElapsedTime(state: TamagotchiState, now = Date.now()): T
 
   const elapsed = now - current.lastSimulatedAt;
   const intervalStart = current.lastSimulatedAt;
-  const decaySteps = Math.floor(elapsed / DECAY_WINDOW_MS);
-  const poopEvents = Math.floor(elapsed / POOP_WINDOW_MS);
+  const totalDecayMs = current.decayCarryMs + elapsed;
+  const totalPoopMs = current.poopCarryMs + elapsed;
+  const decaySteps = Math.floor(totalDecayMs / DECAY_WINDOW_MS);
+  const poopEvents = Math.floor(totalPoopMs / POOP_WINDOW_MS);
+  const sleepDebtDeltaMs = current.sleeping ? 0 : getSleepWindowOverlapMs(intervalStart, now);
+  const totalSleepDebtMs = current.sleeping ? 0 : current.sleepDebtMs + sleepDebtDeltaMs;
+  const sleepViolations = current.sleeping ? 0 : Math.floor(totalSleepDebtMs / HOUR_MS);
 
   current = {
     ...current,
     ageMs: current.ageMs + elapsed,
     lastSimulatedAt: now,
     careMistakes: current.careMistakes + (poopEvents > 0 ? 1 : 0),
+    decayCarryMs: totalDecayMs % DECAY_WINDOW_MS,
+    poopCarryMs: totalPoopMs % POOP_WINDOW_MS,
+    sleepDebtMs: current.sleeping ? 0 : totalSleepDebtMs % HOUR_MS,
   };
 
   for (let step = 0; step < decaySteps; step += 1) {
@@ -537,7 +618,7 @@ export function simulateElapsedTime(state: TamagotchiState, now = Date.now()): T
   }
 
   current = applyPoop(current, poopEvents);
-  current = applySleepConsequences(current, intervalStart, now, elapsed);
+  current = applySleepConsequences(current, sleepViolations);
   current = applyHealthConsequences(current);
   current = recalculateDerivedState(current);
   current = advanceStageGates(current, now);
@@ -732,6 +813,14 @@ export function getTamagotchiAnimationState(
 
 export function checkHatch(state: TamagotchiState): TamagotchiState {
   return simulateElapsedTime(state, Date.now());
+}
+
+export function skipIncubation(state: TamagotchiState, now = Date.now()): TamagotchiState {
+  if (state.stage !== "egg" || !state.eggStartTime || !state.hatchDurationMs) {
+    return state;
+  }
+
+  return hatchEgg(state, now);
 }
 
 export function getHatchProgress(state: TamagotchiState): number {

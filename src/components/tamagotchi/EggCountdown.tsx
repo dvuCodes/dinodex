@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { useArtSource } from "@/hooks/useArtSource";
 import { getEggVariantLabel, getTamagotchiEggSheet } from "@/lib/tamagotchi-sprites";
+import { PixelSprite } from "./PixelSprite";
 
 interface EggCountdownProps {
   dinoName: string;
@@ -110,23 +111,15 @@ export function EggCountdown({ dinoName, speciesId, eggVariantSeed, timeRemainin
             ease: "easeInOut",
           }}
         >
-          <div className="pixel-screen h-[88px] w-[88px] rounded-[1.25rem] border-violet-200/60 bg-[linear-gradient(180deg,#f7f2ff_0%,#efe7ff_100%)]">
-            <div
-              role="img"
-              aria-label={`${dinoName} egg countdown`}
-              className="pixel-sprite"
-              style={{
-                backgroundImage: `url("${artSrc}")`,
-                backgroundSize: `${frameCount * 88}px 88px`,
-                animation:
-                  reduceMotion || frameCount <= 1
-                    ? "none"
-                    : `tamagotchi-sprite ${frameCount * eggSheet.frameDurationMs}ms steps(${frameCount}) infinite`,
-                width: 88,
-                height: 88,
-              }}
-            />
-          </div>
+          <PixelSprite
+            key={`${artSrc}-${frameCount}-88`}
+            ariaLabel={`${dinoName} egg countdown`}
+            artSrc={artSrc}
+            displaySizePx={88}
+            frameCount={frameCount}
+            frameDurationMs={eggSheet.frameDurationMs}
+            reduceMotion={reduceMotion}
+          />
         </motion.div>
 
         {!reduceMotion && isAlmostReady && (

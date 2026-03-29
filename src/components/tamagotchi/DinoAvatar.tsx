@@ -13,6 +13,7 @@ import type {
 import { getMoodEmoji } from "@/lib/tamagotchi";
 import type { Era } from "@/lib/types";
 import { getEggVariantLabel, getTamagotchiEggSheet, getTamagotchiSpriteSheet } from "@/lib/tamagotchi-sprites";
+import { PixelSprite } from "./PixelSprite";
 
 interface DinoAvatarProps {
   attentionReason: AttentionReason | null;
@@ -40,54 +41,6 @@ const ACTION_BADGES: Partial<Record<TamagotchiAction, string>> = {
   discipline: "Discipline",
   status: "Vitals check",
 };
-
-type PixelSpriteProps = {
-  ariaLabel: string;
-  artSrc: string;
-  displaySizePx: number;
-  expectedFrameCount: number;
-  fallbackFrameCount: number;
-  frameDurationMs: number;
-  reduceMotion: boolean | null;
-  usingFallback: boolean;
-};
-
-function PixelSprite({
-  ariaLabel,
-  artSrc,
-  displaySizePx,
-  expectedFrameCount,
-  fallbackFrameCount,
-  frameDurationMs,
-  reduceMotion,
-  usingFallback,
-}: PixelSpriteProps) {
-  const frameCount = usingFallback ? fallbackFrameCount : expectedFrameCount;
-  return (
-    <div
-      role="img"
-      aria-label={ariaLabel}
-      data-testid="tamagotchi-pixel-screen"
-      className="pixel-screen"
-      style={{ width: displaySizePx, height: displaySizePx }}
-    >
-      <div
-        data-testid="tamagotchi-pixel-sprite"
-        className="pixel-sprite"
-        style={{
-          backgroundImage: `url("${artSrc}")`,
-          backgroundSize: `${frameCount * displaySizePx}px ${displaySizePx}px`,
-          animation:
-            reduceMotion || frameCount <= 1
-              ? "none"
-              : `tamagotchi-sprite ${frameCount * frameDurationMs}ms steps(${frameCount}) infinite`,
-          width: displaySizePx,
-          height: displaySizePx,
-        }}
-      />
-    </div>
-  );
-}
 
 export function DinoAvatar({
   attentionReason,
@@ -164,14 +117,13 @@ export function DinoAvatar({
           className="relative mx-auto flex aspect-square max-w-[280px] items-center justify-center"
         >
           <PixelSprite
+            key={`${artSrc}-${usingFallback ? spriteDescriptor.fallbackFrameCount : spriteDescriptor.expectedFrameCount}-${spriteDescriptor.displaySizePx}`}
             ariaLabel={stage === "egg" ? `${dinoName} egg in tamagotchi mode` : `${dinoName} pixel sprite in tamagotchi mode`}
             artSrc={artSrc}
             displaySizePx={spriteDescriptor.displaySizePx}
-            expectedFrameCount={spriteDescriptor.expectedFrameCount}
-            fallbackFrameCount={spriteDescriptor.fallbackFrameCount}
+            frameCount={usingFallback ? spriteDescriptor.fallbackFrameCount : spriteDescriptor.expectedFrameCount}
             frameDurationMs={spriteDescriptor.frameDurationMs}
             reduceMotion={reduceMotion}
-            usingFallback={usingFallback}
           />
 
           {stage === "egg" ? (

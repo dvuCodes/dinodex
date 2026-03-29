@@ -19,6 +19,8 @@ const loadMetaProgression = () => getFunction("loadMetaProgression");
 const saveMetaProgression = () => getFunction("saveMetaProgression");
 const createInitialState = () => getFunction("createInitialState");
 const simulateElapsedTime = () => getFunction("simulateElapsedTime");
+const reconcileMetaProgression = () => getFunction("reconcileMetaProgression");
+const skipIncubation = () => getFunction("skipIncubation");
 const applyPlayerAction = () => getFunction("applyPlayerAction");
 const didActionApply = () => getFunction("didActionApply");
 const resetCurrentRun = () => getFunction("resetCurrentRun");
@@ -143,6 +145,8 @@ describe("tamagotchi storage and migration", () => {
 });
 
 describe("tamagotchi simulation", () => {
+  const HOUR_MS = 60 * 60 * 1000;
+
   test("preserves the egg seed until the hatch time is reached", () => {
     const state = createInitialState()(18, 10_000);
     const beforeHatch = state.eggStartTime + state.hatchDurationMs - 1_000;
@@ -224,6 +228,18 @@ describe("tamagotchi simulation", () => {
     expect(reconciled.lastSimulatedAt).toBe(future);
   });
 
+  test("skip incubation hatches an egg immediately for in-app testing", () => {
+    const state = createInitialState()(18, 25_000);
+
+    const hatched = skipIncubation()(state, 26_000);
+
+    expect(hatched.stage).toBe("hatchling");
+    expect(hatched.eggStartTime).toBeNull();
+    expect(hatched.hatchDurationMs).toBeNull();
+    expect(hatched.lastSimulatedAt).toBe(26_000);
+    expect(hatched.stats.hunger).toBeGreaterThan(0);
+  });
+
   test("offline reconciliation accumulates mess and attention debt without impossible negatives", () => {
     const base = createInitialState()(6);
     const hatched = simulateElapsedTime()(base, base.eggStartTime + base.hatchDurationMs + 1_000);
@@ -241,6 +257,21 @@ describe("tamagotchi simulation", () => {
     expect(reconciled.stats.hunger).toBeGreaterThanOrEqual(0);
     expect(reconciled.stats.energy).toBeGreaterThanOrEqual(0);
     expect(reconciled.stats.cleanliness).toBeGreaterThanOrEqual(0);
+  });
+
+  test("accumulates decay across minute-by-minute reconciliation ticks", () => {
+    const base = createInitialState()(18, 1_000);
+    const hatchTime = base.eggStartTime + base.hatchDurationMs + 1_000;
+    let incremental = simulateElapsedTime()(base, hatchTime);
+
+    for (let tick = incremental.lastSimulatedAt + 60_000; tick <= hatchTime + 8 * HOUR_MS; tick += 60_000) {
+      incremental = simulateElapsedTime()(incremental, tick);
+    }
+
+    expect(incremental.poopCount).toBeGreaterThan(0);
+    expect(incremental.careMistakes).toBeGreaterThan(0);
+    expect(incremental.stats.hunger).toBeLessThan(72);
+    expect(incremental.stats.cleanliness).toBeLessThan(82);
   });
 
   test("cleaning removes mess and improves cleanliness", () => {
@@ -442,5 +473,29 @@ describe("tamagotchi simulation", () => {
 
     expect(didActionApply()(ignored, "feed", 101_000)).toBe(false);
     expect(didActionApply()(statusCheck, "status", 102_000)).toBe(true);
+  });
+
+  test("records adult branch progression from reconciled state without a player action", () => {
+    const meta = {
+      version: 1,
+      unlockedSpeciesIds: [18],
+      discoveredBranches: [],
+      bestCareQualityBySpecies: {},
+    };
+    const adultState = {
+      ...createInitialState()(18, 10_000),
+      stage: "adult",
+      branchKey: "ideal",
+      careQuality: 84,
+      ageMs: 30 * HOUR_MS,
+      lastSimulatedAt: 20_000,
+      eggStartTime: null,
+      hatchDurationMs: null,
+    };
+
+    const reconciledMeta = reconcileMetaProgression()(meta, adultState);
+
+    expect(reconciledMeta.discoveredBranches).toEqual(["ideal"]);
+    expect(reconciledMeta.bestCareQualityBySpecies[18]).toBe(84);
   });
 });

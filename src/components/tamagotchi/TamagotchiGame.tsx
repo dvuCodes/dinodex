@@ -20,9 +20,11 @@ import {
   getTamagotchiAnimationState,
   loadAndReconcileState,
   loadMetaProgression,
+  reconcileMetaProgression,
   resetCurrentRun,
   saveMetaProgression,
   saveState,
+  skipIncubation,
   simulateElapsedTime,
 } from "@/lib/tamagotchi";
 import { formatDexNumber } from "@/lib/utils";
@@ -57,31 +59,55 @@ function getStatusHeadline(attentionReason: AttentionReason | null, dinoName: st
   }
 }
 
-function ensureUnlocked(meta: TamagotchiMetaProgression, speciesId: number): TamagotchiMetaProgression {
-  if (meta.unlockedSpeciesIds.includes(speciesId)) {
-    return meta;
+function loadInitialRunData(): { state: TamagotchiState | null; meta: TamagotchiMetaProgression } {
+  const state = loadAndReconcileState();
+  const storedMeta = loadMetaProgression();
+  const meta = reconcileMetaProgression(storedMeta, state);
+
+  if (meta !== storedMeta) {
+    saveMetaProgression(meta);
   }
 
-  return {
-    ...meta,
-    unlockedSpeciesIds: [...meta.unlockedSpeciesIds, speciesId].sort((left, right) => left - right),
-  };
+  return { state, meta };
 }
 
 export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
   const reduceMotion = useReducedMotion();
-  const [state, setState] = useState<TamagotchiState | null>(() => loadAndReconcileState());
-  const [meta, setMeta] = useState<TamagotchiMetaProgression>(() => loadMetaProgression());
+  const initialDataRef = useRef<{ state: TamagotchiState | null; meta: TamagotchiMetaProgression } | null>(null);
+  if (initialDataRef.current === null) {
+    initialDataRef.current = loadInitialRunData();
+  }
+  const [state, setState] = useState<TamagotchiState | null>(initialDataRef.current.state);
+  const [meta, setMeta] = useState<TamagotchiMetaProgression>(initialDataRef.current.meta);
   const [showSelector, setShowSelector] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [isActing, setIsActing] = useState(false);
   const [justChangedStage, setJustChangedStage] = useState(false);
   const [justHatched, setJustHatched] = useState(false);
-  const stateRef = useRef<TamagotchiState | null>(null);
+  const stateRef = useRef<TamagotchiState | null>(initialDataRef.current.state);
+  const metaRef = useRef<TamagotchiMetaProgression>(initialDataRef.current.meta);
 
   useEffect(() => {
     stateRef.current = state;
   }, [state]);
+
+  useEffect(() => {
+    metaRef.current = meta;
+  }, [meta]);
+
+  const commitState = useCallback((nextState: TamagotchiState) => {
+    stateRef.current = nextState;
+    saveState(nextState);
+
+    const nextMeta = reconcileMetaProgression(metaRef.current, nextState);
+    if (nextMeta !== metaRef.current) {
+      metaRef.current = nextMeta;
+      saveMetaProgression(nextMeta);
+      setMeta(nextMeta);
+    }
+
+    setState(nextState);
+  }, []);
 
   useEffect(() => {
     if (!state) {
@@ -97,15 +123,14 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
 
       const reconciled = simulateElapsedTime(current, Date.now());
       if (JSON.stringify(reconciled) !== JSON.stringify(current)) {
-        saveState(reconciled);
-        setState(reconciled);
+        commitState(reconciled);
       } else if (current.stage === "egg") {
         setState({ ...current });
       }
     }, intervalMs);
 
     return () => window.clearInterval(interval);
-  }, [state]);
+  }, [commitState, state]);
 
   const currentDino = state ? dinos.find((dino) => dino.id === state.speciesId) ?? null : null;
   const mood = state ? getMood(state.stats) : "neutral";
@@ -117,18 +142,13 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
 
   const handleSelectDino = useCallback((speciesId: number) => {
     const nextState = createInitialState(speciesId);
-    const currentMeta = loadMetaProgression();
-    const nextMeta = ensureUnlocked(currentMeta, speciesId);
 
-    saveState(nextState);
-    saveMetaProgression(nextMeta);
-    setMeta(nextMeta);
-    setState(nextState);
+    commitState(nextState);
     setShowSelector(false);
     setFeedback("Egg secured. Keep watch.");
     setJustChangedStage(false);
     setJustHatched(false);
-  }, []);
+  }, [commitState]);
 
   const handleAction = useCallback((action: TamagotchiAction) => {
     const current = stateRef.current;
@@ -140,29 +160,10 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
     const actionTime = Date.now();
     const nextState = applyPlayerAction(current, action, actionTime);
     const actionApplied = didActionApply(nextState, action, actionTime);
-    const discoveredBranches = nextState.branchKey
-      ? Array.from(new Set([...meta.discoveredBranches, nextState.branchKey]))
-      : meta.discoveredBranches;
-    const nextMeta = nextState.stage === "adult" && meta
-      ? {
-          ...ensureUnlocked(meta, nextState.speciesId),
-          discoveredBranches,
-          bestCareQualityBySpecies: {
-            ...meta.bestCareQualityBySpecies,
-            [nextState.speciesId]: Math.max(meta.bestCareQualityBySpecies[nextState.speciesId] ?? 0, nextState.careQuality),
-          },
-        }
-      : meta;
-
-    saveState(nextState);
-    if (nextMeta) {
-      saveMetaProgression(nextMeta);
-      setMeta(nextMeta);
-    }
 
     setJustHatched(current.stage === "egg" && nextState.stage !== "egg");
     setJustChangedStage(current.stage !== nextState.stage && current.stage !== "egg");
-    setState(nextState);
+    commitState(nextState);
     setFeedback(actionApplied ? getActionFeedback(action) : null);
 
     window.setTimeout(() => setFeedback(null), 2200);
@@ -171,18 +172,42 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
       setJustChangedStage(false);
       setIsActing(false);
     }, 500);
-  }, [isActing, meta]);
+  }, [commitState, isActing]);
 
   const handleResetRun = useCallback(() => {
     resetCurrentRun();
+    stateRef.current = null;
     setState(null);
     setFeedback(null);
     setShowSelector(false);
   }, []);
 
+  const handleSkipIncubation = useCallback(() => {
+    const current = stateRef.current;
+    if (!current || current.stage !== "egg") {
+      return;
+    }
+
+    const nextState = skipIncubation(current, Date.now());
+    if (nextState === current) {
+      return;
+    }
+
+    commitState(nextState);
+    setJustChangedStage(false);
+    setJustHatched(true);
+    setFeedback("Incubation skipped.");
+
+    window.setTimeout(() => setFeedback(null), 2200);
+    window.setTimeout(() => setJustHatched(false), 500);
+  }, [commitState]);
+
   const handleClearProgress = useCallback(() => {
     clearAllProgress();
-    setMeta(loadMetaProgression());
+    const clearedMeta = loadMetaProgression();
+    stateRef.current = null;
+    metaRef.current = clearedMeta;
+    setMeta(clearedMeta);
     setState(null);
     setFeedback(null);
     setShowSelector(false);
@@ -419,6 +444,16 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
                         timeRemainingMs={getHatchTimeRemaining(state)}
                       />
                     </div>
+                    <button
+                      type="button"
+                      onClick={handleSkipIncubation}
+                      className="w-full rounded-[1.4rem] border border-dashed border-accent/35 bg-accent/10 px-4 py-3 text-left transition-colors hover:bg-accent/15"
+                    >
+                      <span className="block font-display text-sm font-bold text-text-primary">Skip incubation</span>
+                      <span className="mt-1 block font-body text-xs leading-5 text-text-secondary">
+                        Testing shortcut. Hatch this egg immediately without waiting for the timer.
+                      </span>
+                    </button>
                     <ActionButtons disabled={isActing || state.runStatus !== "active"} isEgg={isEgg} onAction={handleAction} />
                   </div>
                 ) : (

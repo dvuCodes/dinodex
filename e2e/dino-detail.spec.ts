@@ -50,19 +50,14 @@ test.describe("Dino Detail Page", () => {
 
     // Default stage is adult — get initial description
     const descriptionArea = page.locator('[aria-live="polite"]');
-    const initialText = await descriptionArea.textContent();
 
     // Click hatchling stage
     const hatchlingRadio = page.locator('[role="radio"][aria-label="View hatchling stage"]');
     await hatchlingRadio.click();
 
-    // Wait for description to change
-    await page.waitForTimeout(500);
-    const newText = await descriptionArea.textContent();
-    expect(newText).not.toBe(initialText);
-
-    // URL should update with stage param
-    expect(page.url()).toContain("stage=hatchling");
+    // Wait for description and URL to change
+    await page.waitForURL("**/dino/001?stage=hatchling");
+    await expect(descriptionArea).toContainText("Tiny insects and grubs");
   });
 
   test("prev/next navigation works", async ({ page }) => {

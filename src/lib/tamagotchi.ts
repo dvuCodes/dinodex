@@ -729,6 +729,19 @@ export function getActionFeedback(action: TamagotchiAction): string {
   }
 }
 
+export function getActionFeedbackKey(action: TamagotchiAction, lastActionTime: number): string {
+  return `${action}-${lastActionTime}`;
+}
+
+export function syncStateRef<T>(
+  ref: { current: T },
+  nextState: T,
+  applyState: (state: T) => void
+): void {
+  ref.current = nextState;
+  applyState(nextState);
+}
+
 export function saveState(state: TamagotchiState): void {
   if (!hasStorage()) return;
   globalThis.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));

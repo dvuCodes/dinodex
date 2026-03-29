@@ -26,28 +26,29 @@ function Chip({
   onClick: () => void;
 }) {
   return (
-    <motion.button
+    <button
+      type="button"
       onClick={onClick}
-      whileTap={{ scale: 0.93 }}
-      className="shrink-0 h-8 px-4 rounded-pill font-body text-[13px] font-medium capitalize transition-[background-color,color,box-shadow,border-color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+      className={`shrink-0 h-8 px-4 rounded-pill border font-body text-[13px] font-medium capitalize cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-parchment ${
+        active
+          ? "border-transparent text-white hover:brightness-[1.08] focus-visible:brightness-[1.08]"
+          : "border-border-default bg-parchment text-text-secondary hover:border-text-secondary/35 hover:bg-[var(--chip-hover-bg)] hover:text-text-primary focus-visible:border-text-secondary/35 focus-visible:bg-[var(--chip-hover-bg)] focus-visible:text-text-primary"
+      }`}
       style={
         active
           ? {
               backgroundColor: color,
               color: "white",
-              boxShadow: `0 2px 8px ${color}30`,
             }
           : {
-              border: "1.5px solid var(--color-border-default)",
-              color: "var(--color-text-secondary)",
-              backgroundColor: "var(--color-parchment)",
+              ["--chip-hover-bg" as string]: `${color}1F`,
             }
       }
       aria-label={`Filter by ${label}`}
       aria-pressed={active}
     >
       {label}
-    </motion.button>
+    </button>
   );
 }
 

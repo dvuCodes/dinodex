@@ -28,8 +28,13 @@ export function StageSelector({
         return (
           <button
             key={key}
+            type="button"
             onClick={() => onStageChange(key)}
-            className="relative h-9 px-4 rounded-pill font-body text-sm font-medium transition-colors duration-200 z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+            className={`relative z-10 h-9 rounded-pill px-4 font-body text-sm font-medium transition-[background-color,color,box-shadow,transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-parchment ${
+              isActive
+                ? ""
+                : "hover:-translate-y-px hover:bg-white/70 hover:shadow-sm focus-visible:-translate-y-px focus-visible:bg-white/70 focus-visible:shadow-sm"
+            }`}
             style={{
               color: isActive ? "white" : colors.primary,
             }}

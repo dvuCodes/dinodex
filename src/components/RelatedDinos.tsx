@@ -28,12 +28,12 @@ function RelatedDinoCard({ dino, delay }: { dino: DinoEntry; delay: number }) {
     >
       <Link
         href={`/dino/${paddedId}`}
-        className="shrink-0 w-28 block group text-center"
+        className="group block w-28 shrink-0 rounded-[1.5rem] px-1 py-1 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1C1917]"
       >
         <div className="flex flex-col items-center gap-2">
           {/* Circular portrait */}
           <div
-            className="w-20 h-20 rounded-full overflow-hidden border-2 relative group-hover:scale-110 transition-transform duration-300"
+            className="relative h-20 w-20 overflow-hidden rounded-full border-2 transition-[transform,box-shadow,border-color] duration-300 group-hover:scale-110 group-hover:shadow-[0_10px_22px_rgba(255,255,255,0.12)] group-focus-visible:scale-110 group-focus-visible:shadow-[0_10px_22px_rgba(255,255,255,0.12)]"
             style={{
               borderColor: `${eraColor.primary}60`,
               background: `linear-gradient(135deg, ${eraColor.light}40, rgba(255,255,255,0.1))`,
@@ -51,10 +51,10 @@ function RelatedDinoCard({ dino, delay }: { dino: DinoEntry; delay: number }) {
             />
           </div>
           <div>
-            <p className="font-mono text-[10px] text-white/50 tracking-wider">
+            <p className="font-mono text-[10px] tracking-wider text-white/50 transition-colors duration-200 group-hover:text-white/65 group-focus-visible:text-white/65">
               {formatDefaultDexNumber(dino.id)}
             </p>
-            <p className="font-display text-xs font-bold text-white/90 truncate max-w-[100px]">
+            <p className="max-w-[100px] truncate font-display text-xs font-bold text-white/90 transition-colors duration-200 group-hover:text-white group-focus-visible:text-white">
               {dino.name}
             </p>
           </div>

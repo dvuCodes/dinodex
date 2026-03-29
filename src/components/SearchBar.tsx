@@ -38,16 +38,17 @@ export function SearchBar({ value, onChange }: SearchBarProps) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Search dinosaurs..."
-        className="w-full pl-11 pr-11 py-3 rounded-card bg-white font-body text-sm text-text-primary placeholder:text-text-muted/70 border border-border-default shadow-sm focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent/40 focus:shadow-md transition-[border-color,box-shadow] duration-200"
+        className="w-full pl-11 pr-11 py-3 rounded-card bg-white font-body text-sm text-text-primary placeholder:text-text-muted/70 border border-border-default shadow-sm hover:border-text-secondary/20 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/20 focus-visible:border-accent/40 focus-visible:shadow-md transition-[border-color,box-shadow] duration-200"
         aria-label="Search dinosaurs"
       />
       {value && (
         <button
+          type="button"
           onClick={() => {
             onChange("");
             inputRef.current?.focus();
           }}
-          className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center rounded-full bg-text-muted/10 text-text-secondary hover:bg-accent/10 hover:text-accent transition-[background-color,color] duration-150"
+          className="absolute right-3 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center rounded-full bg-text-muted/10 text-text-secondary transition-[background-color,color,box-shadow] duration-150 hover:bg-accent/10 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus-visible:bg-accent/10 focus-visible:text-accent"
           aria-label="Clear search"
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -169,22 +169,22 @@ test.describe("Tamagotchi overhaul", () => {
     await seedState(page, buildAdultState(Date.now()));
     await openTamagotchi(page);
 
-    const sprite = page.getByTestId("tamagotchi-pixel-screen");
+    const sprite = page.getByRole("img", { name: /tamagotchi mode/i });
     await expect(sprite).toBeVisible();
-    await expect(sprite).toHaveAttribute("aria-label", /pixel sprite in tamagotchi mode/i);
+    await expect(sprite).toHaveAccessibleName(/tamagotchi mode/i);
   });
 
   test("keeps the pixel shell visible when art requests are blocked", async ({ page }) => {
     await seedState(page, buildAdultState(Date.now()));
-    await page.route("**/dinos/**", async (route) => {
+    await page.route("**/tamagotchi/*/*.png", async (route) => {
       await route.abort();
     });
 
     await openTamagotchi(page);
 
-    const sprite = page.getByTestId("tamagotchi-pixel-screen");
+    const sprite = page.getByRole("img", { name: /tamagotchi mode/i });
     await expect(sprite).toBeVisible();
-    await expect(sprite).toHaveAttribute("aria-label", /pixel sprite in tamagotchi mode/i);
+    await expect(sprite).toHaveAccessibleName(/tamagotchi mode/i);
     await expect(page.getByRole("button", { name: /feed/i })).toBeVisible();
   });
 

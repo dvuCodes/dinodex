@@ -14,6 +14,7 @@ const HATCHLING_MIN_AGE_MS = 8 * HOUR_MS;
 const JUVENILE_MIN_AGE_MS = 20 * HOUR_MS;
 const SLEEP_START_HOUR = 22;
 const SLEEP_END_HOUR = 7;
+const DISCIPLINE_ALERT_THRESHOLD = 25;
 
 export type TamagotchiStage = "egg" | Stage;
 export type TamagotchiBranchKey = "ideal" | "steady" | "rough";
@@ -291,6 +292,7 @@ function resolveAttentionReason(state: TamagotchiState): TamagotchiAttentionReas
   if (state.stats.hunger <= 30) return "hunger";
   if (state.stats.energy <= 25) return "energy";
   if (state.stats.happiness <= 30) return "happiness";
+  if (state.stats.discipline <= DISCIPLINE_ALERT_THRESHOLD) return "discipline";
   return null;
 }
 
@@ -644,6 +646,10 @@ export function applyPlayerAction(state: TamagotchiState, action: TamagotchiActi
 
 export function applyAction(state: TamagotchiState, action: TamagotchiAction): TamagotchiState {
   return applyPlayerAction(state, action, Date.now());
+}
+
+export function didActionApply(state: TamagotchiState, action: TamagotchiAction, actionTime: number): boolean {
+  return state.lastAction === action && state.lastActionTime === actionTime;
 }
 
 export function getMood(stats: TamagotchiStats): Mood {

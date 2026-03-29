@@ -80,5 +80,5 @@ export function useArtSource(expectedArtSrc: string, fallbackArtSrc: string) {
     setArtSrc(fallbackArtSrc);
   }, [fallbackArtSrc]);
 
-  return { artSrc, handleArtError };
+  return { artSrc, handleArtError, usingFallback: artSrc === fallbackArtSrc };
 }

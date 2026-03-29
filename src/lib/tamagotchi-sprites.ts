@@ -22,7 +22,8 @@ const STAGE_SCALE: Record<Stage, number> = {
 type SpriteDescriptor = {
   expectedSrc: string;
   fallbackSrc: string;
-  frameCount: number;
+  expectedFrameCount: number;
+  fallbackFrameCount: number;
   frameDurationMs: number;
   frameSizePx: number;
   displaySizePx: number;
@@ -261,19 +262,20 @@ export function getTamagotchiSpriteSheet(
   return {
     expectedSrc: `/tamagotchi/${padId(speciesId)}/${stage}.png`,
     fallbackSrc: createFallbackSpriteSheet(speciesId, stage, animationState),
-    frameCount: FRAME_COUNT,
+    expectedFrameCount: 1,
+    fallbackFrameCount: FRAME_COUNT,
     frameDurationMs: FRAME_DURATIONS[animationState],
     frameSizePx: GRID_SIZE,
     displaySizePx: 160,
   };
 }
 
-export function getTamagotchiEggSheet(seed: number): SpriteDescriptor {
-  const variant = getEggVariantIndex(seed);
+export function getTamagotchiEggSheet(speciesId: number, seed: number): SpriteDescriptor {
   return {
-    expectedSrc: `/tamagotchi/eggs/variant-${variant}.png`,
+    expectedSrc: `/tamagotchi/${padId(speciesId)}/egg.png`,
     fallbackSrc: createFallbackEggSheet(seed),
-    frameCount: FRAME_COUNT,
+    expectedFrameCount: 1,
+    fallbackFrameCount: FRAME_COUNT,
     frameDurationMs: 260,
     frameSizePx: GRID_SIZE,
     displaySizePx: 88,

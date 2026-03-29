@@ -10,6 +10,7 @@ import {
   applyPlayerAction,
   clearAllProgress,
   createInitialState,
+  didActionApply,
   getActionFeedback,
   getHatchProgress,
   getHatchTimeRemaining,
@@ -136,7 +137,9 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
     }
 
     setIsActing(true);
-    const nextState = applyPlayerAction(current, action, Date.now());
+    const actionTime = Date.now();
+    const nextState = applyPlayerAction(current, action, actionTime);
+    const actionApplied = didActionApply(nextState, action, actionTime);
     const discoveredBranches = nextState.branchKey
       ? Array.from(new Set([...meta.discoveredBranches, nextState.branchKey]))
       : meta.discoveredBranches;
@@ -160,7 +163,7 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
     setJustHatched(current.stage === "egg" && nextState.stage !== "egg");
     setJustChangedStage(current.stage !== nextState.stage && current.stage !== "egg");
     setState(nextState);
-    setFeedback(getActionFeedback(action));
+    setFeedback(actionApplied ? getActionFeedback(action) : null);
 
     window.setTimeout(() => setFeedback(null), 2200);
     window.setTimeout(() => {
@@ -410,18 +413,19 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
                     <div className="rounded-[1.6rem] border border-border-default bg-[#fbfcff] p-5">
                       <EggCountdown
                         dinoName={currentDino.name}
+                        speciesId={currentDino.id}
                         eggVariantSeed={state.eggVariantSeed}
                         progress={eggProgress}
                         timeRemainingMs={getHatchTimeRemaining(state)}
                       />
                     </div>
-                    <ActionButtons disabled={isActing} isEgg={isEgg} onAction={handleAction} />
+                    <ActionButtons disabled={isActing || state.runStatus !== "active"} isEgg={isEgg} onAction={handleAction} />
                   </div>
                 ) : (
                   <>
                     <StatBars stats={state.stats} />
                     <div className="mt-4">
-                      <ActionButtons disabled={isActing} isEgg={isEgg} onAction={handleAction} />
+                      <ActionButtons disabled={isActing || state.runStatus !== "active"} isEgg={isEgg} onAction={handleAction} />
                     </div>
                   </>
                 )}

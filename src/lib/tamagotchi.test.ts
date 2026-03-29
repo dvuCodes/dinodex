@@ -20,6 +20,7 @@ const saveMetaProgression = () => getFunction("saveMetaProgression");
 const createInitialState = () => getFunction("createInitialState");
 const simulateElapsedTime = () => getFunction("simulateElapsedTime");
 const applyPlayerAction = () => getFunction("applyPlayerAction");
+const didActionApply = () => getFunction("didActionApply");
 const resetCurrentRun = () => getFunction("resetCurrentRun");
 const clearAllProgress = () => getFunction("clearAllProgress");
 const evaluateStageGate = () => getFunction("evaluateStageGate");
@@ -290,6 +291,29 @@ describe("tamagotchi simulation", () => {
     expect(disciplined.careMistakes).toBe(needyState.careMistakes);
   });
 
+  test("low discipline generates a discipline attention state during reconciliation", () => {
+    const unrulyState = {
+      ...createInitialState()(12, 50_000),
+      stage: "juvenile",
+      attention: false,
+      attentionReason: null,
+      stats: {
+        hunger: 84,
+        happiness: 80,
+        energy: 78,
+        cleanliness: 82,
+        health: 86,
+        discipline: 18,
+      },
+      lastSimulatedAt: 50_000,
+    };
+
+    const reconciled = simulateElapsedTime()(unrulyState, 50_000);
+
+    expect(reconciled.attention).toBe(true);
+    expect(reconciled.attentionReason).toBe("discipline");
+  });
+
   test("stage gates branch deterministically from care quality", () => {
     const idealState = {
       ...createInitialState()(18),
@@ -394,5 +418,29 @@ describe("tamagotchi simulation", () => {
 
     expect(healed.runStatus).toBe("soft-failed");
     expect(healed.stats.health).toBeLessThanOrEqual(state.stats.health);
+  });
+
+  test("reports when an action was ignored by a collapsed run", () => {
+    const state = {
+      ...createInitialState()(18, 100_000),
+      stage: "juvenile",
+      runStatus: "soft-failed",
+      sick: true,
+      stats: {
+        hunger: 80,
+        happiness: 80,
+        energy: 80,
+        cleanliness: 80,
+        health: 5,
+        discipline: 80,
+      },
+      lastSimulatedAt: 100_000,
+    };
+
+    const ignored = applyPlayerAction()(state, "feed", 101_000);
+    const statusCheck = applyPlayerAction()(state, "status", 102_000);
+
+    expect(didActionApply()(ignored, "feed", 101_000)).toBe(false);
+    expect(didActionApply()(statusCheck, "status", 102_000)).toBe(true);
   });
 });

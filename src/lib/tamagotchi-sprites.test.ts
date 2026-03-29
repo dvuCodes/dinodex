@@ -1,0 +1,20 @@
+import { describe, expect, test } from "bun:test";
+import { getTamagotchiEggSheet, getTamagotchiSpriteSheet } from "./tamagotchi-sprites";
+
+describe("tamagotchi sprite descriptors", () => {
+  test("treats shipped stage art as a single-frame PNG with animated fallback frames", () => {
+    const sprite = getTamagotchiSpriteSheet(18, "adult", "idle");
+
+    expect(sprite.expectedSrc).toBe("/tamagotchi/018/adult.png");
+    expect(sprite.expectedFrameCount).toBe(1);
+    expect(sprite.fallbackFrameCount).toBe(4);
+  });
+
+  test("points egg art at the generated species sprite and keeps animated fallback frames", () => {
+    const egg = getTamagotchiEggSheet(18, 12345);
+
+    expect(egg.expectedSrc).toBe("/tamagotchi/018/egg.png");
+    expect(egg.expectedFrameCount).toBe(1);
+    expect(egg.fallbackFrameCount).toBe(4);
+  });
+});

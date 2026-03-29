@@ -6,6 +6,7 @@ import { getEggVariantLabel, getTamagotchiEggSheet } from "@/lib/tamagotchi-spri
 
 interface EggCountdownProps {
   dinoName: string;
+  speciesId: number;
   eggVariantSeed: number;
   timeRemainingMs: number;
   progress: number;
@@ -31,13 +32,14 @@ const STROKE_WIDTH = 6;
 const RADIUS = (RING_SIZE - STROKE_WIDTH) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
-export function EggCountdown({ dinoName, eggVariantSeed, timeRemainingMs, progress }: EggCountdownProps) {
+export function EggCountdown({ dinoName, speciesId, eggVariantSeed, timeRemainingMs, progress }: EggCountdownProps) {
   const reduceMotion = useReducedMotion();
   const dashOffset = CIRCUMFERENCE - (progress / 100) * CIRCUMFERENCE;
   const isAlmostReady = progress > 80;
   const isVeryClose = progress > 95;
-  const eggSheet = getTamagotchiEggSheet(eggVariantSeed);
-  const { artSrc } = useArtSource(eggSheet.expectedSrc, eggSheet.fallbackSrc);
+  const eggSheet = getTamagotchiEggSheet(speciesId, eggVariantSeed);
+  const { artSrc, usingFallback } = useArtSource(eggSheet.expectedSrc, eggSheet.fallbackSrc);
+  const frameCount = usingFallback ? eggSheet.fallbackFrameCount : eggSheet.expectedFrameCount;
 
   return (
     <div className="flex flex-col items-center gap-4">
@@ -115,8 +117,11 @@ export function EggCountdown({ dinoName, eggVariantSeed, timeRemainingMs, progre
               className="pixel-sprite"
               style={{
                 backgroundImage: `url("${artSrc}")`,
-                backgroundSize: `${eggSheet.frameCount * 88}px 88px`,
-                animation: reduceMotion ? "none" : `tamagotchi-sprite ${eggSheet.frameCount * eggSheet.frameDurationMs}ms steps(${eggSheet.frameCount}) infinite`,
+                backgroundSize: `${frameCount * 88}px 88px`,
+                animation:
+                  reduceMotion || frameCount <= 1
+                    ? "none"
+                    : `tamagotchi-sprite ${frameCount * eggSheet.frameDurationMs}ms steps(${frameCount}) infinite`,
                 width: 88,
                 height: 88,
               }}

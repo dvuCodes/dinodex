@@ -89,6 +89,9 @@ type RolloutParseResult = {
   mode: RolloutMode;
   batch: BatchName;
   speciesIds: number[];
+  skipSharedArtifacts: boolean;
+  sharedArtifactsOnly: boolean;
+  relatedIssueId?: string;
 };
 
 export const TAMAGOTCHI_ANIMATED_BATCHES = {
@@ -240,6 +243,16 @@ function buildAnchorStagePromptBlock(stage: Stage): string {
   ].join("\n");
 }
 
+function formatBatchName(batch: BatchName): string {
+  return `${batch[0].toUpperCase()}${batch.slice(1)}`;
+}
+
+async function readAnimatedPrototypeMetadata(speciesId: number): Promise<AnimatedPrototypeMetadata> {
+  const metadataPath = getAnimatedPrototypeMetadataPath(PROJECT_ROOT, speciesId);
+  const rawMetadata = await fs.readFile(metadataPath, "utf-8");
+  return JSON.parse(rawMetadata) as AnimatedPrototypeMetadata;
+}
+
 function buildStageMoodPromptBlock(stage: Stage, animationState: TamagotchiAnimationState): string {
   return [
     `Stage target: ${stage}.`,
@@ -361,7 +374,7 @@ export function buildAnimatedBatchPromptArtifact(era: BatchName, speciesIds: num
   });
 
   return [
-    `# ${era[0].toUpperCase()} Style-Lock Reset Prompts`,
+    `# ${formatBatchName(era)} Style-Lock Reset Prompts`,
     "",
     "Related plan: `Remaining Tamagotchi Animated Sprite Rollout`",
     "",
@@ -869,8 +882,12 @@ export function parseAnimatedRolloutArgs(args: string[]): RolloutParseResult {
   const modeIndex = args.indexOf("--mode");
   const eraIndex = args.indexOf("--era");
   const speciesIndex = args.indexOf("--species");
+  const relatedIssueIndex = args.indexOf("--related-issue");
+  const skipSharedArtifacts = args.includes("--skip-shared-artifacts");
+  const sharedArtifactsOnly = args.includes("--shared-artifacts-only");
   const modeArg = modeIndex >= 0 ? args[modeIndex + 1] : undefined;
   const eraArg = (eraIndex >= 0 ? args[eraIndex + 1] : "triassic") as BatchName;
+  const relatedIssueId = relatedIssueIndex >= 0 ? args[relatedIssueIndex + 1] : undefined;
 
   if (modeArg === undefined) {
     throw new Error(`Expected --mode ${STYLE_LOCK_RESET_MODE} for this rollout.`);
@@ -893,52 +910,73 @@ export function parseAnimatedRolloutArgs(args: string[]): RolloutParseResult {
       throw new Error("Expected a comma-separated species list after --species");
     }
 
-    return { mode: STYLE_LOCK_RESET_MODE, batch: eraArg, speciesIds };
+    return {
+      mode: STYLE_LOCK_RESET_MODE,
+      batch: eraArg,
+      speciesIds,
+      skipSharedArtifacts,
+      sharedArtifactsOnly,
+      relatedIssueId,
+    };
   }
 
-  return { mode: STYLE_LOCK_RESET_MODE, batch: eraArg, speciesIds: [...STYLE_LOCK_RESET_BATCHES[eraArg]] };
+  return {
+    mode: STYLE_LOCK_RESET_MODE,
+    batch: eraArg,
+    speciesIds: [...STYLE_LOCK_RESET_BATCHES[eraArg]],
+    skipSharedArtifacts,
+    sharedArtifactsOnly,
+    relatedIssueId,
+  };
 }
 
 export function buildAnimatedBatchLogArtifact(
   batch: BatchName,
   artifactDate: string,
-  speciesMetadata: AnimatedPrototypeMetadata[]
+  speciesMetadata: AnimatedPrototypeMetadata[],
+  relatedIssueId?: string
 ): string {
   const speciesIds = speciesMetadata.map((entry) => entry.speciesId);
   const defaultResetTargets = STYLE_LOCK_RESET_BATCHES[batch];
+  const speciesList = speciesIds.map((id) => `#${padTamagotchiId(id)}`).join(", ");
+  const anchorCount = speciesMetadata.reduce((sum, entry) => sum + entry.anchors.length, 0);
+  const exploratoryCount = speciesMetadata.reduce((sum, entry) => sum + entry.exploratory.length, 0);
+  const finalStripCount = speciesMetadata.reduce((sum, entry) => sum + entry.finalStrips.length, 0);
 
   return [
     `# ${artifactDate} ${batch} Tamagotchi style-lock reset`,
     "",
-    "Related issue: `RIO-40`",
+    `Related issue: \`${relatedIssueId ?? "unspecified"}\``,
     "",
     "## Scope",
     "",
-    `Task 2 refactors the rollout pipeline for the full-reset pass so species ${speciesIds.map((id) => `#${padTamagotchiId(id)}`).join(", ")} regenerate fresh anchors under the approved #001-#002 style-lock family instead of copying shipped stage sprites.`,
+    `This run generated the style-lock reset asset set for species ${speciesList} under the approved #001-#002 family.`,
     "",
     "## Decisions",
     "",
     `- The rollout CLI now requires \`--mode style-lock-reset\`; the default ${batch} reset target set is \`#${padTamagotchiId(defaultResetTargets[0])}-#${padTamagotchiId(defaultResetTargets[defaultResetTargets.length - 1])}\`, so an unqualified ${batch} reset cannot include reference species \`#002\`.`,
-    `- Renamed rollout artifact helpers to the reset-specific prompt/log filenames while keeping helper date output injectable for tests instead of hardcoding the wall-clock date.`,
-    "- Replaced static-anchor copying in `scripts/tamagotchi-animated-rollout.ts` with fresh Gemini anchor generation using the #001 and #002 stage sprites as references.",
-    "- Fresh Gemini anchors are now white-stripped and stage-normalized onto the target 256x256 stage canvas before they become references for exploratory or final generation.",
-    "- Split prompt construction into style-lock, species, and stage-or-stage+mood blocks to keep anchor prompts and final strip prompts aligned.",
-    "- Prototype metadata now uses a clearer composed contract: shared approval fields plus a nested `resetWorkflow` block describing mode, reference species, and anchor normalization.",
-    "- Batch artifact text now describes the reset workflow rather than the older copy-anchor rollout.",
+    `- Generated ${anchorCount} fresh anchors, ${exploratoryCount} exploratory strips, and ${finalStripCount} final strips for this subset run.`,
+    "- Fresh Gemini anchors were white-stripped and stage-normalized onto the target 256x256 stage canvas before becoming references for exploratory or final generation.",
+    "- Final strips were background-stripped and repaired to remove detached frame islands before review.",
+    "- Prototype metadata remains approval-gated: generated assets are present, but manifest promotion still depends on explicit approval.",
     "",
     "## Verification plan",
     "",
-    "- Run the focused Bun rollout helper test file, including control-flow and image-normalization branches.",
-    "- Run the related style-lock test file to confirm the shared approval metadata contract remains aligned with manifest gating.",
+    "- Run the focused Bun rollout helper and style-lock tests after shared-artifact integration.",
+    "- Validate approved species in-app with the debug dino switcher before manifest promotion.",
     "",
     "## Notes",
     "",
-    "- No assets were regenerated in this task.",
-    "- No runtime files were changed in this task.",
+    `- Species included in this run: ${speciesList}.`,
+    "- Shared manifest and batch artifact promotion happen in the integration step, not inside subset lane runs.",
   ].join("\n");
 }
 
-async function writeBatchArtifacts(batch: BatchName, speciesMetadata: AnimatedPrototypeMetadata[]): Promise<void> {
+async function writeBatchArtifacts(
+  batch: BatchName,
+  speciesMetadata: AnimatedPrototypeMetadata[],
+  relatedIssueId?: string
+): Promise<void> {
   const artifactDate = getAnimatedArtifactDate();
   const promptPath = getAnimatedBatchPromptPath(PROJECT_ROOT, batch, artifactDate);
   const logPath = getAnimatedBatchLogPath(PROJECT_ROOT, batch, artifactDate);
@@ -947,7 +985,7 @@ async function writeBatchArtifacts(batch: BatchName, speciesMetadata: AnimatedPr
   ensureDir(dirname(logPath));
 
   writeFileSync(promptPath, `${buildAnimatedBatchPromptArtifact(batch, speciesMetadata.map((entry) => entry.speciesId))}\n`, "utf-8");
-  writeFileSync(logPath, `${buildAnimatedBatchLogArtifact(batch, artifactDate, speciesMetadata)}\n`, "utf-8");
+  writeFileSync(logPath, `${buildAnimatedBatchLogArtifact(batch, artifactDate, speciesMetadata, relatedIssueId)}\n`, "utf-8");
 }
 
 export async function runAnimatedRollout(projectRoot = PROJECT_ROOT, args = process.argv.slice(2)): Promise<void> {
@@ -959,16 +997,24 @@ export async function runAnimatedRollout(projectRoot = PROJECT_ROOT, args = proc
     throw new Error("GEMINI_API_KEY is not set.");
   }
 
-  const { batch, speciesIds } = parseAnimatedRolloutArgs(args);
+  const { batch, speciesIds, skipSharedArtifacts, sharedArtifactsOnly, relatedIssueId } = parseAnimatedRolloutArgs(args);
   const speciesMetadata: AnimatedPrototypeMetadata[] = [];
 
-  for (const speciesId of speciesIds) {
-    console.log(`Generating animated Tamagotchi strips for #${padTamagotchiId(speciesId)} ${getSpeciesEntry(speciesId).name}`);
-    speciesMetadata.push(await generateSpeciesBatch(speciesId, batch));
+  if (sharedArtifactsOnly) {
+    for (const speciesId of speciesIds) {
+      speciesMetadata.push(await readAnimatedPrototypeMetadata(speciesId));
+    }
+  } else {
+    for (const speciesId of speciesIds) {
+      console.log(`Generating animated Tamagotchi strips for #${padTamagotchiId(speciesId)} ${getSpeciesEntry(speciesId).name}`);
+      speciesMetadata.push(await generateSpeciesBatch(speciesId, batch));
+    }
   }
 
-  writeTamagotchiManifest(PROJECT_ROOT);
-  await writeBatchArtifacts(batch, speciesMetadata);
+  if (!skipSharedArtifacts) {
+    writeTamagotchiManifest(PROJECT_ROOT);
+    await writeBatchArtifacts(batch, speciesMetadata, relatedIssueId);
+  }
 }
 
 if (import.meta.main) {

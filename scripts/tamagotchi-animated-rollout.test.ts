@@ -96,6 +96,9 @@ describe("tamagotchi animated rollout helpers", () => {
       mode: "style-lock-reset",
       batch: "triassic",
       speciesIds: [3, 4, 5],
+      skipSharedArtifacts: false,
+      sharedArtifactsOnly: false,
+      relatedIssueId: undefined,
     });
   });
 
@@ -115,6 +118,70 @@ describe("tamagotchi animated rollout helpers", () => {
     expect(() => parseAnimatedRolloutArgs(["--mode", "style-lock-reset", "--era", "triassic", "--species", ""])).toThrow(
       "Expected a comma-separated species list after --species"
     );
+  });
+
+  test("parses the optional shared-artifact skip flag for parallel subset runs", () => {
+    expect(
+      parseAnimatedRolloutArgs([
+        "--mode",
+        "style-lock-reset",
+        "--era",
+        "jurassic",
+        "--species",
+        "6,7",
+        "--skip-shared-artifacts",
+      ])
+    ).toEqual({
+      mode: "style-lock-reset",
+      batch: "jurassic",
+      speciesIds: [6, 7],
+      skipSharedArtifacts: true,
+      sharedArtifactsOnly: false,
+      relatedIssueId: undefined,
+    });
+  });
+
+  test("parses an optional related issue id for shared artifact evidence", () => {
+    expect(
+      parseAnimatedRolloutArgs([
+        "--mode",
+        "style-lock-reset",
+        "--era",
+        "jurassic",
+        "--related-issue",
+        "RIO-42",
+      ])
+    ).toEqual({
+      mode: "style-lock-reset",
+      batch: "jurassic",
+      speciesIds: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+      skipSharedArtifacts: false,
+      sharedArtifactsOnly: false,
+      relatedIssueId: "RIO-42",
+    });
+  });
+
+  test("parses a shared-artifacts-only integration run without changing the species target set", () => {
+    expect(
+      parseAnimatedRolloutArgs([
+        "--mode",
+        "style-lock-reset",
+        "--era",
+        "jurassic",
+        "--species",
+        "6,7,8,9",
+        "--shared-artifacts-only",
+        "--related-issue",
+        "RIO-42",
+      ])
+    ).toEqual({
+      mode: "style-lock-reset",
+      batch: "jurassic",
+      speciesIds: [6, 7, 8, 9],
+      skipSharedArtifacts: false,
+      sharedArtifactsOnly: true,
+      relatedIssueId: "RIO-42",
+    });
   });
 
   test("builds prototype metadata by composing shared approval fields with reset workflow metadata", () => {
@@ -150,6 +217,7 @@ describe("tamagotchi animated rollout helpers", () => {
   test("emits prompt artifacts with the enforced reset command contract and normalized-anchor workflow", () => {
     const promptArtifact = buildAnimatedBatchPromptArtifact("triassic", [3, 4, 5]);
 
+    expect(promptArtifact).toContain("# Triassic Style-Lock Reset Prompts");
     expect(promptArtifact).toContain(
       "Intended command contract: `bun run scripts/tamagotchi-animated-rollout.ts --mode style-lock-reset --era triassic`"
     );
@@ -176,17 +244,12 @@ describe("tamagotchi animated rollout helpers", () => {
         generatedAt: "2026-03-30T00:00:00.000Z",
         batch: "triassic",
       }),
-    ]);
+    ], "RIO-40");
 
-    expect(logArtifact).toContain(
-      "The rollout CLI now requires `--mode style-lock-reset`; the default triassic reset target set is `#003-#005`, so an unqualified triassic reset cannot include reference species `#002`."
-    );
-    expect(logArtifact).toContain(
-      "Fresh Gemini anchors are now white-stripped and stage-normalized onto the target 256x256 stage canvas before they become references for exploratory or final generation."
-    );
-    expect(logArtifact).toContain(
-      "Prototype metadata now uses a clearer composed contract: shared approval fields plus a nested `resetWorkflow` block describing mode, reference species, and anchor normalization."
-    );
+    expect(logArtifact).toContain("Related issue: `RIO-40`");
+    expect(logArtifact).toContain("This run generated the style-lock reset asset set for species #003 under the approved #001-#002 family.");
+    expect(logArtifact).toContain("Generated 0 fresh anchors, 0 exploratory strips, and 0 final strips for this subset run.");
+    expect(logArtifact).toContain("Species included in this run: #003.");
   });
 
   test("normalizes generated anchors onto the canonical stage canvas before reuse", async () => {

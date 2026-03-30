@@ -21,6 +21,7 @@ const createInitialState = () => getFunction("createInitialState");
 const simulateElapsedTime = () => getFunction("simulateElapsedTime");
 const reconcileMetaProgression = () => getFunction("reconcileMetaProgression");
 const skipIncubation = () => getFunction("skipIncubation");
+const evolveCurrentDino = () => getFunction("evolveCurrentDino");
 const applyPlayerAction = () => getFunction("applyPlayerAction");
 const didActionApply = () => getFunction("didActionApply");
 const resetCurrentRun = () => getFunction("resetCurrentRun");
@@ -238,6 +239,47 @@ describe("tamagotchi simulation", () => {
     expect(hatched.hatchDurationMs).toBeNull();
     expect(hatched.lastSimulatedAt).toBe(26_000);
     expect(hatched.stats.hunger).toBeGreaterThan(0);
+  });
+
+  test("manual evolve advances the current dino by exactly one stage per click", () => {
+    const hatchling = {
+      ...createInitialState()(18, 20_000),
+      stage: "hatchling" as const,
+      ageMs: 1_000,
+      eggStartTime: null,
+      hatchDurationMs: null,
+      careQuality: 84,
+      branchKey: null,
+      sleeping: true,
+      attention: true,
+      attentionReason: "hunger" as const,
+      lastSimulatedAt: 20_000,
+    };
+
+    const evolved = evolveCurrentDino()(hatchling, 21_000);
+
+    expect(evolved.stage).toBe("juvenile");
+    expect(evolved.branchKey).toBe("ideal");
+    expect(evolved.attention).toBe(false);
+    expect(evolved.attentionReason).toBeNull();
+    expect(evolved.sleeping).toBe(false);
+    expect(evolved.lastSimulatedAt).toBe(21_000);
+  });
+
+  test("manual evolve stops changing once the current dino is already adult", () => {
+    const adult = {
+      ...createInitialState()(18, 30_000),
+      stage: "adult" as const,
+      ageMs: 30 * HOUR_MS,
+      eggStartTime: null,
+      hatchDurationMs: null,
+      branchKey: "steady" as const,
+      lastSimulatedAt: 30_000,
+    };
+
+    const evolved = evolveCurrentDino()(adult, 31_000);
+
+    expect(evolved).toEqual(adult);
   });
 
   test("offline reconciliation accumulates mess and attention debt without impossible negatives", () => {

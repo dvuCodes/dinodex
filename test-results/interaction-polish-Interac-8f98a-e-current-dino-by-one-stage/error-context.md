@@ -1,0 +1,173 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - link "← Home" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - heading "Dino Care" [level=1] [ref=e7]
+        - button "Hatchery" [ref=e8]
+    - main [ref=e9]:
+      - generic [ref=e10]:
+        - generic [ref=e11]:
+          - generic [ref=e12]:
+            - paragraph [ref=e13]: Run active
+            - 'heading "Tyrannosaurus Rex #018" [level=2] [ref=e14]'
+          - generic [ref=e15]:
+            - paragraph [ref=e16]: Branch
+            - paragraph
+        - generic [ref=e17]:
+          - generic [ref=e18]:
+            - generic [ref=e22]:
+              - generic [ref=e25]:
+                - generic [ref=e26]: hatchling happy
+                - 'generic "Mood: happy" [ref=e27]': 😊
+              - img "Tyrannosaurus Rex pixel sprite in tamagotchi mode" [ref=e29]
+              - generic [ref=e32]:
+                - generic [ref=e33]: "Sleep: Awake"
+                - generic [ref=e34]: "Sick: No"
+                - generic [ref=e35]: "Mess: Clear"
+                - generic [ref=e36]: "Attention: Calm"
+            - generic [ref=e38]:
+              - generic [ref=e39]:
+                - paragraph [ref=e40]: Tyrannosaurus Rex is waiting for your next move.
+                - paragraph [ref=e41]: Tyrannosaurus Rex feels well cared for.
+              - generic [ref=e42]: hatchling
+          - generic [ref=e44]:
+            - generic [ref=e45]:
+              - generic [ref=e46]:
+                - paragraph [ref=e47]: Pixel shell
+                - heading "Vitals and controls" [level=3] [ref=e48]
+              - generic [ref=e49]:
+                - paragraph [ref=e50]: Care quality
+                - paragraph [ref=e51]: 72%
+            - generic [ref=e52]:
+              - generic [ref=e54]:
+                - generic [ref=e55]:
+                  - generic [ref=e56]: 🍖
+                  - text: Hunger
+                - generic [ref=e57]: 72%
+              - generic [ref=e62]:
+                - generic [ref=e63]:
+                  - generic [ref=e64]: 🎈
+                  - text: Joy
+                - generic [ref=e65]: 76%
+              - generic [ref=e70]:
+                - generic [ref=e71]:
+                  - generic [ref=e72]: ⚡
+                  - text: Energy
+                - generic [ref=e73]: 70%
+              - generic [ref=e78]:
+                - generic [ref=e79]:
+                  - generic [ref=e80]: 🧼
+                  - text: Clean
+                - generic [ref=e81]: 82%
+              - generic [ref=e86]:
+                - generic [ref=e87]:
+                  - generic [ref=e88]: 💗
+                  - text: Health
+                - generic [ref=e89]: 86%
+              - generic [ref=e94]:
+                - generic [ref=e95]:
+                  - generic [ref=e96]: 📣
+                  - text: Discipline
+                - generic [ref=e97]: 58%
+            - generic [ref=e102]:
+              - generic [ref=e103]:
+                - button "Feed" [ref=e104]:
+                  - generic [ref=e105]: 🍖
+                  - generic [ref=e106]: Feed
+                  - generic [ref=e107]: Care action
+                - button "Play" [ref=e108]:
+                  - generic [ref=e109]: 🎮
+                  - generic [ref=e110]: Play
+                  - generic [ref=e111]: Care action
+                - button "Clean" [ref=e112]:
+                  - generic [ref=e113]: 🧼
+                  - generic [ref=e114]: Clean
+                  - generic [ref=e115]: Care action
+                - button "Medicine" [ref=e116]:
+                  - generic [ref=e117]: 💊
+                  - generic [ref=e118]: Medicine
+                  - generic [ref=e119]: Care action
+                - button "Lights" [ref=e120]:
+                  - generic [ref=e121]: 💡
+                  - generic [ref=e122]: Lights
+                  - generic [ref=e123]: Care action
+                - button "Discipline" [ref=e124]:
+                  - generic [ref=e125]: 📣
+                  - generic [ref=e126]: Discipline
+                  - generic [ref=e127]: Care action
+              - generic [ref=e128]:
+                - button "Snack" [ref=e129]:
+                  - generic [ref=e130]: 🍪
+                  - text: Snack
+                - button "Status" [ref=e131]:
+                  - generic [ref=e132]: 📟
+                  - text: Status
+            - generic [ref=e133]:
+              - generic [ref=e134]:
+                - paragraph [ref=e135]: Status board
+                - generic [ref=e136]:
+                  - paragraph [ref=e137]: "Sleep: Awake"
+                  - paragraph [ref=e138]: "Sick: No"
+                  - paragraph [ref=e139]: "Mess: Clear"
+                  - paragraph [ref=e140]: "Attention: Calm"
+              - generic [ref=e141]:
+                - paragraph [ref=e142]: Run metrics
+                - generic [ref=e143]:
+                  - paragraph [ref=e144]: "Mistakes: 0"
+                  - paragraph [ref=e145]: "Growth: 0%"
+                  - paragraph [ref=e146]: "Unlocks: 1"
+                  - paragraph [ref=e147]: "Branch:"
+        - generic [ref=e148]:
+          - button "Open Hatchery" [ref=e149]
+          - button "Reset Run" [ref=e150]
+          - button "Clear All Progress" [ref=e151]
+        - generic [ref=e153]:
+          - generic [ref=e154]:
+            - paragraph [ref=e155]: Debug
+            - paragraph [ref=e156]: Switch the active dinosaur or advance one stage at a time for sprite validation.
+          - generic [ref=e157]:
+            - generic [ref=e158]: Debug dino switcher
+            - combobox "Debug dino switcher" [ref=e159]:
+              - option "#001 Eoraptor"
+              - option "#002 Coelophysis"
+              - option "#003 Plateosaurus"
+              - option "#004 Herrerasaurus"
+              - option "#005 Postosuchus"
+              - option "#006 Allosaurus"
+              - option "#007 Stegosaurus"
+              - option "#008 Brachiosaurus"
+              - option "#009 Diplodocus"
+              - option "#010 Archaeopteryx"
+              - option "#011 Compsognathus"
+              - option "#012 Dilophosaurus"
+              - option "#013 Ceratosaurus"
+              - option "#014 Kentrosaurus"
+              - option "#015 Megalosaurus"
+              - option "#016 Apatosaurus"
+              - option "#017 Yangchuanosaurus"
+              - option "#018 Tyrannosaurus Rex" [selected]
+              - option "#019 Triceratops"
+              - option "#020 Velociraptor"
+              - option "#021 Spinosaurus"
+              - option "#022 Ankylosaurus"
+              - option "#023 Parasaurolophus"
+              - option "#024 Pachycephalosaurus"
+              - option "#025 Carnotaurus"
+              - option "#026 Therizinosaurus"
+              - option "#027 Giganotosaurus"
+              - option "#028 Deinonychus"
+              - option "#029 Protoceratops"
+              - option "#030 Quetzalcoatlus"
+            - button "Switch Dino" [ref=e160]
+            - button "Evolve Dino" [active] [ref=e161]
+  - button "Open Next.js Dev Tools" [ref=e167] [cursor=pointer]:
+    - img [ref=e168]
+  - alert [ref=e171]
+```

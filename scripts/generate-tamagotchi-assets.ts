@@ -6,13 +6,11 @@ import type { DinoEntry, Stage } from "../src/lib/types";
 import { findPreferredArtSourcePath } from "./art-pipeline";
 import {
   getEggVariantKey,
-  getTamagotchiManifestPath,
   getTamagotchiSpriteOutputPath,
-  getTamagotchiSpriteUrl,
   getTamagotchiStageList,
   padTamagotchiId,
-  type TamagotchiStage,
 } from "./tamagotchi-art-pipeline";
+import { writeTamagotchiManifest } from "./tamagotchi-manifest";
 
 const PROJECT_ROOT = join(import.meta.dirname, "..");
 const OUTPUT_ROOT = join(PROJECT_ROOT, "public", "tamagotchi");
@@ -20,27 +18,6 @@ const SOURCE_STAGE_SIZE = 64;
 const OUTPUT_STAGE_SIZE = 256;
 const DINO_ENTRIES = dinos as DinoEntry[];
 const SOURCE_STAGES: Stage[] = ["hatchling", "juvenile", "adult"];
-
-interface ManifestSpriteEntry {
-  stage: TamagotchiStage;
-  url: string;
-}
-
-interface ManifestSpeciesEntry {
-  id: number;
-  name: string;
-  eggVariant: string;
-  sprites: ManifestSpriteEntry[];
-}
-
-interface ManifestFile {
-  version: number;
-  generatedAt: string;
-  spriteSize: number;
-  sourceGridSize: number;
-  stageOrder: TamagotchiStage[];
-  species: ManifestSpeciesEntry[];
-}
 
 function ensureDir(dirPath: string) {
   if (!existsSync(dirPath)) {
@@ -226,21 +203,6 @@ async function writeStageSprite(dinoId: number, stage: Stage, outputPath: string
   await resized.png({ compressionLevel: 9, adaptiveFiltering: false }).toFile(outputPath);
 }
 
-function buildManifestEntry(dinoId: number): ManifestSpeciesEntry {
-  const dino = getDinoEntry(dinoId);
-  const sprites: ManifestSpriteEntry[] = getTamagotchiStageList().map((stage) => ({
-    stage,
-    url: getTamagotchiSpriteUrl(dinoId, stage),
-  }));
-
-  return {
-    id: dinoId,
-    name: dino.name,
-    eggVariant: getEggVariantKey(dinoId),
-    sprites,
-  };
-}
-
 async function generateSpeciesAssets(dinoId: number) {
   const entries = getTamagotchiStageList();
   for (const stage of entries) {
@@ -278,25 +240,14 @@ async function main() {
 
   ensureDir(OUTPUT_ROOT);
 
-  const manifest: ManifestFile = {
-    version: 1,
-    generatedAt: new Date().toISOString(),
-    spriteSize: OUTPUT_STAGE_SIZE,
-    sourceGridSize: SOURCE_STAGE_SIZE,
-    stageOrder: getTamagotchiStageList(),
-    species: [],
-  };
-
   console.log(`Generating tamagotchi assets for ${targets.length} species...`);
 
   for (const dinoId of targets) {
     console.log(`  #${padTamagotchiId(dinoId)} ${getDinoEntry(dinoId).name}`);
     await generateSpeciesAssets(dinoId);
-    manifest.species.push(buildManifestEntry(dinoId));
   }
 
-  const manifestPath = getTamagotchiManifestPath(PROJECT_ROOT);
-  writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf-8");
+  const manifestPath = writeTamagotchiManifest(PROJECT_ROOT);
 
   console.log(`Wrote manifest -> ${manifestPath}`);
   console.log(`Wrote assets -> ${OUTPUT_ROOT}`);

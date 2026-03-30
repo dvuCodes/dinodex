@@ -168,4 +168,24 @@ test.describe("Interaction polish", () => {
     await feedButton.click();
     await expect(page.getByText(/meal served/i)).toBeVisible();
   });
+
+  test("debug evolve advances the current dino by one stage", async ({ page }) => {
+    await page.addInitScript(() => {
+      window.localStorage.clear();
+    });
+
+    await page.goto("/tamagotchi");
+
+    await page.getByRole("button", { name: /choose your dino|adopt/i }).click();
+    await page.getByRole("button", { name: /random dino/i }).click();
+
+    const evolveButton = page.getByRole("button", { name: /evolve dino/i });
+    await expect(evolveButton).toBeVisible();
+
+    await evolveButton.click();
+
+    await expect(page.getByText(/debug evolve: egg -> hatchling/i)).toBeVisible();
+    await expect(page.getByText(/^hatchling$/i)).toBeVisible();
+    await expect(page.getByRole("img", { name: /pixel sprite in tamagotchi mode/i })).toBeVisible();
+  });
 });

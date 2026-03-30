@@ -14,4 +14,15 @@
 - [x] Add a one-step evolve helper for tamagotchi state.
 - [x] Expose a debug-only evolve button in the tamagotchi shell.
 - [x] Cover the helper with unit tests.
-- [ ] Run targeted verification and capture results.
+- [x] Run targeted verification and capture results.
+
+## Verification
+
+- `bun test src/lib/tamagotchi.test.ts`
+- `bun test src/lib/review-fixes.test.ts`
+- `PLAYWRIGHT_PORT=3000 bunx playwright test e2e/interaction-polish.spec.ts --grep "debug evolve advances the current dino by one stage"`
+
+## Notes
+
+- Verified against the existing listener on port `3000`, owned by `node.exe scripts/dev-server.mjs`, which matches this repo's custom dev server.
+- The transient hatch celebration copy is not stable enough for browser assertions, so the Playwright smoke test checks the debug feedback, `hatchling` badge, and active pixel sprite instead.

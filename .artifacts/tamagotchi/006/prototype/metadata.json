@@ -1,0 +1,54 @@
+{
+  "animationApproved": true,
+  "approvedAt": "2026-03-30T03:56:00.000Z",
+  "approvedBy": "Codex",
+  "speciesId": 6,
+  "speciesName": "Allosaurus",
+  "era": "jurassic",
+  "generatedAt": "2026-03-30T03:49:59.493Z",
+  "sourceMode": "direct-gemini-api",
+  "model": "gemini-3.1-flash-image-preview",
+  "batch": "jurassic",
+  "anchors": [
+    ".artifacts/tamagotchi/006/prototype/anchors/hatchling-anchor.png",
+    ".artifacts/tamagotchi/006/prototype/anchors/juvenile-anchor.png",
+    ".artifacts/tamagotchi/006/prototype/anchors/adult-anchor.png"
+  ],
+  "exploratory": [
+    ".artifacts/tamagotchi/006/prototype/exploratory/hatchling-idle-exploratory.png",
+    ".artifacts/tamagotchi/006/prototype/exploratory/hatchling-happy-exploratory.png",
+    ".artifacts/tamagotchi/006/prototype/exploratory/hatchling-sleepy-exploratory.png",
+    ".artifacts/tamagotchi/006/prototype/exploratory/hatchling-sick-exploratory.png",
+    ".artifacts/tamagotchi/006/prototype/exploratory/juvenile-idle-exploratory.png",
+    ".artifacts/tamagotchi/006/prototype/exploratory/juvenile-happy-exploratory.png",
+    ".artifacts/tamagotchi/006/prototype/exploratory/juvenile-sleepy-exploratory.png",
+    ".artifacts/tamagotchi/006/prototype/exploratory/juvenile-sick-exploratory.png",
+    ".artifacts/tamagotchi/006/prototype/exploratory/adult-idle-exploratory.png",
+    ".artifacts/tamagotchi/006/prototype/exploratory/adult-happy-exploratory.png",
+    ".artifacts/tamagotchi/006/prototype/exploratory/adult-sleepy-exploratory.png",
+    ".artifacts/tamagotchi/006/prototype/exploratory/adult-sick-exploratory.png"
+  ],
+  "finalStrips": [
+    "public/tamagotchi/006/hatchling-idle.png",
+    "public/tamagotchi/006/hatchling-happy.png",
+    "public/tamagotchi/006/hatchling-sleepy.png",
+    "public/tamagotchi/006/hatchling-sick.png",
+    "public/tamagotchi/006/juvenile-idle.png",
+    "public/tamagotchi/006/juvenile-happy.png",
+    "public/tamagotchi/006/juvenile-sleepy.png",
+    "public/tamagotchi/006/juvenile-sick.png",
+    "public/tamagotchi/006/adult-idle.png",
+    "public/tamagotchi/006/adult-happy.png",
+    "public/tamagotchi/006/adult-sleepy.png",
+    "public/tamagotchi/006/adult-sick.png"
+  ],
+  "resetWorkflow": {
+    "mode": "style-lock-reset",
+    "anchorSourceMode": "fresh-gemini",
+    "anchorReferenceSpecies": [
+      1,
+      2
+    ],
+    "anchorNormalization": "stage-normalized"
+  }
+}

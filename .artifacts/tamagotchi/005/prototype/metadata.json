@@ -1,5 +1,7 @@
 {
-  "animationApproved": false,
+  "animationApproved": true,
+  "approvedAt": "2026-03-30T02:10:00Z",
+  "approvedBy": "codex",
   "speciesId": 5,
   "speciesName": "Postosuchus",
   "era": "triassic",

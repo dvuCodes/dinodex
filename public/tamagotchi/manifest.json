@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generatedAt": "2026-03-30T01:56:26.191Z",
+  "generatedAt": "2026-03-30T02:12:20.291Z",
   "spriteSize": 256,
   "sourceGridSize": 64,
   "stageOrder": [
@@ -32,11 +32,24 @@
           "url": "/tamagotchi/001/adult.png"
         }
       ],
+      "animation": {
+        "frameCount": 4,
+        "stages": [
+          "hatchling",
+          "juvenile",
+          "adult"
+        ],
+        "moods": [
+          "idle",
+          "happy",
+          "sleepy",
+          "sick"
+        ]
+      },
       "animationPrototype": {
         "hasMoodStrips": true,
-        "metadataStatus": "invalid",
-        "isApproved": false,
-        "error": "Prototype metadata must include a boolean animationApproved field."
+        "metadataStatus": "present",
+        "isApproved": true
       }
     },
     {
@@ -61,11 +74,24 @@
           "url": "/tamagotchi/002/adult.png"
         }
       ],
+      "animation": {
+        "frameCount": 4,
+        "stages": [
+          "hatchling",
+          "juvenile",
+          "adult"
+        ],
+        "moods": [
+          "idle",
+          "happy",
+          "sleepy",
+          "sick"
+        ]
+      },
       "animationPrototype": {
         "hasMoodStrips": true,
-        "metadataStatus": "invalid",
-        "isApproved": false,
-        "error": "Prototype metadata must include a boolean animationApproved field."
+        "metadataStatus": "present",
+        "isApproved": true
       }
     },
     {
@@ -90,10 +116,24 @@
           "url": "/tamagotchi/003/adult.png"
         }
       ],
+      "animation": {
+        "frameCount": 4,
+        "stages": [
+          "hatchling",
+          "juvenile",
+          "adult"
+        ],
+        "moods": [
+          "idle",
+          "happy",
+          "sleepy",
+          "sick"
+        ]
+      },
       "animationPrototype": {
         "hasMoodStrips": true,
         "metadataStatus": "present",
-        "isApproved": false
+        "isApproved": true
       }
     },
     {
@@ -118,10 +158,24 @@
           "url": "/tamagotchi/004/adult.png"
         }
       ],
+      "animation": {
+        "frameCount": 4,
+        "stages": [
+          "hatchling",
+          "juvenile",
+          "adult"
+        ],
+        "moods": [
+          "idle",
+          "happy",
+          "sleepy",
+          "sick"
+        ]
+      },
       "animationPrototype": {
         "hasMoodStrips": true,
         "metadataStatus": "present",
-        "isApproved": false
+        "isApproved": true
       }
     },
     {
@@ -146,10 +200,24 @@
           "url": "/tamagotchi/005/adult.png"
         }
       ],
+      "animation": {
+        "frameCount": 4,
+        "stages": [
+          "hatchling",
+          "juvenile",
+          "adult"
+        ],
+        "moods": [
+          "idle",
+          "happy",
+          "sleepy",
+          "sick"
+        ]
+      },
       "animationPrototype": {
         "hasMoodStrips": true,
         "metadataStatus": "present",
-        "isApproved": false
+        "isApproved": true
       }
     },
     {

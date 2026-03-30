@@ -11,6 +11,7 @@ import {
   clearAllProgress,
   createInitialState,
   didActionApply,
+  evolveCurrentDino,
   getActionFeedback,
   getHatchProgress,
   getHatchTimeRemaining,
@@ -160,6 +161,31 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
     handleSelectDino(debugSpeciesId);
     setFeedback(`Debug switch: ${dinos.find((dino) => dino.id === debugSpeciesId)?.name ?? formatDexNumber(debugSpeciesId)}`);
   }, [debugEnabled, debugSpeciesId, dinos, handleSelectDino]);
+
+  const handleDebugEvolve = useCallback(() => {
+    const current = stateRef.current;
+    if (!debugEnabled || !current) {
+      return;
+    }
+
+    const nextState = evolveCurrentDino(current, Date.now());
+    if (nextState === current) {
+      setFeedback("Already at adult stage.");
+      window.setTimeout(() => setFeedback(null), 2200);
+      return;
+    }
+
+    commitState(nextState);
+    setJustHatched(current.stage === "egg" && nextState.stage !== "egg");
+    setJustChangedStage(current.stage !== "egg" && current.stage !== nextState.stage);
+    setFeedback(`Debug evolve: ${current.stage} -> ${nextState.stage}`);
+
+    window.setTimeout(() => setFeedback(null), 2200);
+    window.setTimeout(() => {
+      setJustHatched(false);
+      setJustChangedStage(false);
+    }, 500);
+  }, [commitState, debugEnabled]);
 
   const handleAction = useCallback((action: TamagotchiAction) => {
     const current = stateRef.current;
@@ -566,7 +592,7 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-muted">Debug</p>
-                  <p className="font-body text-sm text-text-secondary">Switch the active dinosaur instantly for sprite validation.</p>
+                  <p className="font-body text-sm text-text-secondary">Switch the active dinosaur or advance one stage at a time for sprite validation.</p>
                 </div>
                 <div className="flex flex-1 flex-wrap items-center justify-end gap-3">
                   <label className="sr-only" htmlFor="debug-dino-switcher">
@@ -592,6 +618,14 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
                     className="border-accent/35 bg-accent/10 font-display font-bold text-text-primary"
                   >
                     Switch Dino
+                  </Button>
+                  <Button
+                    onClick={handleDebugEvolve}
+                    variant="outline"
+                    size="md"
+                    className="border-accent/35 bg-white font-display font-bold text-text-primary"
+                  >
+                    Evolve Dino
                   </Button>
                 </div>
               </div>

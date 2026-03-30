@@ -26,6 +26,7 @@
 - `bun run dev` should auto-select the next free local port starting at `3000` when `PORT` is unset; when `PORT` is set explicitly, keep port binding strict so scripted tooling does not silently move.
 - `bun` is the default package manager for this repo. Prefer `bun install`, `bun run`, and `bunx` for installs, scripts, tests, and Playwright unless a documented exception exists.
 - Use `bun run <script>` for package scripts such as `dev`; do not use `bunx run <script>`, because `bunx` executes package CLIs and will invoke the external `run` binary instead of this repo's `package.json` scripts.
+- If `git status` reports `UU` or other merge noise, verify the file still has live unmerged index entries with `git ls-files -u -- <path>` before assuming the conflict is still active.
 - Generated raster art under `public/dinos` can fail direct dev serving in this environment; use the custom dev server to intercept `/dinos/...` raster requests when validating rendered art.
 - WebP conversion alone does not create transparency; for the current dinosaur art set, exact-preservation transparency should default to deterministic edge-connected background removal, `scripts/process-images.ts` should prefer `scripts/transparent-output` over `scripts/raw-output`, and generative image editing should be opt-in only when a real redraw is acceptable.
 - Dinosaur art served from `/dinos/...` must bypass `next/image` optimization when validating or shipping transparency-sensitive renders, because the optimized path can flatten alpha in this environment.

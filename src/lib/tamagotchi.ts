@@ -823,6 +823,35 @@ export function skipIncubation(state: TamagotchiState, now = Date.now()): Tamago
   return hatchEgg(state, now);
 }
 
+export function evolveCurrentDino(state: TamagotchiState, now = Date.now()): TamagotchiState {
+  if (state.stage === "adult") {
+    return state;
+  }
+
+  if (state.stage === "egg") {
+    return hatchEgg(state, now);
+  }
+
+  const nextStage: TamagotchiStage = state.stage === "hatchling" ? "juvenile" : "adult";
+  const branchKey = getBranchKeyForQuality(state.careQuality);
+
+  return recalculateDerivedState({
+    ...state,
+    stage: nextStage,
+    branchKey,
+    attention: false,
+    attentionReason: null,
+    sleeping: false,
+    ageMs: Math.max(state.ageMs, getMinAgeForStage(state.stage)),
+    lastSimulatedAt: now,
+    stats: {
+      ...state.stats,
+      health: clamp(state.stats.health + 6),
+      happiness: clamp(state.stats.happiness + 8),
+    },
+  });
+}
+
 export function getHatchProgress(state: TamagotchiState): number {
   if (state.stage !== "egg" || !state.eggStartTime || !state.hatchDurationMs) {
     return 100;

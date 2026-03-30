@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import type { DinoEntry } from "@/lib/types";
 import { ERA_COLORS, DIET_COLORS } from "@/lib/constants";
 import { formatDexNumber } from "@/lib/utils";
+import { Button, buttonVariants } from "@/components/ui/Button";
 
 interface DinoSelectorProps {
   dinos: DinoEntry[];
@@ -129,13 +130,16 @@ export function DinoSelector({ dinos, isOpen, onSelect, onClose }: DinoSelectorP
                 <h2 id={titleId} className="font-display font-bold text-xl text-text-primary">
                   Choose Your Dino
                 </h2>
-                <button
+                <Button
+                  type="button"
                   onClick={onClose}
                   aria-label="Close dinosaur selector"
-                  className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-gray-200 transition-colors cursor-pointer"
+                  variant="ghost"
+                  size="icon"
+                  className="bg-stone-100 text-text-muted hover:bg-stone-200"
                 >
                   ×
-                </button>
+                </Button>
               </div>
 
               <label htmlFor={searchId} className="sr-only">
@@ -163,11 +167,16 @@ export function DinoSelector({ dinos, isOpen, onSelect, onClose }: DinoSelectorP
                 return (
                   <motion.button
                     key={dino.id}
+                    type="button"
                     initial={reduceMotion ? false : { opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={reduceMotion ? { duration: 0 } : { delay: i * 0.02 }}
                     onClick={() => onSelect(dino.id)}
-                    className="w-full flex items-center gap-3 p-3 rounded-xl bg-white border border-border-default hover:border-accent/30 hover:shadow-sm transition-[border-color,box-shadow] text-left cursor-pointer group"
+                    className={buttonVariants({
+                      variant: "outline",
+                      size: "md",
+                      className: "group w-full justify-start rounded-xl p-3 text-left hover:shadow-sm",
+                    })}
                   >
                     {/* Mini art placeholder */}
                     <div
@@ -214,11 +223,17 @@ export function DinoSelector({ dinos, isOpen, onSelect, onClose }: DinoSelectorP
             {/* Random button */}
             <div className="p-4 border-t border-border-default">
               <button
+                type="button"
                 onClick={() => {
                   const random = dinos[Math.floor(Math.random() * dinos.length)];
                   onSelect(random.id);
                 }}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-era-triassic/10 via-era-jurassic/10 to-era-cretaceous/10 border border-border-default font-display font-bold text-sm text-text-secondary hover:text-text-primary hover:shadow-sm transition-[border-color,box-shadow,color] cursor-pointer"
+                className={buttonVariants({
+                  variant: "outline",
+                  size: "lg",
+                  className:
+                    "w-full rounded-xl bg-gradient-to-r from-era-triassic/10 via-era-jurassic/10 to-era-cretaceous/10 font-display font-bold text-text-secondary hover:shadow-sm",
+                })}
               >
                 🎲 Random Dino
               </button>

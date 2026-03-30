@@ -65,8 +65,8 @@ export function DinoGrid({ dinos }: DinoGridProps) {
             },
           }}
         >
-          {filteredDinos.map((dino) => (
-            <DinoCard key={dino.id} dino={dino} />
+          {filteredDinos.map((dino, index) => (
+            <DinoCard key={dino.id} dino={dino} eagerImage={index < 6} />
           ))}
         </motion.div>
       )}

@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generatedAt": "2026-03-29T06:31:50.461Z",
+  "version": 3,
+  "generatedAt": "2026-03-30T01:56:26.191Z",
   "spriteSize": 256,
   "sourceGridSize": 64,
   "stageOrder": [
@@ -31,7 +31,13 @@
           "stage": "adult",
           "url": "/tamagotchi/001/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": true,
+        "metadataStatus": "invalid",
+        "isApproved": false,
+        "error": "Prototype metadata must include a boolean animationApproved field."
+      }
     },
     {
       "id": 2,
@@ -54,7 +60,13 @@
           "stage": "adult",
           "url": "/tamagotchi/002/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": true,
+        "metadataStatus": "invalid",
+        "isApproved": false,
+        "error": "Prototype metadata must include a boolean animationApproved field."
+      }
     },
     {
       "id": 3,
@@ -77,7 +89,12 @@
           "stage": "adult",
           "url": "/tamagotchi/003/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": true,
+        "metadataStatus": "present",
+        "isApproved": false
+      }
     },
     {
       "id": 4,
@@ -100,7 +117,12 @@
           "stage": "adult",
           "url": "/tamagotchi/004/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": true,
+        "metadataStatus": "present",
+        "isApproved": false
+      }
     },
     {
       "id": 5,
@@ -123,7 +145,12 @@
           "stage": "adult",
           "url": "/tamagotchi/005/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": true,
+        "metadataStatus": "present",
+        "isApproved": false
+      }
     },
     {
       "id": 6,
@@ -146,7 +173,12 @@
           "stage": "adult",
           "url": "/tamagotchi/006/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 7,
@@ -169,7 +201,12 @@
           "stage": "adult",
           "url": "/tamagotchi/007/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 8,
@@ -192,7 +229,12 @@
           "stage": "adult",
           "url": "/tamagotchi/008/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 9,
@@ -215,7 +257,12 @@
           "stage": "adult",
           "url": "/tamagotchi/009/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 10,
@@ -238,7 +285,12 @@
           "stage": "adult",
           "url": "/tamagotchi/010/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 11,
@@ -261,7 +313,12 @@
           "stage": "adult",
           "url": "/tamagotchi/011/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 12,
@@ -284,7 +341,12 @@
           "stage": "adult",
           "url": "/tamagotchi/012/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 13,
@@ -307,7 +369,12 @@
           "stage": "adult",
           "url": "/tamagotchi/013/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 14,
@@ -330,7 +397,12 @@
           "stage": "adult",
           "url": "/tamagotchi/014/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 15,
@@ -353,7 +425,12 @@
           "stage": "adult",
           "url": "/tamagotchi/015/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 16,
@@ -376,7 +453,12 @@
           "stage": "adult",
           "url": "/tamagotchi/016/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 17,
@@ -399,7 +481,12 @@
           "stage": "adult",
           "url": "/tamagotchi/017/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 18,
@@ -422,7 +509,12 @@
           "stage": "adult",
           "url": "/tamagotchi/018/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 19,
@@ -445,7 +537,12 @@
           "stage": "adult",
           "url": "/tamagotchi/019/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 20,
@@ -468,7 +565,12 @@
           "stage": "adult",
           "url": "/tamagotchi/020/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 21,
@@ -491,7 +593,12 @@
           "stage": "adult",
           "url": "/tamagotchi/021/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 22,
@@ -514,7 +621,12 @@
           "stage": "adult",
           "url": "/tamagotchi/022/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 23,
@@ -537,7 +649,12 @@
           "stage": "adult",
           "url": "/tamagotchi/023/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 24,
@@ -560,7 +677,12 @@
           "stage": "adult",
           "url": "/tamagotchi/024/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 25,
@@ -583,7 +705,12 @@
           "stage": "adult",
           "url": "/tamagotchi/025/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 26,
@@ -606,7 +733,12 @@
           "stage": "adult",
           "url": "/tamagotchi/026/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 27,
@@ -629,7 +761,12 @@
           "stage": "adult",
           "url": "/tamagotchi/027/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 28,
@@ -652,7 +789,12 @@
           "stage": "adult",
           "url": "/tamagotchi/028/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 29,
@@ -675,7 +817,12 @@
           "stage": "adult",
           "url": "/tamagotchi/029/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     },
     {
       "id": 30,
@@ -698,7 +845,12 @@
           "stage": "adult",
           "url": "/tamagotchi/030/adult.png"
         }
-      ]
+      ],
+      "animationPrototype": {
+        "hasMoodStrips": false,
+        "metadataStatus": "missing",
+        "isApproved": false
+      }
     }
   ]
 }

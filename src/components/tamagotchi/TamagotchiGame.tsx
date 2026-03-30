@@ -28,6 +28,7 @@ import {
   simulateElapsedTime,
 } from "@/lib/tamagotchi";
 import { formatDexNumber } from "@/lib/utils";
+import { isTamagotchiDebugEnabled } from "@/lib/tamagotchi-debug";
 import { ActionButtons } from "./ActionButtons";
 import { DinoAvatar } from "./DinoAvatar";
 import { DinoSelector } from "./DinoSelector";
@@ -73,6 +74,7 @@ function loadInitialRunData(): { state: TamagotchiState | null; meta: Tamagotchi
 
 export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
   const reduceMotion = useReducedMotion();
+  const debugEnabled = isTamagotchiDebugEnabled();
   const initialDataRef = useRef<{ state: TamagotchiState | null; meta: TamagotchiMetaProgression } | null>(null);
   if (initialDataRef.current === null) {
     initialDataRef.current = loadInitialRunData();
@@ -84,12 +86,17 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
   const [isActing, setIsActing] = useState(false);
   const [justChangedStage, setJustChangedStage] = useState(false);
   const [justHatched, setJustHatched] = useState(false);
+  const [debugSpeciesId, setDebugSpeciesId] = useState<number | null>(initialDataRef.current.state?.speciesId ?? null);
   const stateRef = useRef<TamagotchiState | null>(initialDataRef.current.state);
   const metaRef = useRef<TamagotchiMetaProgression>(initialDataRef.current.meta);
 
   useEffect(() => {
     stateRef.current = state;
   }, [state]);
+
+  useEffect(() => {
+    setDebugSpeciesId(state?.speciesId ?? null);
+  }, [state?.speciesId]);
 
   useEffect(() => {
     metaRef.current = meta;
@@ -149,6 +156,15 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
     setJustChangedStage(false);
     setJustHatched(false);
   }, [commitState]);
+
+  const handleDebugSwitch = useCallback(() => {
+    if (!debugEnabled || !debugSpeciesId) {
+      return;
+    }
+
+    handleSelectDino(debugSpeciesId);
+    setFeedback(`Debug switch: ${dinos.find((dino) => dino.id === debugSpeciesId)?.name ?? formatDexNumber(debugSpeciesId)}`);
+  }, [debugEnabled, debugSpeciesId, dinos, handleSelectDino]);
 
   const handleAction = useCallback((action: TamagotchiAction) => {
     const current = stateRef.current;
@@ -529,6 +545,42 @@ export function TamagotchiGame({ dinos }: TamagotchiGameProps) {
               Clear All Progress
             </button>
           </div>
+
+          {debugEnabled ? (
+            <div className="mt-4 rounded-[1.5rem] border border-dashed border-accent/30 bg-white/70 px-4 py-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-muted">Debug</p>
+                  <p className="font-body text-sm text-text-secondary">Switch the active dinosaur instantly for sprite validation.</p>
+                </div>
+                <div className="flex flex-1 flex-wrap items-center justify-end gap-3">
+                  <label className="sr-only" htmlFor="debug-dino-switcher">
+                    Debug dino switcher
+                  </label>
+                  <select
+                    id="debug-dino-switcher"
+                    name="debug-dino-switcher"
+                    value={debugSpeciesId ?? ""}
+                    onChange={(event) => setDebugSpeciesId(Number(event.target.value))}
+                    className="min-w-[220px] rounded-pill border border-border-default bg-white px-4 py-2.5 font-body text-sm text-text-primary"
+                  >
+                    {dinos.map((dino) => (
+                      <option key={dino.id} value={dino.id}>
+                        {formatDexNumber(dino.id)} {dino.name}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    onClick={handleDebugSwitch}
+                    className="rounded-pill border border-accent/35 bg-accent/10 px-5 py-2.5 font-display text-sm font-bold text-text-primary"
+                  >
+                    Switch Dino
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : null}
         </div>
       </main>
 

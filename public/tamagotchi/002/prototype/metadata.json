@@ -1,0 +1,43 @@
+{
+  "speciesId": 2,
+  "speciesName": "Coelophysis",
+  "era": "triassic",
+  "generatedAt": "2026-03-29T22:47:39.887Z",
+  "sourceMode": "direct-gemini-api",
+  "model": "gemini-3.1-flash-image-preview",
+  "helper": "C:/Users/datvu/.agents/skills/nano-banana-2/gemini_image.py",
+  "batch": "triassic",
+  "anchors": [
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/prototype/anchors/hatchling-anchor.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/prototype/anchors/juvenile-anchor.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/prototype/anchors/adult-anchor.png"
+  ],
+  "exploratory": [
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/prototype/exploratory/hatchling-idle-exploratory.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/prototype/exploratory/hatchling-happy-exploratory.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/prototype/exploratory/hatchling-sleepy-exploratory.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/prototype/exploratory/hatchling-sick-exploratory.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/prototype/exploratory/juvenile-idle-exploratory.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/prototype/exploratory/juvenile-happy-exploratory.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/prototype/exploratory/juvenile-sleepy-exploratory.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/prototype/exploratory/juvenile-sick-exploratory.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/prototype/exploratory/adult-idle-exploratory.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/prototype/exploratory/adult-happy-exploratory.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/prototype/exploratory/adult-sleepy-exploratory.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/prototype/exploratory/adult-sick-exploratory.png"
+  ],
+  "finalStrips": [
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/hatchling-idle.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/hatchling-happy.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/hatchling-sleepy.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/hatchling-sick.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/juvenile-idle.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/juvenile-happy.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/juvenile-sleepy.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/juvenile-sick.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/adult-idle.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/adult-happy.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/adult-sleepy.png",
+    "C:/Users/datvu/.codex/worktrees/694a/dinodex/public/tamagotchi/002/adult-sick.png"
+  ]
+}

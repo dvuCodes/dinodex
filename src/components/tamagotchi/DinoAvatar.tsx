@@ -66,7 +66,7 @@ export function DinoAvatar({
       : getTamagotchiSpriteSheet(dinoId, stage, animationState);
   const { artSrc, usingFallback } = useArtSource(spriteDescriptor.expectedSrc, spriteDescriptor.fallbackSrc);
   const crackCount = eggProgress > 90 ? 3 : eggProgress > 72 ? 2 : eggProgress > 48 ? 1 : 0;
-  const usesPrototypeStripMotion = dinoId === 1 && stage !== "egg";
+  const usesPrototypeStripMotion = stage !== "egg" && spriteDescriptor.expectedFrameCount > 1;
 
   const statusChips = [
     { label: sleeping ? "Sleep: On" : "Sleep: Awake", active: sleeping },

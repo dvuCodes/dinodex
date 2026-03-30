@@ -12,6 +12,7 @@
 - Always mark tasks off when complete.
 - After every correction to assumptions/process, update this `AGENTS.md`.
 - Use the existing Linear team `Rio31` for non-trivial work. Start from a Linear issue whenever practical instead of treating chat as the task tracker.
+- Before starting non-trivial implementation, create the Linear issue or explicitly link the existing issue in the first work update. If work begins without one, stop and create it before continuing.
 - Linear is the source of truth for backlog, priority, assignment, project membership, and status. Repo files remain the source of truth for implementation detail and evidence.
 - Model time-bound initiatives as Linear projects and keep implementation work as atomic Linear issues. Use parent/sub-issues only when a task is too large for one reviewable change.
 - Standardize non-trivial issue descriptions around `Context`, `Acceptance Criteria`, and `Verification`.

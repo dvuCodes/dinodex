@@ -1,5 +1,6 @@
 import type { Stage } from "./types";
 import type { TamagotchiAnimationState } from "./tamagotchi";
+import tamagotchiManifest from "../../public/tamagotchi/manifest.json";
 
 const FRAME_COUNT = 4;
 const GRID_SIZE = 16;
@@ -12,12 +13,28 @@ const FRAME_DURATIONS: Record<TamagotchiAnimationState, number> = {
   sleepy: 320,
   sick: 280,
 };
-const EORAPTOR_PROTOTYPE_ID = 1;
 const STAGE_SCALE: Record<Stage, number> = {
   hatchling: 0.85,
   juvenile: 1,
   adult: 1.14,
 };
+
+type ManifestAnimationEntry = {
+  frameCount?: number;
+  stages?: Stage[];
+  moods?: TamagotchiAnimationState[];
+};
+
+type ManifestSpeciesEntry = {
+  id: number;
+  animation?: ManifestAnimationEntry;
+};
+
+const ANIMATED_SPECIES = new Map<number, ManifestAnimationEntry>(
+  ((tamagotchiManifest as { species?: ManifestSpeciesEntry[] }).species ?? [])
+    .filter((species) => species.animation)
+    .map((species) => [species.id, species.animation as ManifestAnimationEntry])
+);
 
 type SpriteDescriptor = {
   expectedSrc: string;
@@ -259,13 +276,18 @@ export function getTamagotchiSpriteSheet(
   stage: Stage,
   animationState: TamagotchiAnimationState
 ): SpriteDescriptor {
-  const isEoraptorPrototype = speciesId === EORAPTOR_PROTOTYPE_ID;
+  const animation = ANIMATED_SPECIES.get(speciesId);
+  const usesMoodStrip =
+    Boolean(animation) &&
+    (animation?.stages ?? []).includes(stage) &&
+    (animation?.moods ?? []).includes(animationState);
+
   return {
-    expectedSrc: isEoraptorPrototype
+    expectedSrc: usesMoodStrip
       ? `/tamagotchi/${padId(speciesId)}/${stage}-${animationState}.png`
       : `/tamagotchi/${padId(speciesId)}/${stage}.png`,
     fallbackSrc: createFallbackSpriteSheet(speciesId, stage, animationState),
-    expectedFrameCount: isEoraptorPrototype ? FRAME_COUNT : 1,
+    expectedFrameCount: usesMoodStrip ? animation?.frameCount ?? FRAME_COUNT : 1,
     fallbackFrameCount: FRAME_COUNT,
     frameDurationMs: FRAME_DURATIONS[animationState],
     frameSizePx: GRID_SIZE,
